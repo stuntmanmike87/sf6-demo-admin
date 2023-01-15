@@ -12,7 +12,7 @@ This is a simple demo administrator system built in [Symfony 6.1](https://symfon
 
 ## 3 Documentation
 
-- [Changes](CHANGES.md)
+- [Changes](CHANGELOG.md)
 - [Installation](documentation/installation.md)
 - [Databases](documentation/database.md)
 - [Commands](documentation/commands.md)
