@@ -13,7 +13,7 @@
 **1. Clone the repository**
 
 ```bash
-git clone git@gitlab.com:language-exchange/admin.git .
+git clone git@github.com:thomaskanzig/symfony-demo-administrator.git .
 ```
 
 **2. Config environment file**  
