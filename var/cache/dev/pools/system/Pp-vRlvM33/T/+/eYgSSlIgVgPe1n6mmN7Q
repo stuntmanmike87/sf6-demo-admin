@@ -1,3 +1,0 @@
-<?php //App%255CController%255CAdmin%255CSettingsController%2523security
-
-return [PHP_INT_MAX, []];
