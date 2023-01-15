@@ -1,0 +1,29 @@
+<li class="nav-item dropdown user-menu navbar-user-item">
+    <a href="#" class="nav-link dropdown-toggle navbar-user-item__dropdown-toggle" data-toggle="dropdown">
+        <img src="{{ app_image(app.user.urlPicture|default('img/placeholders/profile-avatar.png'), {'w': 200, 'h': 200}) }}" class="user-image img-circle img-bordered-sm" alt="User Image">
+        <span class="d-none d-md-inline">
+            {{ app.user.firstName }} {{ app.user.lastName }}
+        </span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <li class="user-header bg-primary">
+            <img src="{{ app_image(app.user.urlPicture|default('img/placeholders/profile-avatar.png'), {'w': 200, 'h': 200}) }}" class="img-circle elevation-2" alt="User Image">
+
+            <p>
+                {{ app.user.firstName }} {{ app.user.lastName }}
+            </p>
+        </li>
+
+        <li class="user-footer">
+            <a href="{{ path('admin_settings_security') }}"
+               class="btn btn-default">
+                <i class="fas fa-sliders-h"></i> {{ 'app.settings'|trans }}
+            </a>
+
+            <a href="{{ path('security_logout') }}"
+               class="btn btn-default float-right">
+                <i class="fas fa-sign-out-alt"></i> {{ 'app.logout'|trans }}
+            </a>
+        </li>
+    </ul>
+</li>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="file.ext">
+        <body>
+            <!-- User -->
+            <trans-unit id="app.user.form.error.unique.username">
+                <source>app.user.form.error.unique.username</source>
+                <target>Dieser Benutzername wird bereits verwendet.</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.error.required.password">
+                <source>app.user.form.error.required.password</source>
+                <target>Das Kennwort ist ein pflichtfeld</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.error.match.password">
+                <source>app.user.form.error.match.password</source>
+                <target>Beide Passwörter müssen stimmen.</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.error.min_length.password">
+                <source>app.user.form.error.min_length.password</source>
+                <target>Das Passwort muss mindestens 6 Zeichen enthalten.</target>
+            </trans-unit>
+
+            <!-- Register -->
+            <trans-unit id="app.register.form.client_type.form.not_blank">
+                <source>app.register.form.client_type.form.not_blank</source>
+                <target>Ist notwendig zum informieren was für Konto es ist.</target>
+            </trans-unit>
+
+            <trans-unit id="app.register.form.email.form.unique">
+                <source>app.register.form.email.form.unique</source>
+                <target>Diese E-Mail wird bereits verwendet.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

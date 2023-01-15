@@ -1,0 +1,60 @@
+{
+    "name": "sulu/web-twig",
+    "type": "library",
+    "description": "The web twig extension for web-js component management",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sulu Web Twig contributors",
+            "homepage": "https://github.com/sulu/web-twig/graphs/contributors"
+        }
+    ],
+    "require": {
+        "php": "^7.1 || ^8.0",
+        "twig/twig": "^1.38 || ^2.7 || ^3.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.11",
+        "jangregor/phpstan-prophecy": "^0.8",
+        "phpstan/phpstan": "^0.12",
+        "phpstan/phpstan-phpunit": "^0.12",
+        "phpunit/phpunit": "^7.5 || ^8.5",
+        "symfony/intl": "^2.8 || ^3.0 || ^4.0 || ^5.0 || ^6.0",
+        "symfony/property-access": "^2.8 || ^3.0 || ^4.0 || ^5.0 || ^6.0",
+        "thecodingmachine/phpstan-strict-rules": "^0.12"
+    },
+    "conflict": {
+        "symfony/intl": ">=7.0",
+        "symfony/property-access": ">=7.0"
+    },
+    "suggest": {
+        "symfony/property-access": "The ImageExtension requires the symfony/property-access service.",
+        "symfony/intl": "The IntlExtension requires the symfony/intl service."
+    },
+    "autoload": {
+        "psr-4": {
+            "Sulu\\Twig\\Extensions\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sulu\\Twig\\Extensions\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": [
+            "@phpunit"
+        ],
+        "lint": [
+            "@phpstan",
+            "@php-cs"
+        ],
+        "phpunit": "@php vendor/bin/phpunit",
+        "phpstan": "@php vendor/bin/phpstan analyze -c ./phpstan.neon",
+        "php-cs": "@php vendor/bin/php-cs-fixer fix --verbose --diff --dry-run",
+        "php-cs-fix": "@php vendor/bin/php-cs-fixer fix"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

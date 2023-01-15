@@ -1,0 +1,26 @@
+.auto-complete-input-results {
+    position: absolute;
+    display: block;
+    background: $colorWhite;
+    color: $colorGrey;
+    z-index: 3;
+    list-style: none;
+    padding: 0;
+    box-shadow: 0 0 10px -4px;
+    border-radius: 4px;
+
+    li {
+        padding: 10px 20px;
+        cursor: pointer;
+
+        &:not(:last-child) {
+            border-bottom: 1px solid $colorGreyAlabaster;
+        }
+
+        &.is-active {
+            background-color: $colorBlueZircon;
+            color: $colorBlueDanube;
+            font-weight: 700;
+        }
+    }
+}

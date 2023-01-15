@@ -1,0 +1,28 @@
+.navbar-languages-item {
+  &__current-flag {
+    width: 1.375rem !important;
+    height: 1.375rem !important;
+  }
+
+  &__dropdown-toggle {
+    display: flex;
+    align-items: center;
+    padding-right: 0 !important;
+    padding-left: 10px !important;
+
+    @include media-breakpoint-up(sm) {
+      padding-right: 10px !important;
+      padding-left: 16px !important;
+    }
+  }
+
+  &__dropdown-item {
+    display: flex;
+    align-items: center;
+
+    &-flag {
+      width: 25px;
+      margin-left: auto;
+    }
+  }
+}

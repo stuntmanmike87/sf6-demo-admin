@@ -1,0 +1,20 @@
+<li class="nav-item nav-item-languages dropdown navbar-languages-item">
+    <a class="nav-link dropdown-toggle navbar-languages-item__dropdown-toggle"
+       href="#"
+       id="navbarDropdown"
+       role="button"
+       data-toggle="dropdown"
+       aria-haspopup="true"
+       aria-expanded="false">
+        <span class="fi fi-{{ locale|lower|app_language_flag_icon }} fis rounded-circle navbar-languages-item__current-flag"></span>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+        {% for locale in app_locales() %}
+            {% set attrHrefLocale = app.request.locale == locale.code ? ' aria-checked="true" class="dropdown-item navbar-languages-item__dropdown-item active"':' aria-checked="false" class="dropdown-item navbar-languages-item__dropdown-item"' %}
+
+            <a{{ attrHrefLocale|raw }} href="{{ path(app.request.get('_route', 'admin_user_index'), app.request.get('_route_params', [])|merge({_locale: locale.code})) }}">
+                {{ locale.name|capitalize }}  <span class="fi fi-{{ locale.code|app_language_flag_icon }} fis rounded-circle navbar-languages-item__dropdown-item-flag"></span>
+            </a>
+        {% endfor %}
+    </div>
+</li>

@@ -1,0 +1,14 @@
+.content-empty-results {
+    display: flex;
+    justify-content: center;
+    padding-top: 100px;
+    text-align: center;
+
+    p {
+        font-size: 18px;
+    }
+}
+
+.c-pointer {
+    cursor: pointer;
+}

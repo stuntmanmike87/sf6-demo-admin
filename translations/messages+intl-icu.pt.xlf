@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="pt" datatype="plaintext" original="file.ext">
+        <body>
+            <!-- General -->
+            <trans-unit id="app.active">
+                <source>app.active</source>
+                <target>Ativo</target>
+            </trans-unit>
+
+            <trans-unit id="app.verified">
+                <source>app.verified</source>
+                <target>Verificado</target>
+            </trans-unit>
+
+            <trans-unit id="app.access_information">
+                <source>app.access_information</source>
+                <target>Informações de acesso</target>
+            </trans-unit>
+
+            <trans-unit id="app.address_information">
+                <source>app.address_information</source>
+                <target>Informações de Endereço</target>
+            </trans-unit>
+
+            <trans-unit id="app.basic_information">
+                <source>app.basic_information</source>
+                <target>Informações básicas</target>
+            </trans-unit>
+
+            <trans-unit id="app.button.save_changes">
+                <source>app.button.save_changes</source>
+                <target>Salvar atualizações</target>
+            </trans-unit>
+
+            <trans-unit id="app.contact_details">
+                <source>app.contact_details</source>
+                <target>Contatos</target>
+            </trans-unit>
+
+            <trans-unit id="app.created_at">
+                <source>app.created_at</source>
+                <target>Cadastrado em</target>
+            </trans-unit>
+
+            <trans-unit id="app.delete">
+                <source>app.delete</source>
+                <target>Excluir</target>
+            </trans-unit>
+
+            <trans-unit id="app.edit">
+                <source>app.edit</source>
+                <target>Editar</target>
+            </trans-unit>
+
+            <trans-unit id="app.add">
+                <source>app.add</source>
+                <target>Adicionar</target>
+            </trans-unit>
+
+            <trans-unit id="app.clean">
+                <source>app.clean</source>
+                <target>Limpar</target>
+            </trans-unit>
+
+            <trans-unit id="app.group">
+                <source>app.group</source>
+                <target>Grupo</target>
+            </trans-unit>
+
+            <trans-unit id="app.name">
+                <source>app.name</source>
+                <target>Nome</target>
+            </trans-unit>
+
+            <trans-unit id="app.logout">
+                <source>app.logout</source>
+                <target>Sair</target>
+            </trans-unit>
+
+            <trans-unit id="app.list_all">
+                <source>app.list_all</source>
+                <target>Listar todos</target>
+            </trans-unit>
+
+            <trans-unit id="app.type">
+                <source>app.type</source>
+                <target>Tipo</target>
+            </trans-unit>
+
+            <trans-unit id="app.version">
+                <source>app.version</source>
+                <target>Versão</target>
+            </trans-unit>
+
+            <trans-unit id="app.all_rights_reserved">
+                <source>app.all_rights_reserved</source>
+                <target>Todos os direitos reservados.</target>
+            </trans-unit>
+
+            <trans-unit id="app.loading">
+                <source>app.loading</source>
+                <target>Carregando</target>
+            </trans-unit>
+
+            <trans-unit id="app.list.not_exist_results">
+                <source>app.list.not_exist_results</source>
+                <target>Infelizmente não foi encontrado nenhum resultado.</target>
+            </trans-unit>
+
+            <trans-unit id="app.search">
+                <source>app.search</source>
+                <target>Pesquisar</target>
+            </trans-unit>
+
+            <trans-unit id="app.search_input.by_names">
+                <source>app.search_input.by_names</source>
+                <target>Pesquisar por nomes...</target>
+            </trans-unit>
+
+            <trans-unit id="app.update_google_maps">
+                <source>app.update_google_maps</source>
+                <target>Atualizar google maps</target>
+            </trans-unit>
+
+            <trans-unit id="app.saved_successfully">
+               <source>app.saved_successfully</source>
+               <target>Salvo com sucesso</target>
+           </trans-unit>
+
+            <trans-unit id="app.form.label.country">
+                <source>app.form.label.country</source>
+                <target>País</target>
+            </trans-unit>
+
+            <trans-unit id="app.form.label.state">
+                <source>app.form.label.state</source>
+                <target>Estado</target>
+            </trans-unit>
+
+            <trans-unit id="app.form.label.city">
+                <source>app.form.label.city</source>
+                <target>Cidade</target>
+            </trans-unit>
+
+            <trans-unit id="app.form.label.neighborhood">
+                <source>app.form.label.neighborhood</source>
+                <target>Bairro</target>
+            </trans-unit>
+
+            <trans-unit id="app.form.label.search_postal_code">
+                <source>app.form.label.search_postal_code</source>
+                <target>Pesquisar CEP</target>
+            </trans-unit>
+
+            <trans-unit id="app.form.label.address">
+                <source>app.form.label.address</source>
+                <target>Endereço:</target>
+            </trans-unit>
+
+            <trans-unit id="app.form.label.postal_code">
+                <source>app.form.label.postal_code</source>
+                <target>CEP:</target>
+            </trans-unit>
+
+            <trans-unit id="app.form.label.street_number">
+                <source>app.form.label.street_number</source>
+                <target>Número da rua:</target>
+            </trans-unit>
+
+            <trans-unit id="app.form.label.complement">
+                <source>app.form.label.complement</source>
+                <target>Complemento:</target>
+            </trans-unit>
+
+            <trans-unit id="app.form.label.choose">
+                <source>app.form.label.choose</source>
+                <target>Escolha:</target>
+            </trans-unit>
+
+            <trans-unit id="app.message.no_results_found">
+                <source>app.message.no_results_found</source>
+                <target>Nenhum resultado encontrado</target>
+            </trans-unit>
+
+            <trans-unit id="app.message.successfully_found">
+                <source>app.message.successfully_found</source>
+                <target>Encontrado com sucesso</target>
+            </trans-unit>
+
+            <trans-unit id="app.success.upload_was_successfully">
+                <source>app.success.upload_was_successfully</source>
+                <target>O Upload foi bem-sucedido</target>
+            </trans-unit>
+
+            <!-- Login -->
+            <trans-unit id="app.login.start_your_session">
+                <source>app.login.start_your_session</source>
+                <target>Faca seu login aqui</target>
+            </trans-unit>
+
+            <trans-unit id="app.login.remember_me">
+                <source>app.login.remember_me</source>
+                <target>Lembrar me</target>
+            </trans-unit>
+
+            <trans-unit id="app.login.sign_in">
+                <source>app.login.sign_in</source>
+                <target>Entrar</target>
+            </trans-unit>
+
+            <!-- Error. -->
+            <trans-unit id="app.error.unauthorised_access">
+                <source>app.error.unauthorised_access</source>
+                <target>Acesso não autorizado</target>
+            </trans-unit>
+
+            <trans-unit id="app.error.upload_error">
+                <source>app.error.upload_error</source>
+                <target>Erro no upload</target>
+            </trans-unit>
+
+            <trans-unit id="app.error.error_deleting_file">
+                <source>app.error.error_deleting_file</source>
+                <target>Erro ao apagar o arquivo</target>
+            </trans-unit>
+
+            <!-- Language -->
+            <trans-unit id="language.identifier">
+                <source>language.identifier</source>
+                <target>pt_BR</target>
+            </trans-unit>
+
+            <trans-unit id="language.translate_key.name">
+                <source>language.translate_key.name</source>
+                <target>language.translate.portuguese</target>
+            </trans-unit>
+
+            <trans-unit id="language.translate.english">
+                <source>language.translate.english</source>
+                <target>Inglês</target>
+            </trans-unit>
+
+            <trans-unit id="language.translate.portuguese">
+                <source>language.translate.portuguese</source>
+                <target>Português</target>
+            </trans-unit>
+
+            <trans-unit id="language.translate.german">
+                <source>language.translate.german</source>
+                <target>Alemão</target>
+            </trans-unit>
+
+            <!-- Users -->
+            <trans-unit id="app.users">
+                <source>app.users</source>
+                <target>Usuários</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.user_list">
+                <source>app.user.user_list</source>
+                <target>Listagem de Usuários</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.add_user">
+                <source>app.user.add_user</source>
+                <target>Add user</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.edit_user">
+                <source>app.user.edit_user</source>
+                <target>Editar usuário</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.label.first_name">
+                <source>app.user.form.label.first_name</source>
+                <target>Primeiro nome:</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.label.group">
+                <source>app.user.form.label.group</source>
+                <target>Grupo:</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.label.last_name">
+                <source>app.user.form.label.last_name</source>
+                <target>Último nome:</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.label.username">
+                <source>app.user.form.label.username</source>
+                <target>Login:</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.label.password">
+                <source>app.user.form.label.password</source>
+                <target>Senha:</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.label.repeat_password">
+                <source>app.user.form.label.repeat_password</source>
+                <target>Repetir senha:</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.label.birthday">
+                <source>app.user.form.label.birthday</source>
+                <target>Data de nascimento:</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.label.bio">
+                <source>app.user.form.label.bio</source>
+                <target>Sobre me:</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.label.url_picture">
+                <source>app.user.form.label.url_picture</source>
+                <target>Escolhe uma foto:</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.button.save_user">
+                <source>app.user.form.button.save_user</source>
+                <target>Salvar usuário</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.label.user_type">
+                <source>app.user.form.label.user_type</source>
+                <target>Tipo de usuário:</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.label.email">
+                <source>app.user.form.label.email</source>
+                <target>E-mail:</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.label.phone_number">
+                <source>app.user.form.label.phone_number</source>
+                <target>Telefone:</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.select_country_calling_code">
+                <source>app.user.select_country_calling_code</source>
+                <target>Selecione qual país origin do número</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.delete_confirmation_dialog">
+                <source>app.user.delete_confirmation_dialog</source>
+                <target>Você tem certeza de que quer deleter o usuário?</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.label.delete_url_avatar">
+                <source>app.user.form.label.delete_url_avatar</source>
+                <target>Deletar a foto do usuário</target>
+            </trans-unit>
+
+            <trans-unit id="app.user.form.label.show_picture">
+                <source>app.user.form.label.show_picture</source>
+                <target>Mostrar foto</target>
+            </trans-unit>
+
+            <!-- Settings -->
+            <trans-unit id="app.settings">
+                <source>app.settings</source>
+                <target>Configurações</target>
+            </trans-unit>
+
+            <trans-unit id="app.settings.security">
+                <source>app.settings.security</source>
+                <target>Segurança &amp; Login</target>
+            </trans-unit>
+
+            <trans-unit id="app.settings.profile">
+                <source>app.settings.profile</source>
+                <target>Perfil</target>
+            </trans-unit>
+
+            <trans-unit id="app.settings.address">
+                <source>app.settings.address</source>
+                <target>Endereço</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

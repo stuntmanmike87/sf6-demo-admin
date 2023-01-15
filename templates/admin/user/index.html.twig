@@ -1,0 +1,171 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %} {{ 'app.users'|trans }} {% endblock %}
+
+{% block body %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>{{ 'app.users'|trans }}</h1>
+                </div>
+
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">
+                            {{ 'app.users'|trans }}
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="mb-3 d-flex justify-content-end">
+                <form action="{{ path('admin_user_index') }}"
+                      method="get"
+                      class="input-group search-list__input-group">
+                    <div class="input-group-prepend">
+                        <a class="btn btn-secondary" type="button" href="{{ path('admin_user_index') }}">
+                            <i class="fas fa-eraser"></i>
+                            <span class="d-none d-sm-inline-block">{{ 'app.clean'|trans }}</span>
+                        </a>
+                    </div>
+                    <input type="text"
+                           name="q"
+                           class="form-control"
+                           placeholder="{{ 'app.search_input.by_names'|trans }}"
+                           aria-label="{{ 'app.search_input.by_names'|trans }}"
+                           autocomplete="off"
+                           value="{{ query }}">
+
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-secondary">
+                            <i class="fas fa-search"></i>
+                            <span class="d-none d-sm-inline-block">{{ 'app.search'|trans }}</span>
+                        </button>
+                    </div>
+                </form>
+
+                {% if acl_is_accessible('admin', 'user', 'add') %}
+                    <a class="btn btn-primary ml-3 text-nowrap" href="{{ path('admin_user_add') }}">
+                        <i class="fas fa-plus"></i> {{ 'app.user.add_user'|trans }}
+                    </a>
+                {% endif %}
+            </div>
+
+            {% if users|length %}
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            {{ 'app.user.user_list'|trans }}
+                        </h3>
+
+                        <div class="card-tools">
+                            {{ knp_pagination_render(users, null, {}, {size: 'small'}) }}
+                        </div>
+                    </div>
+
+                    <div class="card-body p-0 table-responsive-xl">
+                        <table class="table table-striped projects">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>{{ 'app.type'|trans }}</th>
+                                    <th>{{ 'app.group'|trans }}</th>
+                                    <th>{{ 'app.active'|trans }}</th>
+                                    <th>{{ 'app.verified'|trans }}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for user in users %}
+                                <tr>
+                                    <td class="text-nowrap">
+                                        <div class="d-flex">
+                                            <img class="users__item-picture img-circle img-bordered-sm mr-3"
+                                                 src="{{ app_image(user.urlPicture|default(), {'w': 200, 'h': 200}) }}"
+                                                 onerror="this.onerror=null;this.src='{{ constant('App\\Enum\\Placeholder\\PlaceholderEnum::PROFILE_AVATAR').value }}';"
+                                                 alt="">
+                                            <div>
+                                                <span class="text-bold"> {{ user.firstName }} {{ user.lastName }} </span>
+                                                <small class="description d-block"> {{ 'app.created_at'|trans }} {{ user.createdAt|date("d.m.Y") }} </small>
+
+                                                <div class="mt-2 d-block d-sm-none">
+                                                    {% if acl_is_accessible('admin', 'user', 'edit') %}
+                                                        <a href="{{ path('admin_user_edit', { id: user.id }) }}"
+                                                           title="{{ 'app.edit'|trans }}">
+                                                            <i class="fas fa-pencil-alt"></i> {{ 'app.edit'|trans }}
+                                                        </a>
+                                                    {% endif %}
+                                                    &nbsp
+                                                    {% if acl_is_accessible('admin', 'user', 'delete') %}
+                                                        <a href="#"
+                                                           title="{{ 'app.delete'|trans }}"
+                                                           onclick="return confirm('{{ 'app.user.delete_confirmation_dialog'|trans }}')">
+                                                            <i class="fas fa-trash" aria-hidden="true"></i> {{ 'app.delete'|trans }}
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td class="text-nowrap">
+                                        {{ app_translate_text(transTypes, user.userTypeTranslateKey) }}
+                                    </td>
+
+                                    <td class="text-nowrap">
+                                        {{ app_translate_text(transGroups, user.userGroupTranslateKey) }}
+                                    </td>
+
+                                    <td>
+                                        {{ user.active|app_html_toggle|raw }}
+                                    </td>
+
+                                    <td>
+                                        {{ user.verified|app_html_toggle|raw }}
+                                    </td>
+
+                                    <td class="text-right text-nowrap">
+                                        <div class="d-none d-sm-block">
+                                            {% if acl_is_accessible('admin', 'user', 'edit') %}
+                                                <a class="btn btn-sm btn-info"
+                                                   href="{{ path('admin_user_edit', { id: user.id }) }}">
+                                                    <i class="fas fa-pencil-alt">
+                                                    </i>
+                                                    {{ 'app.edit'|trans }}
+                                                </a>
+                                            {% endif %}
+
+                                            {% if acl_is_accessible('admin', 'user', 'delete') %}
+                                                <a class="btn btn-sm btn-danger"
+                                                   href="#"
+                                                   onclick="return confirm('{{ 'app.user.delete_confirmation_dialog'|trans }}')">
+                                                    <i class="fas fa-trash"></i>
+                                                    {{ 'app.delete'|trans }}
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card-footer clearfix bg-white py-0">
+                        {{ knp_pagination_render(users, null, {}, {align: 'right'}) }}
+                    </div>
+                </div>
+            {% else %}
+                <div class="content-empty-results">
+                    <p>{{ 'app.list.not_exist_results'|trans }}</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

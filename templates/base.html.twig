@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="{{ 'language.identifier'|trans([], null, app.request.locale)|replace({'_':'-'}) }}">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="robots" content="noindex, nofollow">
+
+        <!-- Google Font: Source Sans Pro -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+        <title>{% block title %}Welcome!{% endblock %}</title>
+
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('main') }}
+        {% endblock %}
+    </head>
+
+    <body{% block addAttrBody %}{% endblock %}>
+    {% block body %}{% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('main') }}
+
+        <script>
+            window.onload = () => {
+                web.startComponents({{ get_components() }});
+            };
+        </script>
+    {% endblock %}
+
+    {% block scripts %}
+        <!-- Add more javascript. -->
+    {% endblock %}
+    </body>
+</html>
