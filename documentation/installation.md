@@ -92,8 +92,8 @@ You should import all SQL files listed below (keep the sort) to have all necessa
 To import that easier, just execute this two command below:
 
 ```bash
-mysql -u root -p language_exchange_db < data/db/insert_location_data.sql
-mysql -u root -p language_exchange_db < data/db/insert_initial_data.sql
+mysql -u root -p symfony_adm_db < data/db/insert_location_data.sql
+mysql -u root -p symfony_adm_db < data/db/insert_initial_data.sql
 ```
 
 **6. Install yarn package**
