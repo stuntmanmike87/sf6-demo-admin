@@ -13,7 +13,7 @@
 **1. Clone the repository**
 
 ```bash
-git clone git@gitlab.com:language-exchange/admin.git .
+git clone git@github.com:thomaskanzig/symfony-demo-administrator.git .
 ```
 
 **2. Config environment file**  
@@ -92,8 +92,8 @@ You should import all SQL files listed below (keep the sort) to have all necessa
 To import that easier, just execute this two command below:
 
 ```bash
-mysql -u root -p language_exchange_db < data/db/insert_location_data.sql
-mysql -u root -p language_exchange_db < data/db/insert_initial_data.sql
+mysql -u root -p symfony_adm_db < data/db/insert_location_data.sql
+mysql -u root -p symfony_adm_db < data/db/insert_initial_data.sql
 ```
 
 **6. Install yarn package**
