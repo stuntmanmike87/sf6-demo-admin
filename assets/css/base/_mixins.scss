@@ -1,0 +1,28 @@
+/**
+ * Stretches an element.
+ * Can be used with height 100vh or height 100%.
+ */
+@mixin stretched($heightType: '%') {
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    @if $heightType == '%' {
+        height: 100%;
+    } @else {
+        height: 100vh;
+    }
+}
+
+/**
+ * Breakpoints custom with your own pixel.
+ */
+@mixin mqCustom($size: 1200px, $type: max) {
+    @if $type == min {
+        $size: $size + 1px;
+    }
+
+    @media screen and (#{$type}-width: $size) {
+        @content;
+    }
+}

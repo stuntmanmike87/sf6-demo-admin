@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block addAttrBody %} {{ ' class="login-page"'|raw }} {% endblock %}
+
+{% block body %}
+    <div class="login-box">
+        <div class="login-logo login__logo">
+            <b>{{ app_name }}</b>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">{{ 'app.login.start_your_session'|trans }}</p>
+
+                <form action="{{ path('security_login') }}" method="post">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <input type="hidden" name="_target_path" value="{{ app.request.get('redirect_to') }}">
+
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Username" name="_username">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" placeholder="Password" name="_password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-between">
+                            <div class="icheck-primary">
+                                <input type="checkbox" id="remember">
+                                <label for="remember">
+                                    {{ 'app.login.remember_me'|trans }}
+                                </label>
+                            </div>
+
+                            <button
+                                id="{{ register_component('button-loading') }}"
+                                type="submit"
+                                class="btn btn-primary btn-block button-loading w-auto"
+                            >
+                                {{ 'app.login.sign_in'|trans }}
+                            </button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
+                <!-- /.social-auth-links -->
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+{% endblock %}

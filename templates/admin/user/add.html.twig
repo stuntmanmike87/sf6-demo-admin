@@ -1,0 +1,222 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %} {{ 'app.user.edit_user'|trans }} {% endblock %}
+
+{% block headerNavbar %}
+    <li class="nav-item">
+        {{ form_widget(form.submit, {
+            label: 'app.user.form.button.save_user',
+            icon_before: 'fa-save',
+            attr: {
+                form: 'form_user',
+                class: 'nav-link btn'
+            }
+        }) }}
+    </li>
+{% endblock %}
+
+{% block body %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>{{ 'app.user.add_user'|trans }}</h1>
+                </div>
+
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('admin_user_index') }}">
+                                {{ 'app.users'|trans }}
+                            </a>
+                        </li>
+
+                        <li class="breadcrumb-item active">
+                            {{ 'app.user.add_user'|trans }}
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% set csrfApiToken = csrf_token('api') %}
+
+    <section class="content">
+        <div class="container-fluid">
+            {{ form_start(form, {attr: {id: 'form_user'}}) }}
+                {% do form.phone_number.setRendered() %}
+                {% do form.phone_number_country_id.setRendered() %}
+
+                {# Card of basic information. #}
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            {{ 'app.basic_information'|trans }}
+                        </h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ form_row(form.first_name) }}
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form_row(form.last_name) }}
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form_row(form.user_type_id) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                {{ form_label(form.birthday) }}
+
+                                <div class="input-group mb-3" id="{{ register_component('datepicker', {
+                                    locale: app.request.locale,
+                                    changeMonth: true,
+                                    changeYear: true,
+                                })}}">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-calendar" aria-hidden="true"></i></span>
+                                    </div>
+
+                                    {{ form_widget(form.birthday, {
+                                        'attr': {'class': 'js-datepicker'}}
+                                    )}}
+                                </div>
+
+                                <div class="form-error">
+                                    {{ form_errors(form.birthday) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                {{ form_row(form.bio) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(form.tmp_url_avatar) }}
+
+                                {% if form.vars.data.urlPicture is not empty %}
+                                    <img src="{{ app_image(form.vars.data.urlPicture, {'w': 320, 'h': 320}) }}"
+                                         class="img-rounded img-responsive client-form__image mb-3"
+                                         alt="">
+
+                                    {{ form_row(form.delete_url_avatar) }}
+                                {% else %}
+                                    {% do form.delete_url_avatar.setRendered() %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Card of access information (login & password). #}
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            {{ 'app.access_information'|trans }}
+                        </h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                {{ form_row(form.active) }}
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form_row(form.verified) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ form_row(form.username) }}
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form_row(form.plainPassword.first) }}
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form_row(form.plainPassword.second) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ form_row(form.acl_user_group_id) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Card of contacts. #}
+                <div class="card">
+                    <div class="card-header with-border">
+                        <h3 class="card-title">
+                            {{ 'app.contact_details'|trans }}
+                        </h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                {{ form_row(form.email) }}
+                            </div>
+
+                            {% set componentPhoneNumber = register_component('phone-number', {
+                                locale: app.request.locale,
+                                value: form.vars.data.phoneNumber|default(),
+                                locationCountryId: form.vars.data.getPhoneNumberCountry.id|default(),
+                                prefixEntity: form.vars.full_name,
+                                translations: {
+                                    choose: 'app.form.label.choose'|trans,
+                                    label: 'app.user.form.label.phone_number'|trans,
+                                    selectCountryCallingCode: 'app.user.select_country_calling_code'|trans
+                                },
+                                countryCallingCodes: app_country_calling_codes()|json_encode(),
+                            }) %}
+
+                            <div id="{{ componentPhoneNumber }}" class="col-md-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Card of location. #}
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            {{ 'app.address_information'|trans }}
+                        </h3>
+                    </div>
+
+                    <div class="card-body">
+                        {% include 'admin/includes/form/card-location-google-maps.html.twig' with {
+                            form: form,
+                            apiToken: csrfApiToken,
+                        } %}
+                    </div>
+                </div>
+
+                {# Submit. #}
+                <div class="row mb-3">
+                    <div class="col-12 d-flex justify-content-end">
+                        <button id="{{ register_component('button-loading') }}" type="submit" class="btn btn-lg btn-primary button-loading">
+                            <i class="fas fa-save mr-2 js-button-loading--removing"></i> {{ 'app.user.form.button.save_user'|trans }}
+                        </button>
+                    </div>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </section>
+{% endblock %}

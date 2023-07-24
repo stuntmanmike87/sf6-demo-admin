@@ -1,0 +1,85 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="#" class="brand-link" target="_blank">
+        <img src="{{ asset('img/random-logo.png'|imagine_filter('90x90')) }}"
+             alt="Logo" class="brand-image"
+             style="opacity: .8">
+        <span class="brand-text font-weight-light">{{ app_name }}</span>
+    </a>
+
+    <div class="sidebar">
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                {% if acl_is_accessible('admin', 'user') %}
+                    <li class="nav-item{{ display_class(' menu-open', 'user') }}">
+                        <a href="#" class="nav-link{{ display_class(' active', 'user') }}">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                {{ 'app.users'|trans }}
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            {% if acl_is_accessible('admin', 'user', 'add') %}
+                                <li class="nav-item">
+                                    <a href="{{ path('admin_user_add') }}" class="nav-link{{ display_class(' active', 'user', 'add') }}">
+                                        <i class="fas fa-plus nav-icon"></i>
+                                        <p>{{ 'app.add'|trans }}</p>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if acl_is_accessible('admin', 'user', 'index') %}
+                                <li class="nav-item">
+                                    <a href="{{ path('admin_user_index') }}" class="nav-link{{ display_class(' active', 'user', 'index') }}">
+                                        <i class="fas fa-list-ul nav-icon"></i>
+                                        <p>{{ 'app.list_all'|trans }}</p>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                {% endif %}
+
+                {% if acl_is_accessible('admin', 'settings') %}
+                    <li class="nav-item{{ display_class(' menu-open', 'settings') }}">
+                        <a href="#" class="nav-link{{ display_class(' active', 'settings') }}">
+                            <i class="nav-icon fas fa-sliders-h"></i>
+                            <p>
+                                {{ 'app.settings'|trans }}
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            {% if acl_is_accessible('admin', 'settings', 'security') %}
+                                <li class="nav-item">
+                                    <a href="{{ path('admin_settings_security') }}" class="nav-link{{ display_class(' active', 'settings', 'security') }}">
+                                        <i class="fas fa-shield-alt nav-icon"></i>
+                                        <p>{{ 'app.settings.security'|trans }}</p>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if acl_is_accessible('admin', 'settings', 'profile') %}
+                                <li class="nav-item">
+                                    <a href="{{ path('admin_settings_profile') }}" class="nav-link{{ display_class(' active', 'settings', 'profile') }}">
+                                        <i class="fas fa-user-circle nav-icon"></i>
+                                        <p>{{ 'app.settings.profile'|trans }}</p>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% if acl_is_accessible('admin', 'settings', 'address') %}
+                                <li class="nav-item">
+                                    <a href="{{ path('admin_settings_address') }}" class="nav-link{{ display_class(' active', 'settings', 'address') }}">
+                                        <i class="fas fa-map-marker-alt nav-icon"></i>
+                                        <p>{{ 'app.settings.address'|trans }}</p>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</aside>

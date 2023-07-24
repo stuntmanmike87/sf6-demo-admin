@@ -1,0 +1,145 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %} {{ 'app.settings'|trans }} | {{ 'app.settings.profile'|trans }} {% endblock %}
+
+{% block headerNavbar %}
+    <li class="nav-item">
+        {{ form_widget(form.submit, {
+            label: 'app.button.save_changes',
+            icon_before: 'fa-save',
+            attr: {
+                form: 'form_settings_profile',
+                class: 'nav-link btn'
+            }
+        }) }}
+    </li>
+{% endblock %}
+
+{% block body %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>{{ 'app.settings'|trans }}</h1>
+                </div>
+
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">
+                            {{ 'app.settings'|trans }}
+                        </li>
+
+                        <li class="breadcrumb-item active">
+                            {{ 'app.settings.profile'|trans }}
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# TODO: Insert media upload for avatar. #}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-primary card-outline card-outline-tabs">
+                {% include 'admin/includes/settings-nav-pills.html.twig' %}
+
+                {{ form_start(form, {attr: {id: 'form_settings_profile'}}) }}
+                    {% do form.phone_number.setRendered() %}
+                    {% do form.phone_number_country_id.setRendered() %}
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ form_row(form.first_name) }}
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form_row(form.last_name) }}
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form_row(form.user_type_id) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ form_label(form.birthday) }}
+
+                                <div class="input-group mb-3" id="{{ register_component('datepicker', {
+                                    locale: app.request.locale,
+                                    changeMonth: true,
+                                    changeYear: true,
+                                })}}">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-calendar" aria-hidden="true"></i></span>
+                                    </div>
+
+                                    {{ form_widget(form.birthday, {
+                                        'attr': {'class': 'js-datepicker'}}
+                                    )}}
+                                </div>
+
+                                <div class="form-error">
+                                    {{ form_errors(form.birthday) }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                {{ form_row(form.email) }}
+                            </div>
+
+                            {% set componentPhoneNumber = register_component('phone-number', {
+                                locale: app.request.locale,
+                                value: form.vars.data.phoneNumber|default(),
+                                locationCountryId: form.vars.data.getPhoneNumberCountry.id|default(),
+                                prefixEntity: form.vars.full_name,
+                                translations: {
+                                    choose: 'app.form.label.choose'|trans,
+                                    label: 'app.user.form.label.phone_number'|trans,
+                                    selectCountryCallingCode: 'app.user.select_country_calling_code'|trans
+                                },
+                                countryCallingCodes: app_country_calling_codes()|json_encode(),
+                            }) %}
+
+                            <div id="{{ componentPhoneNumber }}" class="col-md-4"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                {{ form_row(form.bio) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                                {{ form_row(form.tmp_url_avatar) }}
+                            </div>
+                        </div>
+
+                        {% if form.vars.data.urlPicture is not empty %}
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <img src="{{ app_image(form.vars.data.urlPicture, {'w': 320, 'h': 320}) }}"
+                                     class="img-rounded img-responsive client-form__image mb-3"
+                                     alt="">
+
+                                {{ form_row(form.delete_url_avatar) }}
+                            </div>
+                        </div>
+                        {% else %}
+                            {% do form.delete_url_avatar.setRendered() %}
+                        {% endif %}
+                    </div>
+
+                    <div class="card-footer d-flex justify-content-end">
+                        <button id="{{ register_component('button-loading') }}" type="submit" class="btn btn-primary button-loading">
+                            <i class="fas fa-save mr-2 js-button-loading--removing"></i> {{ 'app.button.save_changes'|trans }}
+                        </button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}

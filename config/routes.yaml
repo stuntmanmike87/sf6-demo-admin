@@ -1,0 +1,8 @@
+login:
+    path: /{_locale}
+    controller: App\Controller\SecurityController::login
+    requirements:
+        _locale: '%app_locales%'
+    defaults:
+        template: security/login.html.twig
+        _locale: '%locale%'

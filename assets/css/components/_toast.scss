@@ -1,0 +1,52 @@
+.toast {
+    $componentToast: &;
+
+    position: fixed;
+    z-index: 1040;
+    left: 0.5rem;
+    right: 0.5rem;
+    max-width: none;
+    width: auto;
+    background-color: $white;
+
+    font-size: 16px;
+
+    &-black {
+        background-color: $colorGrey;
+        color: $colorWhite;
+
+        #{$componentToast}-header {
+            background-color: $colorGreyMineShaft;
+            color: $colorWhite;
+        }
+
+        .close {
+            color: $colorWhite;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+    }
+
+    &.\--bottom-right {
+        bottom: 0.5rem;
+        right: 0.5rem;
+
+        @include media-breakpoint-up(sm) {
+            left: auto;
+        }
+    }
+
+    &.\--top-center {
+        top: 0.5rem;
+        transform: none;
+
+        @include media-breakpoint-up(sm) {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+
+    @include media-breakpoint-up(sm) {
+        width: 280px;
+    }
+}

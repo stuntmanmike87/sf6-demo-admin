@@ -1,0 +1,79 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %} {{ 'app.settings'|trans }} | {{ 'app.settings.security'|trans }} {% endblock %}
+
+{% block headerNavbar %}
+    <li class="nav-item">
+        {{ form_widget(form.submit, {
+            label: 'app.button.save_changes',
+            icon_before: 'fa-save',
+            attr: {
+                form: 'form_settings_security',
+                class: 'nav-link btn'
+            }
+        }) }}
+    </li>
+{% endblock %}
+
+{% block body %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>{{ 'app.settings'|trans }}</h1>
+                </div>
+
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active">
+                            {{ 'app.settings'|trans }}
+                        </li>
+
+                        <li class="breadcrumb-item active">
+                            {{ 'app.settings.security'|trans }}
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-primary card-outline card-outline-tabs">
+                {% include 'admin/includes/settings-nav-pills.html.twig' %}
+
+                {{ form_start(form, {attr: {id: 'form_settings_security'}}) }}
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ form_row(form.username) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ form_row(form.plainPassword.first) }}
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form_row(form.plainPassword.second) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ form_row(form.acl_user_group_id) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer d-flex justify-content-end">
+                        <button id="{{ register_component('button-loading') }}" type="submit" class="btn btn-primary button-loading">
+                            <i class="fas fa-save mr-2 js-button-loading--removing"></i> {{ 'app.button.save_changes'|trans }}
+                        </button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}

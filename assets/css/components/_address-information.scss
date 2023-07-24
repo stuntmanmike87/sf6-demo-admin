@@ -1,0 +1,63 @@
+$heightGoogleMap: 320px;
+
+.address-info-google-map {
+  background-color: $colorGreyCatskillWhite;
+  background-position: 50% 50%;
+  width: 100%;
+  min-height: $heightGoogleMap;
+  border-radius: 5px;
+  position: relative;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.address-info-google-map-display {
+  width: 100%;
+  min-height: $heightGoogleMap;
+  z-index: 1;
+}
+
+.address-info-google-map-loading {
+  @include stretched('%');
+  position: absolute;
+  background-color: $colorGreyGallery;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: -1;
+  pointer-events: none;
+
+  .is-loading & {
+    opacity: 1;
+    z-index: 1;
+    pointer-events: auto;
+  }
+
+  span {
+    @extend %absoluteCentered;
+    color: $colorGrey;
+    font-size: 14px;
+  }
+}
+
+.address-info-countries-results {
+  > li {
+    display: flex;
+    align-items: flex-start;
+    padding: 8px 20px;
+
+    span {
+      flex-shrink: 0;
+      margin: 5px 8px 0 0;
+    }
+  }
+}
+
+.address-info__btn-postal-code-loader,
+.address-info__btn-google-maps-loader {
+  height: 18px;
+  display: none;
+
+  &.is-visible {
+    display: block;
+  }
+}

@@ -1,0 +1,22 @@
+{# TODO: Improve responsive. #}
+<div class="card-header p-0 border-bottom-0">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="{{ path('admin_settings_security') }}" class="nav-link{{ display_class(' active', 'settings', 'security') }}" role="tab">
+                <i class="fas fa-shield-alt"></i> {{ 'app.settings.security'|trans }}
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{{ path('admin_settings_profile') }}" class="nav-link{{ display_class(' active', 'settings', 'profile') }}" role="tab">
+                <i class="fas fa-user-circle"></i> {{ 'app.settings.profile'|trans }}
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{{ path('admin_settings_address') }}" class="nav-link{{ display_class(' active', 'settings', 'address') }}" role="tab">
+                <i class="fas fa-map-marker-alt"></i> {{ 'app.settings.address'|trans }}
+            </a>
+        </li>
+    </ul>
+</div>
