@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\AclActionRepository;
@@ -8,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AclActionRepository::class)]
+/** @final */
 class AclAction
 {
     #[ORM\Id]
@@ -16,12 +19,13 @@ class AclAction
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private string $name;//private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'actions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?AclController $controller = null;
+    private ?AclController $controller = null;//private AclController $controller;
 
+    /** @var  Collection<int, AclPermission> $permissions */
     #[ORM\OneToMany(mappedBy: 'action', targetEntity: AclPermission::class)]
     private Collection $permissions;
 
@@ -55,7 +59,7 @@ class AclAction
     public function setController(?AclController $controller): self
     {
         $this->controller = $controller;
-
+        
         return $this;
     }
 
@@ -79,11 +83,9 @@ class AclAction
 
     public function removePermission(AclPermission $permission): self
     {
-        if ($this->permissions->removeElement($permission)) {
-            // set the owning side to null (unless already changed)
-            if ($permission->getAction() === $this) {
-                $permission->setAction(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->permissions->removeElement($permission) && $permission->getAction() === $this) {
+            $permission->setAction(null);
         }
 
         return $this;

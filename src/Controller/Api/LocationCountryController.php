@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Api;
 
 use App\Entity\LocationCountry;
 use App\Entity\User;
+use App\Repository\LocationCountryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,7 +19,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class LocationCountryController extends AbstractController
+final class LocationCountryController extends AbstractController
 {
     /**
      * constructor.
@@ -31,25 +34,28 @@ class LocationCountryController extends AbstractController
      * Get location country.
      */
     #[Route('/api/location/country', name: 'api_location_country_get', methods: ['POST'])]
-    public function getAction(Request $request): Response
+    public function get(Request $request): Response
     {
         $success = false;
         $jsonData = [];
         $message = $this->translator->trans('app.message.no_results_found');
 
         $alpha2 = $request->request->get('alpha2');
+        //** @var string|null $tokenApi */
         $tokenApi = $request->request->get('token');
 
+        /** @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $token->getUser();
 
-        if (!$this->isCsrfTokenValid('api', $tokenApi) || !$user instanceof User) {
+        if (!$this->isCsrfTokenValid('api', (string) $tokenApi) || !$user instanceof User) {
             throw new InvalidCsrfTokenException();
         }
 
         $response = new JsonResponse();
 
-        if (empty($alpha2)) {
+        if (null === $alpha2) {
             $response->setData([
                 'success' => $success,
                 'message' => $message,
@@ -58,10 +64,15 @@ class LocationCountryController extends AbstractController
             return $response;
         }
 
-        /** @var LocationCountry $locationCountry */
-        $locationCountry = $this->entityManager
+        /** @var LocationCountryRepository $locationCountryRepository */
+        $locationCountryRepository = $this->entityManager->getRepository(LocationCountry::class);
+        /** @var LocationCountry[] $locationCountry */
+        $locationCountry = $locationCountryRepository->findOneBy(['alpha2' => $alpha2]);
+        
+        //** @var LocationCountry $locationCountry */
+        /* $locationCountry = $this->entityManager
             ->getRepository(LocationCountry::class)
-            ->findOneBy(['alpha2' => $alpha2]);
+            ->findOneBy(['alpha2' => $alpha2]); */
 
         if (isset($locationCountry)){
             $success = true;
@@ -85,22 +96,23 @@ class LocationCountryController extends AbstractController
      * Search location country.
      */
     #[Route('/api/location/country/search', name: 'api_location_country_search', methods: ['POST'])]
-    public function searchAction(Request $request): Response
+    public function search(Request $request): Response
     {
         $success = false;
         $jsonData = [];
         $message = $this->translator->trans('app.message.no_results_found');
 
         $text = $request->request->get('text');
+        //** @var string|null $tokenApi */
         $tokenApi = $request->request->get('token');
 
-        if (!$this->isCsrfTokenValid('api', $tokenApi)) {
+        if (!$this->isCsrfTokenValid('api', (string) $tokenApi)) {
             throw new InvalidCsrfTokenException();
         }
 
         $response = new JsonResponse();
 
-        if (empty($text)) {
+        if (null === $text) {
             $response->setData([
                 'success' => $success,
                 'message' => $message,
@@ -109,14 +121,20 @@ class LocationCountryController extends AbstractController
             return $response;
         }
 
-        /** @var LocationCountry[] $locationCountry */
-        $countries = $this->entityManager
+        /** @var LocationCountryRepository $locationCountryRepository */
+        $locationCountryRepository = $this->entityManager->getRepository(LocationCountry::class);
+        /** @var LocationCountry[] $countries */
+        $countries = $locationCountryRepository->search((string) $text);
+
+        /* $countries = $this->entityManager
             ->getRepository(LocationCountry::class)
-            ->search($text);
+            ->search($text); */
 
         if (0 < (is_countable($countries) ? count($countries) : 0)){
 
-            foreach($countries as $key => $country) {
+            /** @var array<string> $country */
+            foreach($countries as $key => $country) {//@var (\App\Entity\LocationCountry|string[])[] $countries
+                /** @var string[][] $countries */
                 $countries[$key]['html'] = '<span class="fi fi-' . strtolower((string) $country['alpha2']) . '"></span>' . $country['native'];
             }
 

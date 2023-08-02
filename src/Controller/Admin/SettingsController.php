@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Entity\User;
@@ -14,14 +16,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/admin',  methods: ['GET', 'POST'])]
-class SettingsController extends AdminController
+final class SettingsController extends AdminController
 {
     /**
      * Edit security data of the logged user.
      *
-     * @param Request $request
-     * @param TranslatorInterface $translator
-     * @param EntityManagerInterface $entityManager
      * @return Response
      */
     #[Route('/settings/security', name: 'admin_settings_security')]
@@ -52,9 +51,6 @@ class SettingsController extends AdminController
     /**
      * Edit profile of the logged user.
      *
-     * @param Request $request
-     * @param TranslatorInterface $translator
-     * @param EntityManagerInterface $entityManager
      * @return Response
      */
     #[Route('/settings/profile', name: 'admin_settings_profile')]
@@ -85,9 +81,6 @@ class SettingsController extends AdminController
     /**
      * Edit address data of the logged user.
      *
-     * @param Request $request
-     * @param TranslatorInterface $translator
-     * @param EntityManagerInterface $entityManager
      * @return Response
      */
     #[Route('/settings/address', name: 'admin_settings_address')]

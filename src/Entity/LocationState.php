@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\LocationStateRepository;
@@ -10,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: LocationStateRepository::class)]
 #[ORM\Index(columns: ["name"], name: "idx_name")]
 #[ORM\Index(columns: ["slug"], name: "idx_slug")]
+/** @final */
 class LocationState
 {
     #[ORM\Id]
@@ -18,21 +21,23 @@ class LocationState
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $name = null;//private string $name;
 
     #[ORM\Column(length: 255)]
-    private ?string $slug = null;
+    private ?string $slug = null;//private string $slug;
 
     #[ORM\Column(length: 5, nullable: true)]
     private ?string $code = null;
 
     #[ORM\ManyToOne(inversedBy: 'states')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?LocationCountry $country = null;
+    private ?LocationCountry $country = null;//private LocationCountry $country;
 
+    /** @var  Collection<int, LocationCity> $cities*/
     #[ORM\OneToMany(mappedBy: 'state', targetEntity: LocationCity::class)]
     private Collection $cities;
 
+    /** @var  Collection<int, User> $users*/
     #[ORM\OneToMany(mappedBy: 'state', targetEntity: User::class)]
     private Collection $users;
 
@@ -91,7 +96,7 @@ class LocationState
     public function setCountry(?LocationCountry $country): self
     {
         $this->country = $country;
-
+        
         return $this;
     }
 
@@ -115,11 +120,9 @@ class LocationState
 
     public function removeCity(LocationCity $city): self
     {
-        if ($this->cities->removeElement($city)) {
-            // set the owning side to null (unless already changed)
-            if ($city->getState() === $this) {
-                $city->setState(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->cities->removeElement($city) && $city->getState() === $this) {
+            $city->setState(null);
         }
 
         return $this;
@@ -145,11 +148,9 @@ class LocationState
 
     public function removeUser(User $user): self
     {
-        if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getState() === $this) {
-                $user->setState(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->users->removeElement($user) && $user->getState() === $this) {
+            $user->setState(null);
         }
 
         return $this;

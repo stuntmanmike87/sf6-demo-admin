@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
-use App\Entity\ClientType;
-use App\Entity\Translation;
+// use App\Entity\ClientType;
+// use App\Entity\Translation;
 use App\Entity\User;
-use App\Service\StringService;
+// use App\Service\StringService;
 use App\Utils\StringHelper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
+// use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
-use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
+// use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 use Knp\Component\Pager\PaginatorInterface;
-use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
-use Symfony\Component\Form\Util\StringUtil;
+// use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
+// use Symfony\Component\Form\Util\StringUtil;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -26,7 +28,7 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+final class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
     public function __construct(ManagerRegistry $registry, private readonly PaginatorInterface $paginator)
     {
@@ -57,7 +59,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
         $user->setPassword($newHashedPassword);
@@ -65,11 +67,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->save($user, true);
     }
 
-    /**
-     * @param array|null $criteria
-     * @return SlidingPagination
+    // /**
+    //  * @param array|null $criteria
+    //  * @return SlidingPagination
+    //  */
+    /** 
+     * @param array<mixed>|null $criteria
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface<mixed> 
      */
-    public function findLatest(?array $criteria): SlidingPagination
+    public function findLatest(?array $criteria): \Knp\Component\Pager\Pagination\PaginationInterface//SlidingPagination
     {
         $qb = $this->createQueryBuilder('user')
             ->innerJoin('user.userGroup', 'ug')
@@ -88,10 +94,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->where('user.deletedAt IS NULL')
         ;
 
+        /** @var array<mixed> $criteria */
         if (array_key_exists( 'query', $criteria)) {
             $searchTerms = StringHelper::extractSearchTerms($criteria['query']);
 
-            if (\count($searchTerms)) {
+            if ($searchTerms !== []) {
                 $orStatements = $qb->expr()->orX();
 
                 foreach ($searchTerms as $term) {
@@ -107,6 +114,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                         $qb->expr()->like('user.lastName', $qb->expr()->literal('%'.$term.'%'))
                     );
                 }
+
                 $qb->andWhere($orStatements);
             }
         }
@@ -116,12 +124,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $page = $criteria['page'] ?? 1;
         $limit = $criteria['limit'] ?? null;
 
-        $pagination = $this->paginator->paginate(
+        return $this->paginator->paginate(
             $qb,
             $page,
             $limit
         );
-
-        return $pagination;
     }
 }

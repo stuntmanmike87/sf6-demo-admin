@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\ResetUserPassword;
@@ -14,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ResetUserPassword[]    findAll()
  * @method ResetUserPassword[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ResetUserPasswordRepository extends ServiceEntityRepository
+final class ResetUserPasswordRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

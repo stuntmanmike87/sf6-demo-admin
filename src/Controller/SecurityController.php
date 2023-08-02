@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -9,10 +11,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-class SecurityController extends AbstractController
+final class SecurityController extends AbstractController
 {
     #[Route('/login', name: 'security_login')]
-    public function login(Request $request, Security $security, AuthenticationUtils $helper): Response
+    public function login(Security $security, AuthenticationUtils $helper): Response
     {
         // if user is already logged in, don't display the login page again
         if ($security->isGranted('IS_AUTHENTICATED_FULLY')) {

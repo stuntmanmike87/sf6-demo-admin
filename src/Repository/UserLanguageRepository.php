@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\UserLanguage;
@@ -14,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method UserLanguage[]    findAll()
  * @method UserLanguage[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserLanguageRepository extends ServiceEntityRepository
+final class UserLanguageRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

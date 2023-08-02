@@ -1,16 +1,21 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Utils;
 
 use function Symfony\Component\String\u;
 
-class StringHelper
+final class StringHelper
 {
     /**
      * Convert to camelcase.
      */
-    public static function dashesToCamelCase($string, $between = "-", $capitalizeFirstCharacter = false): string
+    public static function dashesToCamelCase(mixed $string, string $between = "-", bool $capitalizeFirstCharacter = false): string
     {
-        $str = str_replace(' ', '', ucwords(str_replace($between, ' ', (string) $string)));
+        /** @var array<string>|string $string *//** @var string $s */
+        $s = str_replace($between, ' ', $string);
+        $str = str_replace(' ', '', ucwords($s));
 
         if (!$capitalizeFirstCharacter) {
             $str[0] = strtolower($str[0]);
@@ -22,13 +27,17 @@ class StringHelper
     /**
      * Convert a string camel case to dash.
      */
-    public static function camelCaseToDashed($string): string
+    public static function camelCaseToDashed(mixed $string): string
     {
-        return strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $string));
+        /** @var array<string>|string $string *//** @var string $s */
+        $s = preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $string);
+        return strtolower($s);
     }
 
     /**
      * Transforms the search string into an array of search terms.
+     *
+     * @return array<mixed>
      */
     public static function extractSearchTerms(string $searchQuery): array
     {
@@ -36,7 +45,7 @@ class StringHelper
         $terms = array_unique($searchQuery->split(' '));
 
         // Ignore the search terms that are too short
-        return array_filter($terms, fn($term) => 2 <= $term->length());
+        return array_filter($terms, static fn($term) => 2 <= $term->length());
     }
 
     /**
@@ -46,17 +55,12 @@ class StringHelper
      */
     public static function isYouTube(string $url = null): bool
     {
-        if (empty($url)){
+        if ($url === null || $url === ''){
             return false;
         }
 
         $yt_rx = '/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/';
         $has_match_youtube = preg_match($yt_rx, $url, $yt_matches);
-
-        if ($has_match_youtube) {
-            return true;
-        }
-
-        return false;
+        return (bool) $has_match_youtube;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Api;
 
 use App\Entity\LocationState;
@@ -15,7 +17,7 @@ use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class LocationStateController extends AbstractController
+final class LocationStateController extends AbstractController
 {
     /**
      * constructor.
@@ -30,7 +32,7 @@ class LocationStateController extends AbstractController
      * List states.
      */
     #[Route('/api/location/states', name: 'api_location_state_list', methods: ['GET'])]
-    public function listAction(Request $request): Response
+    public function list(Request $request): Response
     {
         $success = false;
         $jsonData = [];
@@ -39,8 +41,10 @@ class LocationStateController extends AbstractController
         $countryId = $request->query->get('countryId');
         $tokenApi = $request->query->get('token');
 
+        /** @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $token->getUser();
 
         if (!$this->isCsrfTokenValid('api', $tokenApi) || !$user instanceof User) {
             throw new InvalidCsrfTokenException();
@@ -48,7 +52,7 @@ class LocationStateController extends AbstractController
 
         $response = new JsonResponse();
 
-        if (empty($countryId)) {
+        if (null === $countryId) {
             $response->setData([
                 'success' => $success,
                 'message' => $message,
@@ -60,9 +64,9 @@ class LocationStateController extends AbstractController
         /** @var LocationState[] $locationStates */
         $locationStates = $this->entityManager
             ->getRepository(LocationState::class)
-            ->listAllByCountry($countryId);
+            ->listAllByCountry((int) $countryId);
 
-        if (0 < count($locationStates)){
+        if ([] !== $locationStates){
             $success = true;
             $message = $this->translator->trans('app.message.successfully_found');
 

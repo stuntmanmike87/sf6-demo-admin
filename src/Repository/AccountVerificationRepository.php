@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\AccountVerification;
@@ -14,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AccountVerification[]    findAll()
  * @method AccountVerification[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AccountVerificationRepository extends ServiceEntityRepository
+final class AccountVerificationRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

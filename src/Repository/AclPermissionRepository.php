@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
-use App\Entity\AclAction;
+// use App\Entity\AclAction;
 use App\Entity\AclPermission;
-use App\Entity\Translation;
+// use App\Entity\Translation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
+// use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +19,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AclPermission[]    findAll()
  * @method AclPermission[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AclPermissionRepository extends ServiceEntityRepository
+final class AclPermissionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -45,9 +47,8 @@ class AclPermissionRepository extends ServiceEntityRepository
     /**
      * Find all roles.
      *
-     * @param int $userGroupId
      * @param string|null $prefix
-     * @return array
+     * @return array<mixed>
      */
     public function findRoles(int $userGroupId, ?string $prefix = null): array
     {

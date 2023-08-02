@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\UserLanguageRepository;
@@ -9,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: UserLanguageRepository::class)]
 #[ORM\Index(columns: ["category"], name: "idx_category")]
 #[ORM\Index(columns: ["level"], name: "idx_level")]
+/** @final */
 class UserLanguage
 {
     #[ORM\Id]
@@ -18,17 +21,17 @@ class UserLanguage
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private ?User $user = null;//private User $user;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Language $language = null;
+    private ?Language $language = null;//private Language $language;
 
     #[ORM\Column(length: 20)]
-    private ?string $category = null;
+    private ?string $category = null;//private string $category;
 
     #[ORM\Column(length: 20)]
-    private ?string $level = null;
+    private ?string $level = null;//private string $level;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $createdAt = null;
@@ -46,7 +49,7 @@ class UserLanguage
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
+        
         return $this;
     }
 
@@ -58,7 +61,7 @@ class UserLanguage
     public function setLanguage(?Language $language): self
     {
         $this->language = $language;
-
+        
         return $this;
     }
 

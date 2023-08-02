@@ -1,18 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form\Helper;
 
 use App\Entity\LocationCity;
 use App\Entity\LocationCountry;
 use App\Entity\LocationNeighborhood;
 use App\Entity\LocationState;
+use App\Entity\User;
 use App\Utils\StringHelper;
-use Symfony\Component\Form\FormInterface;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class LocationHelper
+final class LocationHelper
 {
     public function __construct(
         private readonly EntityManager $entityManager,
@@ -24,18 +27,21 @@ class LocationHelper
      *
      * @param object|null $entityByGet In case without a entity reference in the route of method controller, should be added manually the entity in the form type class.
      *
+     * @return array<mixed>
      */
     public function getStates(string $key, ?object $entityByGet = null): array
-    {
+    {//Cognitive complexity for "App\Form\Helper\LocationHelper::getStates()" is 14, keep it under 8
+        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        $req = $this->request->getCurrentRequest();
         if ($this->requestMethodIsPOST()) {
-            $entity = $this->request->getCurrentRequest()->get($key);
-        } else if ($entityByGet) {
+            $entity = $req->get($key);
+        } elseif ($entityByGet !== null) {
             $entity = $entityByGet;
         } else {
-            $entity = $this->request->getCurrentRequest()->get(StringHelper::dashesToCamelCase($key, "_"));
+            $entity = $req->get(StringHelper::dashesToCamelCase($key, "_"));
         }
 
-        if (empty($entity)) {
+        if (null === $entity) {
             return [];
         }
 
@@ -43,22 +49,22 @@ class LocationHelper
 
         if ('object' == gettype($entity)) {
             /** @var LocationCountry $locationCountry */
-            $locationCountry = $entity->getCountry();
+            $locationCountry = $entity->getCountry();//Call to an undefined method object::getCountry().
 
-            if (!$locationCountry) {
+            if ($locationCountry === null) {
                 return [];
             }
 
             $location_country_id = $locationCountry->getId();
         } elseif ('array' == gettype($entity)){
-            if (empty($entity['location_country_id'])) {
+            if (null === $entity['location_country_id']) {
                 return [];
             }
 
             $location_country_id = $entity['location_country_id'];
         }
 
-        if (!$location_country_id) {
+        if ($location_country_id === null) {
             return [];
         }
 
@@ -87,19 +93,21 @@ class LocationHelper
     /**
      * Returns cities from a state in a dropdown (ChoiceType).
      *
-     *
+     * @return array<mixed>
      */
     public function getCities(string $key, ?object $entityByGet = null): array
-    {
+    {//Cognitive complexity for "App\Form\Helper\LocationHelper::getCities()" is 14, keep it under 8
+        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        $req = $this->request->getCurrentRequest();
         if ($this->requestMethodIsPOST()) {
-            $entity = $this->request->getCurrentRequest()->get($key);
-        } else if ($entityByGet) {
+            $entity = $req->get($key);
+        } elseif ($entityByGet !== null) {
             $entity = $entityByGet;
         } else {
-            $entity = $this->request->getCurrentRequest()->get(StringHelper::dashesToCamelCase($key, "_"));
+            $entity = $req->get(StringHelper::dashesToCamelCase($key, "_"));
         }
 
-        if (empty($entity)) {
+        if (null === $entity) {
             return [];
         }
 
@@ -107,22 +115,22 @@ class LocationHelper
 
         if ('object' == gettype($entity)) {
             /** @var LocationState $locationState */
-            $locationState = $entity->getState();
+            $locationState = $entity->getState();//Call to an undefined method object::getState().
 
-            if (!$locationState) {
+            if ($locationState === null) {
                 return [];
             }
 
             $location_state_id = $locationState->getId();
         } elseif ('array' == gettype($entity)){
-            if (empty($entity['state'])) {
+            if (null === $entity['state']) {
                 return [];
             }
 
             $location_state_id = $entity['state'];
         }
 
-        if (!$location_state_id) {
+        if ($location_state_id === null) {
            return [];
         }
 
@@ -154,12 +162,14 @@ class LocationHelper
      *
      * @param $entity
      */
-    public function setLocationBeforeSubmit(FormInterface $form, $entity): void
+    public function setLocationBeforeSubmit(FormInterface $form, mixed $entity): void
     {
+        /** @var User $entity */
+        
         // Update location country.
         $location_country_id = $form->get('location_country_id')->getData();
 
-        if ($location_country_id) {
+        if ($location_country_id !== null) {
             /** @var LocationCountry $locationCountry */
             $locationCountry = $this->entityManager->getRepository(LocationCountry::class)
                 ->find($location_country_id);
@@ -169,8 +179,8 @@ class LocationHelper
 
         // Update location state.
         $location_state_id = $form->get('state')->getData();
-
-        if ($location_state_id) {
+        //** @var int|null $location_state_id */
+        if ($location_state_id !== null) {
             /** @var LocationState $locationState */
             $locationState = $this->entityManager->getRepository(LocationState::class)
                 ->find($location_state_id);
@@ -180,7 +190,7 @@ class LocationHelper
         // Update location city.
         $location_city_id = $form->get('city')->getData();
 
-        if ($location_city_id) {
+        if ($location_city_id !== null) {
             /** @var LocationCity $locationCity */
             $locationCity = $this->entityManager->getRepository(LocationCity::class)
                 ->find($location_city_id);
@@ -190,7 +200,7 @@ class LocationHelper
             // Set correct neightborhood.
             $neighborhood = $form->get('neighborhood')->getData();
 
-            if ($neighborhood) {
+            if ($neighborhood !== null) {
                 /** @var LocationNeighborhood $locationNeighborhood */
                 $locationNeighborhood = $this->entityManager->getRepository(LocationNeighborhood::class)
                     ->findAdd([
@@ -208,34 +218,37 @@ class LocationHelper
     /**
      * Set all values with correctly format of locations before load form.
      *
-     * @param FormInterface $form
      * @param $entity
      */
-    public function setLocationBeforeLoadForm(FormInterface $form, $entity): void
+    public function setLocationBeforeLoadForm(FormInterface $form, mixed $entity): void
     {
+        /** @var User $entity */
+        
         // Set location state on form.
         /** @var LocationState $locationState */
         $locationState = $entity->getState();
-        if ($locationState) {
+        if ($locationState !== null) {
             $form->get('state')->setData($locationState->getId());
         }
 
         // Set location city on form.
         /** @var LocationCity $locationCity */
         $locationCity = $entity->getCity();
-        if ($locationCity) {
+        if ($locationCity !== null) {
             $form->get('city')->setData($locationCity->getId());
         }
 
         // Set location neighborhood on form.
         /** @var LocationNeighborhood $locationNeighborhood */
         $locationNeighborhood = $entity->getNeighborhood();
-        if ($locationNeighborhood) {
+        if ($locationNeighborhood !== null) {
             $form->get('neighborhood')->setData($locationNeighborhood->getName());
         }
     }
 
-    private function requestMethodIsPOST() {
-        return Request::METHOD_POST == $this->request->getCurrentRequest()->getMethod();
+    private function requestMethodIsPOST(): bool {
+        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        $req = $this->request->getCurrentRequest();
+        return Request::METHOD_POST == $req->getMethod();
     }
 }

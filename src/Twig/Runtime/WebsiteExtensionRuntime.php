@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig\Runtime;
 
 use App\Entity\LocationCountry;
@@ -8,26 +10,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
-class WebsiteExtensionRuntime implements RuntimeExtensionInterface
+final class WebsiteExtensionRuntime implements RuntimeExtensionInterface
 {
-    /**
-     * @var mixed
-     */
-    private $locales;
-
-    public function __construct(
-        private readonly string $thumbnailUrl,
-        string $locales,
-        private readonly TranslatorInterface $translator,
-        private readonly Acl $acl,
-        private readonly EntityManagerInterface $entityManager
-    ) {
-      $this->locales = $locales;
+    public function __construct(private readonly string $thumbnailUrl, private readonly string $locales, private readonly TranslatorInterface $translator, private readonly Acl $acl, private readonly EntityManagerInterface $entityManager)
+    {
     }
 
+    /** @param array<mixed>|null $thumb */
     public function getImage(?string $src, ?array $thumb = []): string
     {
-        if (!$src) {
+        if ($src === null) {
             if (isset($thumb['w']) && isset($thumb['h'])) {
                 return $this->thumbnailUrl . '?src=https://dummyimage.com/' . $thumb['w'] .'x'. $thumb['h'] . '/ffffff/bbb.gif&text=Sem imagem';
             }
@@ -37,7 +29,7 @@ class WebsiteExtensionRuntime implements RuntimeExtensionInterface
 
         $params = [];
 
-        if ($thumb) {
+        if ($thumb !== null) {
             foreach ($thumb as $parameter => $value) {
                 $params[] = $parameter . '=' . $value;
             }
@@ -57,7 +49,7 @@ class WebsiteExtensionRuntime implements RuntimeExtensionInterface
     {
         $toggle = 'fa-toggle-off';
 
-        if ($active) {
+        if ((bool) $active) {
             $toggle = 'fa-toggle-on text-success';
         }
 
@@ -69,9 +61,10 @@ class WebsiteExtensionRuntime implements RuntimeExtensionInterface
      * application and returns an array with the name of each locale written
      * in its own language (e.g. English, Français, Español, etc.).
      */
+    /** @return array<mixed> */
     public function getLocales(): array
     {
-        $localeCodes = explode('|', $this->locales);
+        $localeCodes = explode('|', /* (string)  */$this->locales);
         sort($localeCodes);
 
         $locales = [];
@@ -96,7 +89,7 @@ class WebsiteExtensionRuntime implements RuntimeExtensionInterface
         $_controller = $this->acl->getControllerName();
         $_action = $this->acl->getActionName();
 
-        if ($action) {
+        if ($action !== null) {
             if ($controller == $_controller && $action == $_action) {
                 return $className;
             }
@@ -115,13 +108,12 @@ class WebsiteExtensionRuntime implements RuntimeExtensionInterface
      * Returns a string with the correct text by translate key.
      * Originally this method was created to receive an array generated from TranslationHelper::convertTranslateKeyAsKey().
      *
-     * @param array $translations
+     * @param array<mixed> $translations
      * @param string|null $translateKey
-     * @return string|null
      */
-    public function getTextByTranslateKey(array $translations, ?string $translateKey): ?string
+    public function getTextByTranslateKey(array $translations, ?string $translateKey): mixed//?mixed//?string
     {
-        if (!$translateKey) {
+        if ($translateKey === null) {
             return null;
         }
 
@@ -131,7 +123,7 @@ class WebsiteExtensionRuntime implements RuntimeExtensionInterface
     /**
      * Returns an array with all calling codes from each country.
      *
-     * @return array
+     * @return array<mixed>
      */
     public function getCountryCallingCodes(): array
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Api;
 
 use App\Entity\LocationCity;
@@ -17,7 +19,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class LocationCityController extends AbstractController
+final class LocationCityController extends AbstractController
 {
     /**
      * constructor.
@@ -32,7 +34,7 @@ class LocationCityController extends AbstractController
      * List cities.
      */
     #[Route('/api/location/cities', name: 'api_location_city_list', methods: ['GET'])]
-    public function listAction(Request $request): Response
+    public function list(Request $request): Response
     {
         $success = false;
         $jsonData = [];
@@ -41,8 +43,10 @@ class LocationCityController extends AbstractController
         $stateId = $request->query->get('stateId');
         $tokenApi = $request->query->get('token');
 
+        /** @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $token->getUser();
 
         if (!$this->isCsrfTokenValid('api', $tokenApi) || !$user instanceof User) {
             throw new InvalidCsrfTokenException();
@@ -50,7 +54,7 @@ class LocationCityController extends AbstractController
 
         $response = new JsonResponse();
 
-        if (empty($stateId)) {
+        if (null === $stateId) {
             $response->setData([
                 'success' => $success,
                 'message' => $message,
@@ -62,9 +66,9 @@ class LocationCityController extends AbstractController
         /** @var LocationCity[] $locationCities */
         $locationCities = $this->entityManager
             ->getRepository(LocationCity::class)
-            ->listAllByState($stateId);
+            ->listAllByState((int) $stateId);
 
-        if (0 < count($locationCities)){
+        if ([] !== $locationCities){
             $success = true;
             $message = $this->translator->trans('app.message.successfully_found');
 

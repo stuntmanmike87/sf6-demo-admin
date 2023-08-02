@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\LocationCountry;
@@ -21,8 +23,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SettingsProfileType extends AbstractType
+final class SettingsProfileType extends AbstractType
 {
+    /** @param array<mixed> $uploadRules */
     public function __construct(
         private readonly EntityManager $entityManager,
         protected RequestStack $request,
@@ -30,8 +33,10 @@ class SettingsProfileType extends AbstractType
         private readonly array $uploadRules
     ) { }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {//Cognitive complexity for "App\Form\SettingsProfileType::buildForm()" is 12, keep it under 8
+        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        $req = $this->request->getCurrentRequest();
         $builder
             ->add('first_name', TextType::class, [
                 'label' => 'app.user.form.label.first_name',
@@ -51,7 +56,8 @@ class SettingsProfileType extends AbstractType
                 'required' => false,
                 'widget' => 'single_text',
                 'html5' => false,
-                'format' => (new DateTimeService())->getDateFormatFromLocale($this->request->getCurrentRequest()->getLocale()),
+                'format' => (new DateTimeService())->getDateFormatFromLocale($req->getLocale()),
+                //Dynamic call to static method App\Service\DateTimeService::getDateFormatFromLocale().
                 'attr' => [
                     'autocomplete' => 'off'
                 ]
@@ -109,14 +115,16 @@ class SettingsProfileType extends AbstractType
                     $user->setPhoneNumberCountry($country);
                 }
 
-                if (!$user->getPhoneNumber()) {
+                if ($user->getPhoneNumber() === null) {
                     $user->setPhoneNumberCountry(null);
                 }
 
                 // Update URL avatar.
+                /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $tmp_url_avatar */
                 $tmp_url_avatar = $form->get('tmp_url_avatar')->getData();
 
-                if ($tmp_url_avatar) {
+                if ($tmp_url_avatar !== null) {
+                    /** @var string[] $upload *///** @var string[]|null $upload */
                     $upload = $this->uploaderHelper->uploadImageToCDN($tmp_url_avatar, [
                         'addParentPath' => 'user',
                         'uniqueName' => true,
@@ -127,14 +135,14 @@ class SettingsProfileType extends AbstractType
                 }
 
                 // Delete URL avatar.
-                if ($form->get('delete_url_avatar')->getData()) {
+                if ($form->get('delete_url_avatar')->getData() !== null) {
                     $user->setUrlPicture(null);
                 }
 
                 // Update user type.
                 $user_type_id = $form->get('user_type_id')->getData();
 
-                if ($user_type_id) {
+                if ($user_type_id !== null) {
                     /** @var \App\Entity\UserType $userType */
                     $userType = $this->entityManager->getRepository(\App\Entity\UserType::class)
                         ->find($user_type_id);
@@ -152,21 +160,17 @@ class SettingsProfileType extends AbstractType
              * This event is mostly here for reading data after having pre-populated the form.
              * See more: https://symfony.com/doc/current/form/events.html
              */
-            ->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
+            ->addEventListener(FormEvents::POST_SET_DATA, static function (FormEvent $event) {
                 /** @var User $user */
                 $user = $event->getData();
                 $form = $event->getForm();
-
-                if (empty($user)) {
+                if (null === $user) {
                     return;
                 }
-
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
-                if ($user->getId()) {
-                    // Set user type on form.
-                    if ($user->getType()) {
-                        $form->get('user_type_id')->setData($user->getType()->getId());
-                    }
+                // Set user type on form.
+                if ($user->getId() !== null && $user->getType() !== null) {
+                    $form->get('user_type_id')->setData($user->getType()->getId());
                 }
             })
         ;
@@ -181,14 +185,19 @@ class SettingsProfileType extends AbstractType
 
     /**
      * Returns types of user for a dropdown (ChoiceType).
+     *
+     * @return array<mixed>
      */
     private function getUserTypesChoices(): array
     {
-        $locale = $this->request->getCurrentRequest()->getLocale();
+        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        $req = $this->request->getCurrentRequest();
+        $locale = $req->getLocale();//** @var string[][] $types */
         $types = $this->entityManager->getRepository(\App\Entity\UserType::class)
             ->findAllByLocale($locale);
 
         $choices = [];
+        /** @var string[] $type */
         foreach ($types as $type) {
             $choices[$type['text']] = $type['id'];
         }

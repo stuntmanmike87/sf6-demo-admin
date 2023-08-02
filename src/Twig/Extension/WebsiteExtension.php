@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig\Extension;
 
 use App\Twig\Runtime\WebsiteExtensionRuntime;
@@ -7,7 +9,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-class WebsiteExtension extends AbstractExtension
+final class WebsiteExtension extends AbstractExtension
 {
     public function getFilters(): array
     {

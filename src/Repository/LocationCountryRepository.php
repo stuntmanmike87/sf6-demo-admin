@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\LocationCountry;
@@ -14,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method LocationCountry[]    findAll()
  * @method LocationCountry[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LocationCountryRepository extends ServiceEntityRepository
+final class LocationCountryRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -39,10 +41,11 @@ class LocationCountryRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * Search countries. Recommended just for searching or auto-complete input.
-     * @return LocationCountry[] Returns an array of LocationCountry objects
-     */
+    // /**
+    //  * Search countries. Recommended just for searching or auto-complete input.
+    //  * @return LocationCountry[] Returns an array of LocationCountry objects
+    //  */
+    /** @return array<mixed> */
     public function search(string $text): array
     {
         return $this->createQueryBuilder('country')
@@ -62,11 +65,12 @@ class LocationCountryRepository extends ServiceEntityRepository
             ;
     }
 
-    /**
-     * Returns all countries with each calling code.
-     *
-     * @return LocationCountry[] Returns an array of LocationCountry objects with calling codes.
-     */
+    // /**
+    //  * Returns all countries with each calling code.
+    //  *
+    //  * @return LocationCountry[] Returns an array of LocationCountry objects with calling codes.
+    //  */
+    /** @return array<mixed> */
     public function findAllCallingCodes(): array
     {
         return $this->createQueryBuilder('country')

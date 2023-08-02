@@ -1,7 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Service;
 
-class DateTimeService
+final class DateTimeService
 {
     /**
      * Returns date format through locale.
@@ -12,9 +15,9 @@ class DateTimeService
     public static function getDateFormatFromLocale(string $locale): ?string
     {
         $formatter = new \IntlDateFormatter($locale, \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE);
-        if ($formatter === null) {
-            return 'Y-m-d';
-        }
+        //if (!$formatter instanceof \IntlDateFormatter) {
+        //    return 'Y-m-d';
+        //}//Instanceof between IntlDateFormatter and IntlDateFormatter will always evaluate to true.
 
         return $formatter->getPattern();
     }

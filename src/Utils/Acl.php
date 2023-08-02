@@ -1,17 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Utils;
 
-use App\Entity\User;
-use App\Utils\StringHelper;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\AclPermission;
+use App\Entity\AclUserGroup;
+use App\Entity\User;
+use App\Repository\AclPermissionRepository;
+use App\Utils\StringHelper;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * This class is used to provide ACL (access control list) of integrating simple classes as
@@ -19,8 +23,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @author Thomas Känzig <thomas.kanzig@gmail.com>
  */
-class Acl
+final class Acl
 {
+    /** @var array<string> $roles */
     private array $roles = [];
 
     public function __construct(
@@ -39,7 +44,7 @@ class Acl
     public function loadRoles(): void
     {
         try {
-            /* @var User $user */
+            /** @var User $user */
             $user = $this->security->getUser();
         } catch (\Exception) {
             throw new AccessDeniedException($this->translator->trans('app.error.unauthorised_access'));
@@ -49,21 +54,41 @@ class Acl
             return;
         }
 
-        $userGroupId = $user->getUserGroup()->getId();
+        /** @var AclUserGroup $aclUserGroup */
+        $aclUserGroup = $user->getUserGroup();
+        $userGroupId = $aclUserGroup->getId();
 
-        $permissions = $this->entityManager
+        /** @var AclPermissionRepository $aclPermissionRepository */
+        $aclPermissionRepository = $this->entityManager->getRepository(AclPermission::class);
+        /** @var  Collection<int, AclPermission> $permissions *///** @var AclPermission $permissions */
+        $permissions = $aclPermissionRepository->findRoles((int) $userGroupId);
+        
+        /* $permissions = $this->entityManager
             ->getRepository(AclPermission::class)
-            ->findRoles($userGroupId);
+            ->findRoles($userGroupId); */
 
-        if (!(is_countable($permissions) ? count($permissions) : 0)) {
+        if ((is_countable($permissions) ? count($permissions) : 0) === 0) {
             return;
         }
 
+        /** @var array<string> $permission */
         foreach($permissions as $permission) {
-            $this->roles[strtolower($permission['prefix'])][strtolower($permission['controller'])][strtolower($permission['action'])] = true;
+            $prefix = strtolower($permission['prefix']);
+            $controller = strtolower($permission['controller']);
+            $action = strtolower($permission['action']);
+            if (($this->roles[$prefix] === '') && ($this->roles[$controller] === '') && ($this->roles[$action] === '')){
+                return;
+            }
+            ///* $b =  */$this->roles[$prefix][$controller][$action] = true;//@var (string|true[][])[] $roles//Cannot assign offset string to string.
+            //$this->roles[strtolower((string) $permission['prefix'])][strtolower((string) $permission['controller'])][strtolower((string) $permission['action'])] = true;
         }
 
-        $this->tokenStorage->getToken()->getUser()->setAcl($this->roles);
+        /** @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+        /** @var User $user*/
+        $user = $token->getUser();
+        $user->setAcl($this->roles);
+        //$this->tokenStorage->getToken()->getUser()->setAcl($this->roles);//Undefined method 'setAcl'
     }
 
     /**
@@ -73,16 +98,13 @@ class Acl
     {
         $controller = $this->getControllerName();
         $action = $this->getActionName();
-
-        if (isset($this->roles[$prefix][$controller][$action])) {
-            return true;
-        }
-
-        return false;
+        return isset($this->roles[$prefix][$controller][$action]);
     }
 
     /**
      * Return roles from user.
+     *
+     * @return array<mixed>
      */
     public function getRoles(): array
     {
@@ -98,6 +120,7 @@ class Acl
     {
         $request = $this->requestStack->getCurrentRequest();
 
+        /** @var \Symfony\Component\HttpFoundation\Request $request *//** @var string $controller */
         $controller = $request->get('_controller');
         $controller = explode('::', $controller);
         $controller = explode('\\', $controller[0]);
@@ -113,14 +136,16 @@ class Acl
      */
     public function getActionName(): ?string
     {
+        /** @var \Symfony\Component\HttpFoundation\Request $request */
         $request = $this->requestStack->getCurrentRequest();
 
         $pattern = "#Controller::([a-zA-Z]*)#";
         $matches = [];
-        preg_match($pattern, (string) $request->get('_controller'), $matches);
+        $req = $request->get('_controller');/** @var string $req */
+        preg_match($pattern, $req, $matches);
 
 
-        if(empty($matches[1])) {
+        if(null === $matches[1]) {
             return null;
         }
 

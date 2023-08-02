@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\LocationNeighborhoodRepository;
@@ -10,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: LocationNeighborhoodRepository::class)]
 #[ORM\Index(columns: ["name"], name: "idx_name")]
 #[ORM\Index(columns: ["slug"], name: "idx_slug")]
+/** @final */
 class LocationNeighborhood
 {
     #[ORM\Id]
@@ -18,15 +21,16 @@ class LocationNeighborhood
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $name = null;//private string $name;
 
     #[ORM\Column(length: 255)]
-    private ?string $slug = null;
+    private ?string $slug = null;//private string $slug;
 
     #[ORM\ManyToOne(inversedBy: 'neighborhoods')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?LocationCity $city = null;
+    private ?LocationCity $city = null;//private LocationCity $city;
 
+    /** @var  Collection<int, User> $users*/
     #[ORM\OneToMany(mappedBy: 'neighborhood', targetEntity: User::class)]
     private Collection $users;
 
@@ -72,7 +76,7 @@ class LocationNeighborhood
     public function setCity(?LocationCity $city): self
     {
         $this->city = $city;
-
+        
         return $this;
     }
 
@@ -96,11 +100,9 @@ class LocationNeighborhood
 
     public function removeUser(User $user): self
     {
-        if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getNeighborhood() === $this) {
-                $user->setNeighborhood(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->users->removeElement($user) && $user->getNeighborhood() === $this) {
+            $user->setNeighborhood(null);
         }
 
         return $this;

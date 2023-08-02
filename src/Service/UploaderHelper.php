@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Service;
 
 use Aws\Result;
@@ -11,11 +14,12 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class UploaderHelper
+final class UploaderHelper
 {
     /**
      * UploaderHelper constructor.
      */
+    /** @param array<mixed> $cdn */
     public function __construct(
         private readonly string $uploadsMediaPath,
         private readonly string $projectDir,
@@ -28,12 +32,12 @@ class UploaderHelper
     /**
      * Make upload any file and set in uploads folder.
      *
-     * @param UploadedFile $uploadedFile
-     * @param array|null $options
-     * @return array
+     * @param array<mixed>|null $options
+     * @return array<mixed>
      */
     public function uploadMedia(UploadedFile $uploadedFile, ?array $options = []): array
     {
+        /** @var array<mixed> $options */
         $addParentPath = array_key_exists('addParentPath', $options) ? $options['addParentPath']: '/';
         $desiredFileName = array_key_exists('desiredFileName', $options) ? $options['desiredFileName']: '';
         $uniqueName = array_key_exists('uniqueName', $options);
@@ -52,8 +56,6 @@ class UploaderHelper
     /**
      * Delete file.
      *
-     * @param string $path
-     * @param bool $isPublic
      * @return void
      */
     public function deleteFile(string $path, bool $isPublic = true)
@@ -64,15 +66,12 @@ class UploaderHelper
 
         try {
             $this->filesystem->remove($path);
-        } catch (IOExceptionInterface $exception) {
-            echo "An error occurred while creating your directory at ".$exception->getPath();
+        } catch (IOExceptionInterface $ioException) {
+            echo "An error occurred while creating your directory at ".$ioException->getPath();
         }
     }
 
     /**
-     * @param UploadedFile $uploadedFile
-     * @param string $directory
-     * @param string $filename
      * @return string[]
      */
     private function saveFile(UploadedFile $uploadedFile, string $directory, string $filename): array
@@ -90,13 +89,13 @@ class UploaderHelper
     /**
      * Upload a file to CDN.
      *
-     * @param UploadedFile $uploadedFile
-     * @param array|null $options
-     * @return array
+     * @param array<mixed>|null $options
+     * @return array<mixed>
      * @throws \Gumlet\ImageResizeException
      */
     public function uploadImageToCDN(UploadedFile $uploadedFile, ?array $options = []): array
     {
+        /** @var array<mixed> $options */
         $heightReducing = array_key_exists('heightReducing', $options) ? $options['heightReducing']: 800;
         $addParentPath = array_key_exists('addParentPath', $options) ? $options['addParentPath']: '';
         $desiredFileName = array_key_exists('desiredFileName', $options) ? $options['desiredFileName']: '';
@@ -165,14 +164,12 @@ class UploaderHelper
     }
 
     /**
-     * @param string $file
      * @param string|null $desiredFileName
-     * @param bool $nameAddUniqid
      * @return string
      */
     private function generateFileName(string $file, ?string $desiredFileName = null, bool $nameAddUniqid = false): string
     {
-        if (empty($desiredFileName)) {
+        if ($desiredFileName === null || $desiredFileName === '') {
             $originalFilename = pathinfo($file, PATHINFO_FILENAME);
             $desiredFileName = $originalFilename;
         }
@@ -185,11 +182,9 @@ class UploaderHelper
     }
 
     /**
-     * @param Result $result
-     * @param string $file
-     * @return string
+     * @param \Aws\Result<mixed> $result
      */
-    private function getUrlFromCDN(Result $result, string $file): string
+    private function getUrlFromCDN(Result $result, string $file): mixed//?mixed//string
     {
         if (array_key_exists('domain', $this->cdn) && '' != $this->cdn['domain']) {
             return $this->cdn['domain'] . '/' . $file;
@@ -199,13 +194,13 @@ class UploaderHelper
     }
 
     /**
-     * @param string $originalFile
-     * @param array|null $options
+     * @param array<mixed>|null $options
      * @return string|null
      * @throws \Gumlet\ImageResizeException
      */
     public function moveToCDN(string $originalFile, ?array $options = []): ?string
     {
+        /** @var array<mixed> $options */
         $heightReducing = array_key_exists('heightReducing', $options) ? $options['heightReducing']: 800;
         $addParentPath = array_key_exists('addParentPath', $options) ? $options['addParentPath']: '';
         $desiredFileName = array_key_exists('desiredFileName', $options) ? $options['desiredFileName']: '';
@@ -239,6 +234,7 @@ class UploaderHelper
             // Remove the temporarily file.
             unlink($originalFile);
 
+            /** @var ?string $url */
             $url = $this->getUrlFromCDN($result, $file);
         } catch (\Exception) {
             throw new FileException($this->translator->trans('app.error.upload_error'));
@@ -250,7 +246,6 @@ class UploaderHelper
     /**
      * Remove file from CDN.
      *
-     * @param string $file
      * @return void
      */
     public function removeFromCDN(string $file): void

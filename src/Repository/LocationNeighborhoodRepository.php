@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\LocationCity;
@@ -16,7 +18,7 @@ use Gedmo\Sluggable\Util\Urlizer;
  * @method LocationNeighborhood[]    findAll()
  * @method LocationNeighborhood[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LocationNeighborhoodRepository extends ServiceEntityRepository
+final class LocationNeighborhoodRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -44,7 +46,7 @@ class LocationNeighborhoodRepository extends ServiceEntityRepository
     /**
      * This method will be find correctly neighborhood, if not find, then will be added.
      *
-     * @param array $criteria
+     * @param array<mixed> $criteria
      * @return LocationNeighborhood|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -70,12 +72,12 @@ class LocationNeighborhoodRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
 
-        if (!$locationNeighborhood) {
+        if ($locationNeighborhood !== null) {
             /** @var LocationCity $locationCity */
             $locationCity = $this->getEntityManager()->getRepository(LocationCity::class)
                 ->find($criteria['location_city_id']);
 
-            if (!$locationCity) {
+            if ($locationCity === null) {
                 return null;
             }
 

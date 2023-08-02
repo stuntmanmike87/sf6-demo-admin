@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\UserRepository;
@@ -21,34 +23,36 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Index(columns: ["lng"], name: "idx_lng")]
 #[ORM\Index(columns: ["google_id"], name: "idx_google_id")]
 #[ORM\Index(columns: ["facebook_id"], name: "idx_facebook_id")]
+/** @final */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "CUSTOM")]
     #[ORM\Column(unique: true)]
     #[ORM\CustomIdGenerator(class: UuidOrderedTimeGenerator::class)]
-    protected UuidOrderedTimeGenerator|string|null $id = null;
+    protected UuidOrderedTimeGenerator|string|null $id = null;//protected string $id;
 
     #[ORM\Column(length: 100, unique: true)]
-    private ?string $username = null;
+    private ?string $username = null;//private string $username;
 
+    /** @var array<string> $roles *///** @var string[] $roles */
     #[ORM\Column]
     private array $roles = [];
 
     #[ORM\Column(length: 255)]
-    private ?string $password = null;
+    private ?string $password = null;//private string $password;//private ?string $password;//private string $password = null;
 
     #[ORM\Column]
-    private ?bool $verified = false;
+    private ?bool $verified = false;//private bool $verified = false;
 
     #[ORM\Column(length: 255)]
-    private ?string $firstName = null;
+    private ?string $firstName = null;//private string $firstName;
 
     #[ORM\Column(length: 255)]
-    private ?string $lastName = null;
+    private ?string $lastName = null;//private string $lastName;
 
     #[ORM\Column(length: 255)]
-    private ?string $email = null;
+    private ?string $email = null;//private string $email;
 
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $phoneNumber = null;
@@ -60,14 +64,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $urlPicture = null;
 
     #[ORM\Column]
-    private ?bool $showPicture = false;
+    private ?bool $showPicture = false;//private bool $showPicture = false;
 
     #[ORM\Column]
-    private ?bool $active = true;
+    private ?bool $active = true;//private bool $active = true;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?AclUserGroup $userGroup = null;
+    private ?AclUserGroup $userGroup = null;//private AclUserGroup $userGroup;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $lastAccessAt = null;
@@ -126,9 +130,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deletedAt = null;
 
+    /** @var  Collection<int, AccountVerification> $accountVerifications*/
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: AccountVerification::class)]
     private Collection $accountVerifications;
 
+    /** @var  Collection<int, ResetUserPassword> $resetUserPasswords*/
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: ResetUserPassword::class)]
     private Collection $resetUserPasswords;
 
@@ -138,7 +144,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * This variable is only used with a combination to ACL service.
      */
-    private ?array $acl = null;
+    /** @var array<string> $acl */
+    private ?array $acl = null;//private array $acl;
 
     #[ORM\ManyToOne]
     private ?LocationCountry $phoneNumberCountry = null;
@@ -282,7 +289,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUserGroup(?AclUserGroup $userGroup): self
     {
         $this->userGroup = $userGroup;
-
+        
         return $this;
     }
 
@@ -534,11 +541,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeAccountVerification(AccountVerification $accountVerification): self
     {
-        if ($this->accountVerifications->removeElement($accountVerification)) {
-            // set the owning side to null (unless already changed)
-            if ($accountVerification->getUser() === $this) {
-                $accountVerification->setUser(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->accountVerifications->removeElement($accountVerification) && $accountVerification->getUser() === $this) {
+            $accountVerification->setUser(null);
         }
 
         return $this;
@@ -564,11 +569,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeResetUserPassword(ResetUserPassword $resetUserPassword): self
     {
-        if ($this->resetUserPasswords->removeElement($resetUserPassword)) {
-            // set the owning side to null (unless already changed)
-            if ($resetUserPassword->getUser() === $this) {
-                $resetUserPassword->setUser(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->resetUserPasswords->removeElement($resetUserPassword) && $resetUserPassword->getUser() === $this) {
+            $resetUserPassword->setUser(null);//
         }
 
         return $this;
@@ -597,6 +600,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
+    /** @param array<string> $roles */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -607,7 +611,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -642,14 +646,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * This method is only used with a combination to ACL service.
+     *
+     * @return array<string>|null
      */
-    public function getAcl(): array
+    public function getAcl(): ?array
     {
         return $this->acl;
     }
 
     /**
      * This method is only used with a combination to ACL service.
+     *
+     * @param array<string> $acl
      */
     public function setAcl(?array $acl): self
     {

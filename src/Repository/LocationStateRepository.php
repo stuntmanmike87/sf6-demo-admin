@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\LocationState;
@@ -14,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method LocationState[]    findAll()
  * @method LocationState[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LocationStateRepository extends ServiceEntityRepository
+final class LocationStateRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -42,8 +44,7 @@ class LocationStateRepository extends ServiceEntityRepository
     /**
      * Returns an array with all states.
      *
-     * @param int $countryId
-     * @return array
+     * @return array<mixed>
      */
     public function listAllByCountry(int $countryId): array
     {
@@ -55,7 +56,7 @@ class LocationStateRepository extends ServiceEntityRepository
                  state.code'
             );
 
-        if ($countryId) {
+        if ($countryId !== 0) {
             $qb->andWhere('state.country = :country')
                 ->setParameter('country', $countryId);
         }

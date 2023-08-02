@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\AclUserGroup;
@@ -16,7 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AclUserGroup[]    findAll()
  * @method AclUserGroup[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AclUserGroupRepository extends ServiceEntityRepository
+final class AclUserGroupRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -41,11 +43,12 @@ class AclUserGroupRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * Returns all user groups by locale.
-     *
-     * @return AclUserGroup[]
-     */
+    // /**
+    //  * Returns all user groups by locale.
+    //  *
+    //  * @return AclUserGroup[]
+    //  */
+    /** @return array<mixed> */
     public function findAllByLocale(string $locale): array
     {
         $qb = $this->createQueryBuilder('userGroup')
@@ -62,7 +65,7 @@ class AclUserGroupRepository extends ServiceEntityRepository
                 translation.translateKey'
             );
 
-        if ($locale) {
+        if ($locale !== '' && $locale !== '0') {
             $qb->andWhere('language.locale = :locale')
                 ->setParameter('locale', $locale);
         }

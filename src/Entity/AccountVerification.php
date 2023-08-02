@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\AccountVerificationRepository;
@@ -10,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(columns: ["verified_at"], name: "idx_verified_at")]
 #[ORM\Index(columns: ["valid_at"], name: "idx_valid_at")]
 #[ORM\Index(columns: ["token"], name: "idx_token")]
+/** @final */
 class AccountVerification
 {
     #[ORM\Id]
@@ -19,10 +22,10 @@ class AccountVerification
 
     #[ORM\ManyToOne(inversedBy: 'accountVerifications')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private ?User $user = null;//private User $user;
 
     #[ORM\Column(length: 255)]
-    private ?string $token = null;
+    private ?string $token = null;//private string $token;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $verifiedAt = null;
@@ -31,7 +34,7 @@ class AccountVerification
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $validAt = null;
+    private ?\DateTimeInterface $validAt = null;//private \DateTimeInterface $validAt;
 
     public function getId(): ?int
     {
@@ -46,7 +49,7 @@ class AccountVerification
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
+        
         return $this;
     }
 

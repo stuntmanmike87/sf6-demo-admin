@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\ResetUserPasswordRepository;
@@ -10,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(columns: ["reset_at"], name: "idx_reset_at")]
 #[ORM\Index(columns: ["valid_at"], name: "idx_valid_at")]
 #[ORM\Index(columns: ["token"], name: "idx_token")]
+/** @final */
 class ResetUserPassword
 {
     #[ORM\Id]
@@ -19,10 +22,10 @@ class ResetUserPassword
 
     #[ORM\ManyToOne(inversedBy: 'resetUserPasswords')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private ?User $user = null;//private User $user;
 
     #[ORM\Column(length: 255)]
-    private ?string $token = null;
+    private ?string $token = null;//private string $token;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $resetAt = null;
@@ -31,7 +34,7 @@ class ResetUserPassword
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $validAt = null;
+    private ?\DateTimeInterface $validAt = null;//private \DateTimeInterface $validAt;
 
     public function getId(): ?int
     {
@@ -46,7 +49,7 @@ class ResetUserPassword
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
+        
         return $this;
     }
 
@@ -91,7 +94,7 @@ class ResetUserPassword
         return $this->validAt;
     }
 
-    public function setValidAt(?\DateTimeInterface $validAt): self
+    public function setValidAt(/* ? */\DateTimeInterface $validAt): self
     {
         $this->validAt = $validAt;
 

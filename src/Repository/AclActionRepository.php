@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\AclAction;
@@ -14,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AclAction[]    findAll()
  * @method AclAction[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AclActionRepository extends ServiceEntityRepository
+final class AclActionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

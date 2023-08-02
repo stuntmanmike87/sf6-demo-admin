@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\AclUserGroup;
@@ -24,8 +26,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserType extends AbstractType
+/* final  */class UserType extends AbstractType
 {
+    /** @param array<mixed> $uploadRules */
     public function __construct(
         private readonly EntityManager $entityManager,
         protected RequestStack $request,
@@ -35,8 +38,10 @@ class UserType extends AbstractType
         private readonly array $uploadRules
     ) { }
 
-    protected function addBuildForm(FormBuilderInterface $builder, string $formType)
-    {
+    protected function addBuildForm(FormBuilderInterface $builder, string $formType): \Symfony\Component\Form\FormBuilderInterface
+    {//Cognitive complexity for "App\Form\UserType::addBuildForm()" is 14, keep it under 8
+        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        $req = $this->request->getCurrentRequest();
         $builder
             ->add('address', TextType::class, [
                 'label' => 'app.form.label.address',
@@ -176,7 +181,7 @@ class UserType extends AbstractType
                 'required' => false,
                 'widget' => 'single_text',
                 'html5' => false,
-                'format' => DateTimeService::getDateFormatFromLocale($this->request->getCurrentRequest()->getLocale()),
+                'format' => DateTimeService::getDateFormatFromLocale($req->getLocale()),
                 'attr' => [
                     'autocomplete' => 'off'
                 ]
@@ -209,9 +214,10 @@ class UserType extends AbstractType
                 $form = $event->getForm();
 
                 // Update password.
+                /** @var string $plainPassword */
                 $plainPassword = $form->get('plainPassword')->getData();
 
-                if ($plainPassword) {
+                if ($plainPassword !== null) {//if ($plainPassword !== '') {
                     $user->setPassword($this->passwordHasher->hashPassword(
                         $user,
                         $plainPassword
@@ -221,7 +227,7 @@ class UserType extends AbstractType
                 // Update user group.
                 $acl_user_group_id = $form->get('acl_user_group_id')->getData();
 
-                if ($acl_user_group_id) {
+                if ($acl_user_group_id !== null) {
                     /** @var AclUserGroup $userGroup */
                     $userGroup = $this->entityManager->getRepository(AclUserGroup::class)
                         ->find($acl_user_group_id);
@@ -232,7 +238,7 @@ class UserType extends AbstractType
                 // Update user type.
                 $user_type_id = $form->get('user_type_id')->getData();
 
-                if ($user_type_id) {
+                if ($user_type_id !== null) {
                     /** @var \App\Entity\UserType $userType */
                     $userType = $this->entityManager->getRepository(\App\Entity\UserType::class)
                         ->find($user_type_id);
@@ -253,14 +259,16 @@ class UserType extends AbstractType
                     $user->setPhoneNumberCountry($country);
                 }
 
-                if (!$user->getPhoneNumber()) {
+                if ($user->getPhoneNumber() === null) {
                     $user->setPhoneNumberCountry(null);
                 }
 
                 // Update URL avatar.
+                /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $tmp_url_avatar */
                 $tmp_url_avatar = $form->get('tmp_url_avatar')->getData();
 
-                if ($tmp_url_avatar) {
+                if ($tmp_url_avatar !== null) {
+                    /** @var string[] $upload *///** @var string[]|null $upload */
                     $upload = $this->uploaderHelper->uploadImageToCDN($tmp_url_avatar, [
                         'addParentPath' => 'user',
                         'uniqueName' => true,
@@ -271,7 +279,7 @@ class UserType extends AbstractType
                 }
 
                 // Delete URL avatar.
-                if ($form->get('delete_url_avatar')->getData()) {
+                if ($form->get('delete_url_avatar')->getData() !== null) {
                     $user->setUrlPicture(null);
                 }
 
@@ -292,17 +300,19 @@ class UserType extends AbstractType
                 $user = $event->getData();
                 $form = $event->getForm();
 
-                if (empty($user)) {
+                if (null === $user) {
                     return;
                 }
 
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
-                if ($user->getId()) {
+                if ($user->getId() !== null) {
                     // Set user group on form.
-                    $form->get('acl_user_group_id')->setData($user->getUserGroup()->getId());
+                    /** @var AclUserGroup aclUserGroup */
+                    $aclUserGroup = $form->get('acl_user_group_id')->setData($user->getUserGroup());
+                    $aclUserGroup->getId();
 
                     // Set user type on form.
-                    if ($user->getType()) {
+                    if ($user->getType() instanceof \App\Entity\UserType) {
                         $form->get('user_type_id')->setData($user->getType()->getId());
                     }
 
@@ -317,14 +327,19 @@ class UserType extends AbstractType
 
     /**
      * Returns user groups for a dropdown (ChoiceType).
+     *
+     * @return array<mixed>
      */
     private function getUserGroupsChoices(): array
     {
-        $locale = $this->request->getCurrentRequest()->getLocale();
+        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        $req = $this->request->getCurrentRequest();
+        $locale = $req->getLocale();//** @var string[][] $types */
         $types = $this->entityManager->getRepository(AclUserGroup::class)
-            ->findAllByLocale($locale, ['client' => 1]);
+            ->findAllByLocale($locale);
 
         $choices = [];
+        /** @var string[] $type */
         foreach ($types as $type) {
             $choices[$type['text']] = $type['id'];
         }
@@ -334,14 +349,19 @@ class UserType extends AbstractType
 
     /**
      * Returns types of user for a dropdown (ChoiceType).
+     *
+     * @return array<mixed>
      */
     private function getUserTypesChoices(): array
     {
-        $locale = $this->request->getCurrentRequest()->getLocale();
+        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        $req = $this->request->getCurrentRequest();
+        $locale = $req->getLocale();//** @var string[][] $types */
         $types = $this->entityManager->getRepository(\App\Entity\UserType::class)
             ->findAllByLocale($locale);
 
         $choices = [];
+        /** @var string[] $type */
         foreach ($types as $type) {
             $choices[$type['text']] = $type['id'];
         }

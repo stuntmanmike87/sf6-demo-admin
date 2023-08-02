@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\Entity\AclUserGroup;
@@ -17,7 +19,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
     name: 'app:user-admin:create',
     description: 'Command to create an admin user.',
 )]
-class UserAdminCommand extends Command
+final class UserAdminCommand extends Command
 {
 
     public function __construct(private readonly EntityManagerInterface $entityManager, private readonly UserPasswordHasherInterface $passwordHasher) {
@@ -40,6 +42,7 @@ class UserAdminCommand extends Command
         ));
 
         $user->setRoles([]);
+
         $group = $this->entityManager
             ->getRepository(AclUserGroup::class)
             ->find(AclUserGroupIdEnum::Master);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\User;
@@ -11,9 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 
-class UserEditType extends UserType
+final class UserEditType extends UserType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('plainPassword', RepeatedType::class, [
@@ -35,7 +37,9 @@ class UserEditType extends UserType
             ])
         ;
 
-        $param = Request::METHOD_POST == $this->request->getCurrentRequest()->getMethod() ? 'user_edit': 'user';
+        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        $req = $this->request->getCurrentRequest();
+        $param = Request::METHOD_POST == $req->getMethod() ? 'user_edit': 'user';
 
         $this->addBuildForm($builder, $param);
     }

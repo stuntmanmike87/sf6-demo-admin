@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\AclUserGroup;
@@ -18,7 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Constraints\Length;
 
-class SettingsSecurityType extends AbstractType
+final class SettingsSecurityType extends AbstractType
 {
     public function __construct(
         private readonly EntityManager $entityManager,
@@ -26,7 +28,7 @@ class SettingsSecurityType extends AbstractType
         private readonly UserPasswordHasherInterface $passwordHasher
     ) {}
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('username', TextType::class, [
@@ -58,9 +60,10 @@ class SettingsSecurityType extends AbstractType
                 $form = $event->getForm();
 
                 // Update password.
+                /** @var string $plainPassword */
                 $plainPassword = $form->get('plainPassword')->getData();
 
-                if ($plainPassword) {
+                if ($plainPassword !== null) {
                     $user->setPassword($this->passwordHasher->hashPassword(
                         $user,
                         $plainPassword
@@ -70,7 +73,7 @@ class SettingsSecurityType extends AbstractType
                 // Update user group.
                 $acl_user_group_id = $form->get('acl_user_group_id')->getData();
 
-                if ($acl_user_group_id) {
+                if ($acl_user_group_id !== null) {
                     /** @var AclUserGroup $userGroup */
                     $userGroup = $this->entityManager->getRepository(AclUserGroup::class)
                         ->find($acl_user_group_id);
@@ -86,19 +89,19 @@ class SettingsSecurityType extends AbstractType
              * This event is mostly here for reading data after having pre-populated the form.
              * See more: https://symfony.com/doc/current/form/events.html
              */
-            ->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
+            ->addEventListener(FormEvents::POST_SET_DATA, static function (FormEvent $event) {
                 /** @var User $user */
                 $user = $event->getData();
                 $form = $event->getForm();
-
-                if (empty($user)) {
+                if (null === $user) {
                     return;
                 }
-
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
-                if ($user->getId()) {
+                if ($user->getId() !== null) {
                     // Set user group on form.
-                    $form->get('acl_user_group_id')->setData($user->getUserGroup()->getId());
+                    /** @var AclUserGroup aclUserGroup */
+                    $aclUserGroup = $form->get('acl_user_group_id')->setData($user->getUserGroup());
+                    $aclUserGroup->getId();
                 }
             })
         ;
@@ -113,14 +116,19 @@ class SettingsSecurityType extends AbstractType
 
     /**
      * Returns user groups for a dropdown (ChoiceType).
+     *
+     * @return array<mixed>
      */
     private function getUserGroupsChoices(): array
     {
-        $locale = $this->request->getCurrentRequest()->getLocale();
+        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        $req = $this->request->getCurrentRequest();
+        $locale = $req->getLocale();//** @var string[][] $types */
         $types = $this->entityManager->getRepository(AclUserGroup::class)
-            ->findAllByLocale($locale, ['client' => 1]);
+            ->findAllByLocale($locale);
 
         $choices = [];
+        /** @var string[] $type */
         foreach ($types as $type) {
             $choices[$type['text']] = $type['id'];
         }

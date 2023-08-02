@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\User;
@@ -16,7 +18,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class SettingsAddressType extends AbstractType
+final class SettingsAddressType extends AbstractType
 {
     public function __construct(
         protected RequestStack $request,
@@ -24,11 +26,15 @@ class SettingsAddressType extends AbstractType
         private readonly TokenStorageInterface $tokenStorage
     ) { }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
-        $formType = Request::METHOD_POST == $this->request->getCurrentRequest()->getMethod() ? 'settings_address': 'user';
+        /** @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+        //** @var User $user */
+        $user = $token->getUser();
+        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        $req = $this->request->getCurrentRequest();
+        $formType = Request::METHOD_POST == $req->getMethod() ? 'settings_address': 'user';
 
         $builder
             ->add('address', TextType::class, [
@@ -146,12 +152,12 @@ class SettingsAddressType extends AbstractType
                 $user = $event->getData();
                 $form = $event->getForm();
 
-                if (empty($user)) {
+                if (null === $user) {
                     return;
                 }
 
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
-                if ($user->getId()) {
+                if ($user->getId() !== null) {
                     // Set all location fields correctly before load form.
                     $this->location->setLocationBeforeLoadForm($form, $user);
                 }

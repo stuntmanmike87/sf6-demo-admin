@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Entity\AclUserGroup;
@@ -16,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class UserController extends AdminController
+final class UserController extends AdminController
 {
     #[Route('/users', name: 'admin_user_index', methods: ['GET'])]
     public function index(Request $request, UserRepository $users, EntityManagerInterface $entityManager): Response

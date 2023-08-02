@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\AclPermissionRepository;
@@ -8,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AclPermissionRepository::class)]
+/** @final */
 class AclPermission
 {
     #[ORM\Id]
@@ -17,14 +20,15 @@ class AclPermission
 
     #[ORM\ManyToOne(targetEntity: AclAction::class, inversedBy: 'permissions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?AclAction $action = null;
+    private ?AclAction $action = null;//private AclAction $action;
 
+    /** @var  Collection<int, AclUserGroup> $userGroups*/
     #[ORM\OneToMany(mappedBy: 'permission', targetEntity: AclUserGroup::class)]
     private Collection $userGroups;
 
     #[ORM\ManyToOne(inversedBy: 'permissions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?AclUserGroup $userGroup = null;
+    private ?AclUserGroup $userGroup = null;//private AclUserGroup $userGroup;
 
     public function __construct()
     {
@@ -44,7 +48,7 @@ class AclPermission
     public function setAction(?AclAction $action): self
     {
         $this->action = $action;
-
+        
         return $this;
     }
 
@@ -68,11 +72,9 @@ class AclPermission
 
     public function removeUserGroup(AclUserGroup $userGroup): self
     {
-        if ($this->userGroups->removeElement($userGroup)) {
-            // set the owning side to null (unless already changed)
-            if ($userGroup->getPermission() === $this) {
-                $userGroup->setPermission(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->userGroups->removeElement($userGroup) && $userGroup->getPermission() === $this) {
+            $userGroup->setPermission(null);
         }
 
         return $this;
@@ -86,7 +88,7 @@ class AclPermission
     public function setUserGroup(?AclUserGroup $userGroup): self
     {
         $this->userGroup = $userGroup;
-
+        
         return $this;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Translation;
@@ -16,7 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method UserType[]    findAll()
  * @method UserType[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserTypeRepository extends ServiceEntityRepository
+final class UserTypeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -41,10 +43,11 @@ class UserTypeRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * Returns all property types from a locale.
-     * @return UserType[]
-     */
+    // /**
+    //  * Returns all property types from a locale.
+    //  * @return UserType[]
+    //  */
+    /** @return array<mixed> */
     public function findAllByLocale(string $locale): array
     {
         $qb = $this->createQueryBuilder('user_type')
@@ -61,7 +64,7 @@ class UserTypeRepository extends ServiceEntityRepository
                 translation.translateKey'
             );
 
-        if ($locale) {
+        if ($locale !== '' && $locale !== '0') {
             $qb->andWhere('language.locale = :locale')
                 ->setParameter('locale', $locale);
         }

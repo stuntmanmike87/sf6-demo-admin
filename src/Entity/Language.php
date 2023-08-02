@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\LanguageRepository;
@@ -13,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(columns: ["locale"], name: "idx_locale")]
 #[ORM\Index(columns: ["app"], name: "idx_app")]
 #[ORM\Index(columns: ["user"], name: "idx_user")]
+/** @final */
 class Language
 {
     #[ORM\Id]
@@ -21,29 +24,30 @@ class Language
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $name = null;//private string $name;
 
     #[ORM\Column(length: 10)]
-    private ?string $locale = null;
+    private ?string $locale = null;//private string $locale;
 
     #[ORM\Column(length: 10)]
-    private ?string $identifier = null;
+    private ?string $identifier = null;//private string $identifier;
 
     #[ORM\Column(length: 255)]
-    private ?string $translateKey = null;
+    private ?string $translateKey = null;//private string $translateKey;
 
     #[ORM\Column]
-    private ?bool $app = false;
+    private ?bool $app = false;//private bool $app = false;
 
     #[ORM\Column]
-    private ?bool $user = false;
+    private ?bool $user = false;//private bool $user = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column]
-    private ?bool $active = true;
+    private ?bool $active = true;//private bool $active = true;
 
+    /** @var  Collection<int, Translation> $translations*/
     #[ORM\OneToMany(mappedBy: 'language', targetEntity: Translation::class)]
     private Collection $translations;
 
@@ -173,11 +177,9 @@ class Language
 
     public function removeTranslation(Translation $translation): self
     {
-        if ($this->translations->removeElement($translation)) {
-            // set the owning side to null (unless already changed)
-            if ($translation->getLanguage() === $this) {
-                $translation->setLanguage(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->translations->removeElement($translation) && $translation->getLanguage() === $this) {
+            $translation->setLanguage(null);
         }
 
         return $this;

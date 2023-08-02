@@ -1,11 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Service;
 
 use GeoIp2\Database\Reader;
 use GeoIp2\Exception\AddressNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class GeoIP2Service
+final class GeoIP2Service
 {
     public function __construct(private readonly RequestStack $requestStack, private readonly string $projectDir)
     {}
@@ -28,8 +31,10 @@ class GeoIP2Service
             // throw the AddressNotFoundException
 
             // In this example, use a fixed IP address in Minnesota
-            $ip = $this->requestStack->getCurrentRequest()->getClientIp();
-            $record = $reader->city($ip);
+            /** @var \Symfony\Component\HttpFoundation\Request $request */
+            $request = $this->requestStack->getCurrentRequest();
+            $ip = $request->getClientIp();
+            $record = $reader->city((string) $ip);
 
             return $record->country->isoCode;
 

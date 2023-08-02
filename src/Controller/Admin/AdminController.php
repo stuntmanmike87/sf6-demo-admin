@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Utils\Acl;
@@ -12,7 +14,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @author Thomas Känzig <thomas.kanzig@gmail.com>
  */
-class AdminController extends AbstractController
+/* final  */class AdminController extends AbstractController
 {
     public function __construct(Acl $acl, TranslatorInterface $translator)
     {

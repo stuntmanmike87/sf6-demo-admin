@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\AclUserGroupRepository;
@@ -8,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AclUserGroupRepository::class)]
+/** @final */
 class AclUserGroup
 {
     #[ORM\Id]
@@ -16,22 +19,24 @@ class AclUserGroup
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?bool $active = null;
+    private ?bool $active = null;//private bool $active;
 
     #[ORM\ManyToOne(inversedBy: 'userGroups')]
-    private ?AclPermission $permission = null;
+    private ?AclPermission $permission = null;//private AclPermission $permission;
 
     #[ORM\Column]
-    private ?bool $adm = null;
+    private bool $adm;//private ?bool $adm = null;
 
+    /** @var  Collection<int, AclPermission> $permissions*/
     #[ORM\OneToMany(mappedBy: 'userGroup', targetEntity: AclPermission::class)]
     private Collection $permissions;
 
+    /** @var  Collection<int, User> $users*/
     #[ORM\OneToMany(mappedBy: 'userGroup', targetEntity: User::class)]
     private Collection $users;
 
     #[ORM\Column(length: 255)]
-    private ?string $translateKey = null;
+    private ?string $translateKey = null;//private string $translateKey;
 
     public function __construct()
     {
@@ -100,12 +105,10 @@ class AclUserGroup
 
     public function removePermission(AclPermission $permission): self
     {
-        if ($this->permissions->removeElement($permission)) {
-            // set the owning side to null (unless already changed)
-            if ($permission->getUserGroup() === $this) {
-                $permission->setUserGroup(null);
-            }
-        }
+        // set the owning side to null (unless already changed)
+        if ($this->permissions->removeElement($permission) && $permission->getUserGroup() === $this) {
+            $permission->setUserGroup(null);
+        }//Parameter #1 $userGroup of method App\Entity\AclPermission::setUserGroup() expects App\Entity\AclUserGroup, null given.
 
         return $this;
     }
@@ -130,11 +133,9 @@ class AclUserGroup
 
     public function removeUser(User $user): self
     {
-        if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getUserGroup() === $this) {
-                $user->setUserGroup(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->users->removeElement($user) && $user->getUserGroup() === $this) {
+            $user->setUserGroup(null);
         }
 
         return $this;

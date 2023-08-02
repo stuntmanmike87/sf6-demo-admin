@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig\Extension;
 
 use App\Twig\Runtime\LanguageExtensionRuntime;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-class LanguageExtension extends AbstractExtension
+final class LanguageExtension extends AbstractExtension
 {
     public function getFilters(): array
     {
