@@ -4,18 +4,12 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-// use App\Entity\ClientType;
-// use App\Entity\Translation;
 use App\Entity\User;
-// use App\Service\StringService;
 use App\Utils\StringHelper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-// use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
-// use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 use Knp\Component\Pager\PaginatorInterface;
-// use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
-// use Symfony\Component\Form\Util\StringUtil;
+use Knp\Component\Pager\Pagination\PaginationInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -73,9 +67,9 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     //  */
     /** 
      * @param array<mixed>|null $criteria
-     * @return \Knp\Component\Pager\Pagination\PaginationInterface<mixed> 
+     * @return PaginationInterface<mixed> 
      */
-    public function findLatest(?array $criteria): \Knp\Component\Pager\Pagination\PaginationInterface//SlidingPagination
+    public function findLatest(?array $criteria): PaginationInterface//SlidingPagination
     {
         $qb = $this->createQueryBuilder('user')
             ->innerJoin('user.userGroup', 'ug')

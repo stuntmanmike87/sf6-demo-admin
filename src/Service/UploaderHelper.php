@@ -6,28 +6,33 @@ namespace App\Service;
 
 use Aws\Result;
 use Aws\S3\S3Client;
+use Exception;
 use Gedmo\Sluggable\Util\Urlizer;
 use Gumlet\ImageResize;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Gumlet\ImageResizeException;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class UploaderHelper
+final readonly class UploaderHelper
 {
     /**
      * UploaderHelper constructor.
      */
     /** @param array<mixed> $cdn */
     public function __construct(
-        private readonly string $uploadsMediaPath,
-        private readonly string $projectDir,
-        private readonly Filesystem $filesystem,
-        private readonly string $baseUrl,
-        private readonly array $cdn,
-        private readonly TranslatorInterface $translator)
-    {}
+        private string $uploadsMediaPath,
+        private string $projectDir,
+        private Filesystem $filesystem,
+        private string $baseUrl,
+        private array $cdn,
+        private TranslatorInterface $translator
+    )
+    {
+    }
 
     /**
      * Make upload any file and set in uploads folder.
@@ -91,7 +96,7 @@ final class UploaderHelper
      *
      * @param array<mixed>|null $options
      * @return array<mixed>
-     * @throws \Gumlet\ImageResizeException
+     * @throws ImageResizeException
      */
     public function uploadImageToCDN(UploadedFile $uploadedFile, ?array $options = []): array
     {
@@ -139,7 +144,7 @@ final class UploaderHelper
 
             // Remove the temporarily file.
             unlink($tempFile);
-        } catch (\Exception) {
+        } catch (Exception) {
             $message = $this->translator->trans('app.error.upload_error');
         }
 
@@ -182,7 +187,7 @@ final class UploaderHelper
     }
 
     /**
-     * @param \Aws\Result<mixed> $result
+     * @param Result<mixed> $result
      */
     private function getUrlFromCDN(Result $result, string $file): mixed//?mixed//string
     {
@@ -196,7 +201,7 @@ final class UploaderHelper
     /**
      * @param array<mixed>|null $options
      * @return string|null
-     * @throws \Gumlet\ImageResizeException
+     * @throws ImageResizeException
      */
     public function moveToCDN(string $originalFile, ?array $options = []): ?string
     {
@@ -236,7 +241,7 @@ final class UploaderHelper
 
             /** @var ?string $url */
             $url = $this->getUrlFromCDN($result, $file);
-        } catch (\Exception) {
+        } catch (Exception) {
             throw new FileException($this->translator->trans('app.error.upload_error'));
         }
 
@@ -256,6 +261,6 @@ final class UploaderHelper
                 'Bucket' => $this->cdn['bucket'],
                 'Key'    => str_replace($this->cdn['domain'] . '/', '', $file),
             ]);
-        } catch (\Exception) { }
+        } catch (Exception) { }
     }
 }

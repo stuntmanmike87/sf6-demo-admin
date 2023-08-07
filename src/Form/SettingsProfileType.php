@@ -6,6 +6,7 @@ namespace App\Form;
 
 use App\Entity\LocationCountry;
 use App\Entity\User;
+use App\Entity\UserType;
 use App\Service\DateTimeService;
 use App\Service\UploaderHelper;
 use Doctrine\ORM\EntityManager;
@@ -20,7 +21,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class SettingsProfileType extends AbstractType
@@ -31,11 +34,13 @@ final class SettingsProfileType extends AbstractType
         protected RequestStack $request,
         private readonly UploaderHelper $uploaderHelper,
         private readonly array $uploadRules
-    ) { }
+    )
+    {
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {//Cognitive complexity for "App\Form\SettingsProfileType::buildForm()" is 12, keep it under 8
-        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         $builder
             ->add('first_name', TextType::class, [
@@ -120,10 +125,10 @@ final class SettingsProfileType extends AbstractType
                 }
 
                 // Update URL avatar.
-                /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $tmp_url_avatar */
+                /** @var UploadedFile $tmp_url_avatar */
                 $tmp_url_avatar = $form->get('tmp_url_avatar')->getData();
 
-                if ($tmp_url_avatar !== null) {
+                if ($tmp_url_avatar instanceof UploadedFile) {
                     /** @var string[] $upload *///** @var string[]|null $upload */
                     $upload = $this->uploaderHelper->uploadImageToCDN($tmp_url_avatar, [
                         'addParentPath' => 'user',
@@ -143,8 +148,8 @@ final class SettingsProfileType extends AbstractType
                 $user_type_id = $form->get('user_type_id')->getData();
 
                 if ($user_type_id !== null) {
-                    /** @var \App\Entity\UserType $userType */
-                    $userType = $this->entityManager->getRepository(\App\Entity\UserType::class)
+                    /** @var UserType $userType */
+                    $userType = $this->entityManager->getRepository(UserType::class)
                         ->find($user_type_id);
 
                     $user->setType($userType);
@@ -164,12 +169,13 @@ final class SettingsProfileType extends AbstractType
                 /** @var User $user */
                 $user = $event->getData();
                 $form = $event->getForm();
-                if (null === $user) {
+                if (!$user instanceof User) {
                     return;
                 }
+
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
                 // Set user type on form.
-                if ($user->getId() !== null && $user->getType() !== null) {
+                if ($user->getId() !== null && $user->getType() instanceof UserType) {
                     $form->get('user_type_id')->setData($user->getType()->getId());
                 }
             })
@@ -190,14 +196,14 @@ final class SettingsProfileType extends AbstractType
      */
     private function getUserTypesChoices(): array
     {
-        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         $locale = $req->getLocale();//** @var string[][] $types */
-        $types = $this->entityManager->getRepository(\App\Entity\UserType::class)
+        $types = $this->entityManager->getRepository(UserType::class)
             ->findAllByLocale($locale);
 
         $choices = [];
-        /** @var string[] $type */
+        /** @var string[][] $types *///** @var string[] $type */
         foreach ($types as $type) {
             $choices[$type['text']] = $type['id'];
         }

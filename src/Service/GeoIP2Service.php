@@ -6,17 +6,19 @@ namespace App\Service;
 
 use GeoIp2\Database\Reader;
 use GeoIp2\Exception\AddressNotFoundException;
+use MaxMind\Db\Reader\InvalidDatabaseException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-final class GeoIP2Service
+final readonly class GeoIP2Service
 {
-    public function __construct(private readonly RequestStack $requestStack, private readonly string $projectDir)
+    public function __construct(private RequestStack $requestStack, private string $projectDir)
     {}
 
     /**
      * Returns a string with the country code (AT => Austria, BR => Brazil...) according user visitor.
      *
-     * @throws \MaxMind\Db\Reader\InvalidDatabaseException
+     * @throws InvalidDatabaseException
      */
     public function getCountryIsoCodeOfUser(): ?string
     {
@@ -29,9 +31,8 @@ final class GeoIP2Service
             // user's IP with $request->getClientIp()
             // Note that in a development environment 127.0.0.1 will
             // throw the AddressNotFoundException
-
             // In this example, use a fixed IP address in Minnesota
-            /** @var \Symfony\Component\HttpFoundation\Request $request */
+            /** @var Request $request */
             $request = $this->requestStack->getCurrentRequest();
             $ip = $request->getClientIp();
             $record = $reader->city((string) $ip);

@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -41,7 +42,7 @@ final class LocationStateController extends AbstractController
         $countryId = $request->query->get('countryId');
         $tokenApi = $request->query->get('token');
 
-        /** @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token */
+        /** @var TokenInterface $token */
         $token = $this->tokenStorage->getToken();
         /** @var User $user */
         $user = $token->getUser();

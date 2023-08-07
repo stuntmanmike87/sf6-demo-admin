@@ -23,7 +23,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /* final  */class UserType extends AbstractType
@@ -36,11 +38,13 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         private readonly UploaderHelper $uploaderHelper,
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly array $uploadRules
-    ) { }
+    )
+    {
+    }
 
-    protected function addBuildForm(FormBuilderInterface $builder, string $formType): \Symfony\Component\Form\FormBuilderInterface
+    protected function addBuildForm(FormBuilderInterface $builder, string $formType): FormBuilderInterface
     {//Cognitive complexity for "App\Form\UserType::addBuildForm()" is 14, keep it under 8
-        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         $builder
             ->add('address', TextType::class, [
@@ -264,10 +268,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 }
 
                 // Update URL avatar.
-                /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $tmp_url_avatar */
+                /** @var UploadedFile $tmp_url_avatar */
                 $tmp_url_avatar = $form->get('tmp_url_avatar')->getData();
 
-                if ($tmp_url_avatar !== null) {
+                if ($tmp_url_avatar instanceof UploadedFile) {
                     /** @var string[] $upload *///** @var string[]|null $upload */
                     $upload = $this->uploaderHelper->uploadImageToCDN($tmp_url_avatar, [
                         'addParentPath' => 'user',
@@ -300,7 +304,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 $user = $event->getData();
                 $form = $event->getForm();
 
-                if (null === $user) {
+                if (!$user instanceof User) {
                     return;
                 }
 
@@ -332,14 +336,14 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
      */
     private function getUserGroupsChoices(): array
     {
-        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         $locale = $req->getLocale();//** @var string[][] $types */
         $types = $this->entityManager->getRepository(AclUserGroup::class)
             ->findAllByLocale($locale);
 
         $choices = [];
-        /** @var string[] $type */
+        /** @var string[][] $types *///** @var string[] $type */
         foreach ($types as $type) {
             $choices[$type['text']] = $type['id'];
         }
@@ -354,14 +358,14 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
      */
     private function getUserTypesChoices(): array
     {
-        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         $locale = $req->getLocale();//** @var string[][] $types */
         $types = $this->entityManager->getRepository(\App\Entity\UserType::class)
             ->findAllByLocale($locale);
 
         $choices = [];
-        /** @var string[] $type */
+        /** @var string[][] $types *///** @var string[] $type */
         foreach ($types as $type) {
             $choices[$type['text']] = $type['id'];
         }

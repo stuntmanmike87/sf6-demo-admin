@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 final class SettingsAddressType extends AbstractType
 {
@@ -24,15 +25,17 @@ final class SettingsAddressType extends AbstractType
         protected RequestStack $request,
         private readonly LocationHelper $location,
         private readonly TokenStorageInterface $tokenStorage
-    ) { }
+    )
+    {
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token */
+        /** @var TokenInterface $token */
         $token = $this->tokenStorage->getToken();
         //** @var User $user */
         $user = $token->getUser();
-        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         $formType = Request::METHOD_POST == $req->getMethod() ? 'settings_address': 'user';
 
@@ -152,7 +155,7 @@ final class SettingsAddressType extends AbstractType
                 $user = $event->getData();
                 $form = $event->getForm();
 
-                if (null === $user) {
+                if (!$user instanceof User) {
                     return;
                 }
 

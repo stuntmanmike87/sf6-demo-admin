@@ -7,6 +7,7 @@ namespace App\Repository;
 use App\Entity\LocationCity;
 use App\Entity\LocationNeighborhood;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Gedmo\Sluggable\Util\Urlizer;
 
@@ -48,7 +49,7 @@ final class LocationNeighborhoodRepository extends ServiceEntityRepository
      *
      * @param array<mixed> $criteria
      * @return LocationNeighborhood|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function findAdd(array $criteria): ?LocationNeighborhood
     {
@@ -77,7 +78,7 @@ final class LocationNeighborhoodRepository extends ServiceEntityRepository
             $locationCity = $this->getEntityManager()->getRepository(LocationCity::class)
                 ->find($criteria['location_city_id']);
 
-            if ($locationCity === null) {
+            if (!$locationCity instanceof LocationCity) {
                 return null;
             }
 

@@ -11,9 +11,12 @@ use App\Repository\AclPermissionRepository;
 use App\Utils\StringHelper;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -46,7 +49,7 @@ final class Acl
         try {
             /** @var User $user */
             $user = $this->security->getUser();
-        } catch (\Exception) {
+        } catch (Exception) {
             throw new AccessDeniedException($this->translator->trans('app.error.unauthorised_access'));
         }
 
@@ -62,7 +65,7 @@ final class Acl
         $aclPermissionRepository = $this->entityManager->getRepository(AclPermission::class);
         /** @var  Collection<int, AclPermission> $permissions *///** @var AclPermission $permissions */
         $permissions = $aclPermissionRepository->findRoles((int) $userGroupId);
-        
+
         /* $permissions = $this->entityManager
             ->getRepository(AclPermission::class)
             ->findRoles($userGroupId); */
@@ -79,11 +82,12 @@ final class Acl
             if (($this->roles[$prefix] === '') && ($this->roles[$controller] === '') && ($this->roles[$action] === '')){
                 return;
             }
+
             ///* $b =  */$this->roles[$prefix][$controller][$action] = true;//@var (string|true[][])[] $roles//Cannot assign offset string to string.
             //$this->roles[strtolower((string) $permission['prefix'])][strtolower((string) $permission['controller'])][strtolower((string) $permission['action'])] = true;
         }
 
-        /** @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token */
+        /** @var TokenInterface $token */
         $token = $this->tokenStorage->getToken();
         /** @var User $user*/
         $user = $token->getUser();
@@ -136,7 +140,7 @@ final class Acl
      */
     public function getActionName(): ?string
     {
-        /** @var \Symfony\Component\HttpFoundation\Request $request */
+        /** @var Request $request */
         $request = $this->requestStack->getCurrentRequest();
 
         $pattern = "#Controller::([a-zA-Z]*)#";

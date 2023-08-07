@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Form\SettingsAddressType;
 use App\Form\SettingsProfileType;
 use App\Form\SettingsSecurityType;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +36,7 @@ final class SettingsController extends AdminController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setUpdatedAt(new \DateTime());
+            $user->setUpdatedAt(new DateTime());
 
             $entityManager->flush();
 
@@ -65,7 +66,7 @@ final class SettingsController extends AdminController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setUpdatedAt(new \DateTime());
+            $user->setUpdatedAt(new DateTime());
 
             $entityManager->flush();
 
@@ -95,7 +96,7 @@ final class SettingsController extends AdminController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setUpdatedAt(new \DateTime());
+            $user->setUpdatedAt(new DateTime());
 
             $entityManager->flush();
 

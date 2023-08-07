@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -26,7 +27,9 @@ final class SettingsSecurityType extends AbstractType
         private readonly EntityManager $entityManager,
         protected RequestStack $request,
         private readonly UserPasswordHasherInterface $passwordHasher
-    ) {}
+    )
+    {
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -93,9 +96,10 @@ final class SettingsSecurityType extends AbstractType
                 /** @var User $user */
                 $user = $event->getData();
                 $form = $event->getForm();
-                if (null === $user) {
+                if (!$user instanceof User) {
                     return;
                 }
+
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
                 if ($user->getId() !== null) {
                     // Set user group on form.
@@ -121,14 +125,14 @@ final class SettingsSecurityType extends AbstractType
      */
     private function getUserGroupsChoices(): array
     {
-        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         $locale = $req->getLocale();//** @var string[][] $types */
         $types = $this->entityManager->getRepository(AclUserGroup::class)
             ->findAllByLocale($locale);
 
         $choices = [];
-        /** @var string[] $type */
+        /** @var string[][] $types *///** @var string[] $type */
         foreach ($types as $type) {
             $choices[$type['text']] = $type['id'];
         }

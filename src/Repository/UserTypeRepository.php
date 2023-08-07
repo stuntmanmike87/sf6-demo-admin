@@ -47,8 +47,8 @@ final class UserTypeRepository extends ServiceEntityRepository
     //  * Returns all property types from a locale.
     //  * @return UserType[]
     //  */
-    /** @return array<mixed> */
-    public function findAllByLocale(string $locale): array
+    //** @return array<mixed> */
+    public function findAllByLocale(string $locale): mixed//array
     {
         $qb = $this->createQueryBuilder('user_type')
             ->innerJoin(

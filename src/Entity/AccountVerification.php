@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\AccountVerificationRepository;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,13 +29,13 @@ class AccountVerification
     private ?string $token = null;//private string $token;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $verifiedAt = null;
+    private ?DateTimeInterface $verifiedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $createdAt = null;
+    private ?DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $validAt = null;//private \DateTimeInterface $validAt;
+    private ?DateTimeInterface $validAt = null;//private \DateTimeInterface $validAt;
 
     public function getId(): ?int
     {
@@ -65,36 +66,36 @@ class AccountVerification
         return $this;
     }
 
-    public function getVerifiedAt(): ?\DateTimeInterface
+    public function getVerifiedAt(): ?DateTimeInterface
     {
         return $this->verifiedAt;
     }
 
-    public function setVerifiedAt(?\DateTimeInterface $verifiedAt): self
+    public function setVerifiedAt(?DateTimeInterface $verifiedAt): self
     {
         $this->verifiedAt = $verifiedAt;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTimeInterface $createdAt): self
+    public function setCreatedAt(?DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getValidAt(): ?\DateTimeInterface
+    public function getValidAt(): ?DateTimeInterface
     {
         return $this->validAt;
     }
 
-    public function setValidAt(\DateTimeInterface $validAt): self
+    public function setValidAt(DateTimeInterface $validAt): self
     {
         $this->validAt = $validAt;
 

@@ -41,12 +41,12 @@ final class LocationStateRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * Returns an array with all states.
-     *
-     * @return array<mixed>
-     */
-    public function listAllByCountry(int $countryId): array
+    // /**
+    //  * Returns an array with all states.
+    //  *
+    //  * @return array<mixed>
+    //  */
+    public function listAllByCountry(int $countryId): mixed//array
     {
         $qb = $this->createQueryBuilder('state')
             ->select(

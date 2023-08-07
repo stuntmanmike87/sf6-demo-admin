@@ -33,7 +33,7 @@ final class UserAddType extends UserType
             ])
         ;
 
-        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         $param = Request::METHOD_POST == $req->getMethod() ? 'user_add': 'user';
 

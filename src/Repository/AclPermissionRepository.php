@@ -44,13 +44,13 @@ final class AclPermissionRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * Find all roles.
-     *
-     * @param string|null $prefix
-     * @return array<mixed>
-     */
-    public function findRoles(int $userGroupId, ?string $prefix = null): array
+    // /**
+    //  * Find all roles.
+    //  *
+    //  * @param string|null $prefix
+    //  * @return array<mixed>
+    //  */
+    public function findRoles(int $userGroupId/* , ?string $prefix = null */): mixed//array
     {
         $qb = $this->createQueryBuilder('permission')
             ->innerJoin('permission.action', 'a')

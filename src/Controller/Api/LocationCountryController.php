@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -44,7 +45,7 @@ final class LocationCountryController extends AbstractController
         //** @var string|null $tokenApi */
         $tokenApi = $request->request->get('token');
 
-        /** @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token */
+        /** @var TokenInterface $token */
         $token = $this->tokenStorage->getToken();
         /** @var User $user */
         $user = $token->getUser();

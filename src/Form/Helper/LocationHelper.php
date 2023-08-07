@@ -15,23 +15,26 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-final class LocationHelper
+final readonly class LocationHelper
 {
     public function __construct(
-        private readonly EntityManager $entityManager,
-        private readonly RequestStack $request
-    ) { }
+        private EntityManager $entityManager,
+        private RequestStack $request
+    )
+    {
+    }
 
     /**
      * Returns states from a country in a dropdown (ChoiceType).
      *
-     * @param object|null $entityByGet In case without a entity reference in the route of method controller, should be added manually the entity in the form type class.
+     * @param object|null $entityByGet In case without a entity reference in the route of method controller, 
+     * should be added manually the entity in the form type class.
      *
      * @return array<mixed>
      */
     public function getStates(string $key, ?object $entityByGet = null): array
     {//Cognitive complexity for "App\Form\Helper\LocationHelper::getStates()" is 14, keep it under 8
-        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         if ($this->requestMethodIsPOST()) {
             $entity = $req->get($key);
@@ -51,7 +54,7 @@ final class LocationHelper
             /** @var LocationCountry $locationCountry */
             $locationCountry = $entity->getCountry();//Call to an undefined method object::getCountry().
 
-            if ($locationCountry === null) {
+            if (!$locationCountry instanceof LocationCountry) {
                 return [];
             }
 
@@ -97,7 +100,7 @@ final class LocationHelper
      */
     public function getCities(string $key, ?object $entityByGet = null): array
     {//Cognitive complexity for "App\Form\Helper\LocationHelper::getCities()" is 14, keep it under 8
-        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         if ($this->requestMethodIsPOST()) {
             $entity = $req->get($key);
@@ -117,7 +120,7 @@ final class LocationHelper
             /** @var LocationState $locationState */
             $locationState = $entity->getState();//Call to an undefined method object::getState().
 
-            if ($locationState === null) {
+            if (!$locationState instanceof LocationState) {
                 return [];
             }
 
@@ -227,27 +230,27 @@ final class LocationHelper
         // Set location state on form.
         /** @var LocationState $locationState */
         $locationState = $entity->getState();
-        if ($locationState !== null) {
+        if ($locationState instanceof LocationState) {
             $form->get('state')->setData($locationState->getId());
         }
 
         // Set location city on form.
         /** @var LocationCity $locationCity */
         $locationCity = $entity->getCity();
-        if ($locationCity !== null) {
+        if ($locationCity instanceof LocationCity) {
             $form->get('city')->setData($locationCity->getId());
         }
 
         // Set location neighborhood on form.
         /** @var LocationNeighborhood $locationNeighborhood */
         $locationNeighborhood = $entity->getNeighborhood();
-        if ($locationNeighborhood !== null) {
+        if ($locationNeighborhood instanceof LocationNeighborhood) {
             $form->get('neighborhood')->setData($locationNeighborhood->getName());
         }
     }
 
     private function requestMethodIsPOST(): bool {
-        /** @var \Symfony\Component\HttpFoundation\Request $req */
+        /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         return Request::METHOD_POST == $req->getMethod();
     }

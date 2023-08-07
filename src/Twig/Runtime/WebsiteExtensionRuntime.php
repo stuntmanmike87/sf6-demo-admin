@@ -5,14 +5,21 @@ declare(strict_types=1);
 namespace App\Twig\Runtime;
 
 use App\Entity\LocationCountry;
+use App\Repository\LocationCountryRepository;
 use App\Utils\Acl;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
-final class WebsiteExtensionRuntime implements RuntimeExtensionInterface
+final readonly class WebsiteExtensionRuntime implements RuntimeExtensionInterface
 {
-    public function __construct(private readonly string $thumbnailUrl, private readonly string $locales, private readonly TranslatorInterface $translator, private readonly Acl $acl, private readonly EntityManagerInterface $entityManager)
+    public function __construct(
+        private string $thumbnailUrl,
+        private string $locales,
+        private TranslatorInterface $translator,
+        private Acl $acl,
+        private EntityManagerInterface $entityManager
+    )
     {
     }
 
@@ -106,7 +113,8 @@ final class WebsiteExtensionRuntime implements RuntimeExtensionInterface
 
     /**
      * Returns a string with the correct text by translate key.
-     * Originally this method was created to receive an array generated from TranslationHelper::convertTranslateKeyAsKey().
+     * Originally this method was created to receive an array 
+     * generated from TranslationHelper::convertTranslateKeyAsKey().
      *
      * @param array<mixed> $translations
      * @param string|null $translateKey
@@ -120,14 +128,15 @@ final class WebsiteExtensionRuntime implements RuntimeExtensionInterface
         return $translations[$translateKey] ?? $translateKey;
     }
 
-    /**
-     * Returns an array with all calling codes from each country.
-     *
-     * @return array<mixed>
-     */
-    public function getCountryCallingCodes(): array
+    // /**
+    //  * Returns an array with all calling codes from each country.
+    //  *
+    //  * @return array<mixed>
+    //  */
+    public function getCountryCallingCodes(): mixed//array
     {
-        return $this->entityManager->getRepository(LocationCountry::class)
-            ->findAllCallingCodes();
+        /** @var LocationCountryRepository $locationCountryRepository */
+        $locationCountryRepository = $this->entityManager->getRepository(LocationCountry::class);
+        return $locationCountryRepository->findAllCallingCodes();
     }
 }

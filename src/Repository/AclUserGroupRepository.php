@@ -48,8 +48,8 @@ final class AclUserGroupRepository extends ServiceEntityRepository
     //  *
     //  * @return AclUserGroup[]
     //  */
-    /** @return array<mixed> */
-    public function findAllByLocale(string $locale): array
+    //** @return array<mixed> */
+    public function findAllByLocale(string $locale): mixed//array
     {
         $qb = $this->createQueryBuilder('userGroup')
             ->innerJoin(

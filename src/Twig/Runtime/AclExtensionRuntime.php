@@ -6,11 +6,12 @@ namespace App\Twig\Runtime;
 
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
-final class AclExtensionRuntime implements RuntimeExtensionInterface
+final readonly class AclExtensionRuntime implements RuntimeExtensionInterface
 {
-    public function __construct(private readonly TokenStorageInterface $tokenStorage)
+    public function __construct(private TokenStorageInterface $tokenStorage)
     {
         // Inject dependencies if needed
     }
@@ -21,13 +22,15 @@ final class AclExtensionRuntime implements RuntimeExtensionInterface
      */
     public function isAccessible(string $prefix, string $controller, ?string $action = null): bool
     {
-        /** @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token */
+        /** @var TokenInterface $token */
         $token = $this->tokenStorage->getToken();
         /** @var User $user*/
         $user = $token->getUser();
         $acl = $user->getAcl();
         //$acl = $this->tokenStorage->getToken()->getUser()->getAcl();//Undefined method 'getAcl'
 
-        return ((isset($action) && isset($acl[$prefix][$controller][$action])) || (($action === null || $action === '') && isset($acl[$prefix][$controller])));
+        return (
+            (isset($action) && isset($acl[$prefix][$controller][$action])) || (($action === null || $action === '') && isset($acl[$prefix][$controller]))
+        );
     }
 }
