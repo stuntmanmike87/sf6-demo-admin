@@ -12,6 +12,7 @@ use App\Utils\StringHelper;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Nette\Utils\Strings;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -128,7 +129,7 @@ final class Acl
         $controller = $request->get('_controller');
         $controller = explode('::', $controller);
         $controller = explode('\\', $controller[0]);
-        $controller = preg_replace('/Controller$/', '', end($controller));
+        $controller = Strings::replace('/Controller$/', '', end($controller));
 
         return StringHelper::camelCaseToDashed($controller);
     }
@@ -145,10 +146,12 @@ final class Acl
 
         $pattern = "#Controller::([a-zA-Z]*)#";
         $matches = [];
-        $req = $request->get('_controller');/** @var string $req */
-        preg_match($pattern, $req, $matches);
+        $req = $request->get('_controller');
+        /** @var string $req */
+        /** @var bool|int $matches */
+        Strings::match($pattern, $req, $matches);
 
-
+        /** @var array<string> $matches */
         if(null === $matches[1]) {
             return null;
         }

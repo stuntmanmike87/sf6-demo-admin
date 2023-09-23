@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Utils;
 
 use function Symfony\Component\String\u;
+use Nette\Utils\Strings;
 
 final class TranslationHelper
 {
@@ -34,8 +35,8 @@ final class TranslationHelper
      */
     public static function camelCaseToDashed(mixed $string): string
     {
-        /** @var array<string>|string $string *//** @var string $s */
-        $s = preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $string);
+        /** @var (callable(): mixed)|string $string *//** @var string $s */
+        $s = Strings::replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $string);
         return strtolower($s);
     }
 
@@ -65,7 +66,9 @@ final class TranslationHelper
         }
 
         $yt_rx = '/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/';
-        $has_match_youtube = preg_match($yt_rx, $url, $yt_matches);
+        $yt_matches = [];
+        /** @var bool|int $yt_matches */
+        $has_match_youtube = Strings::match($yt_rx, $url, $yt_matches);
         return (bool) $has_match_youtube;
     }
 }
