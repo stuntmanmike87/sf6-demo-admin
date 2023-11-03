@@ -2165,10 +2165,10 @@ core-js-compat@^3.31.0, core-js-compat@^3.32.2:
   dependencies:
     browserslist "^4.22.1"
 
-core-js@^3.33.1:
-  version "3.33.1"
-  resolved "https://registry.npmjs.org/core-js/-/core-js-3.33.1.tgz"
-  integrity sha512-qVSq3s+d4+GsqN0teRCJtM6tdEEXyWxjzbhVrCHmBS5ZTM0FS2MOS0D13dUXAWDUN6a+lHI/N1hF9Ytz6iLl9Q==
+core-js@^3.33.2:
+  version "3.33.2"
+  resolved "https://registry.npmjs.org/core-js/-/core-js-3.33.2.tgz"
+  integrity sha512-XeBzWI6QL3nJQiHmdzbAOiMYqjrb7hwU7A39Qhvd/POSa/t9E1AeZyEZx3fNvp/vtM8zXwhoL0FsiS0hD0pruQ==
 
 core-util-is@~1.0.0:
   version "1.0.3"
@@ -2185,9 +2185,9 @@ cross-spawn@^7.0.3:
     which "^2.0.1"
 
 crypto-js@^4.0.0:
-  version "4.1.1"
-  resolved "https://registry.npmjs.org/crypto-js/-/crypto-js-4.1.1.tgz"
-  integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
+  version "4.2.0"
+  resolved "https://registry.npmjs.org/crypto-js/-/crypto-js-4.2.0.tgz"
+  integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
 
 css-declaration-sorter@^6.3.1:
   version "6.4.1"
@@ -3175,10 +3175,10 @@ flag-icon-css@^4.1.7:
   resolved "https://registry.npmjs.org/flag-icon-css/-/flag-icon-css-4.1.7.tgz"
   integrity sha512-AFjSU+fv98XbU0vnTQ32vcLj89UEr1MhwDFcooQv14qWJCjg9fGZzfh9BVyDhAhIOZW/pGmJmq38RqpgPaeybQ==
 
-flag-icons@^6.11.1:
-  version "6.11.1"
-  resolved "https://registry.npmjs.org/flag-icons/-/flag-icons-6.11.1.tgz"
-  integrity sha512-c2UMJTFZoVQ47/sE1mb+9b5S1pi8SjXsx0MR063O31GV+O2EN4FMwMdEYSQItpien2bl9w1viLUoo2R3r6OK3g==
+flag-icons@^6.11.2:
+  version "6.11.2"
+  resolved "https://registry.npmjs.org/flag-icons/-/flag-icons-6.11.2.tgz"
+  integrity sha512-xEVPdyDkL28GG0H+x7OP89uFXDgCduNX5DEJ9ZJuxpg3dnDCioBoHfhl4kjC4ixnOnVh7ajL/PNFg7my8qBxtQ==
 
 flot@^4.2.2:
   version "4.2.3"
@@ -4869,10 +4869,10 @@ sass-loader@^13.0.0, sass-loader@^13.3.2:
   dependencies:
     neo-async "^2.6.2"
 
-sass@^1.17.0, sass@^1.3.0, sass@^1.69.4:
-  version "1.69.4"
-  resolved "https://registry.npmjs.org/sass/-/sass-1.69.4.tgz"
-  integrity sha512-+qEreVhqAy8o++aQfCJwp0sklr2xyEzkm9Pp/Igu9wNPoe7EZEQ8X/MBvvXggI2ql607cxKg/RKOwDj6pp2XDA==
+sass@^1.17.0, sass@^1.3.0, sass@^1.69.5:
+  version "1.69.5"
+  resolved "https://registry.npmjs.org/sass/-/sass-1.69.5.tgz"
+  integrity sha512-qg2+UCJibLr2LCVOt3OlPhr/dqVHWOa9XtZf2OjbLs/T4VPSJ00udtgJxH3neXZm+QqX8B+3cU7RaLqp1iVfcQ==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
