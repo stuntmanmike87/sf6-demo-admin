@@ -2,6 +2,7 @@
 
 namespace App\Factory;
 
+use Override;
 use App\Entity\AclPermission;
 use App\Repository\AclPermissionRepository;
 use Zenstruck\Foundry\ModelFactory;
@@ -60,6 +61,7 @@ final class AclPermissionFactory extends ModelFactory
      *
      * @todo add your default values here
      */
+    #[Override]
     protected function getDefaults(): array
     {
         return [
@@ -71,6 +73,7 @@ final class AclPermissionFactory extends ModelFactory
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
      */
+    #[Override]
     protected function initialize(): self
     {
         return $this
@@ -78,6 +81,7 @@ final class AclPermissionFactory extends ModelFactory
         ;
     }
 
+    #[Override]
     protected static function getClass(): string
     {
         return AclPermission::class;

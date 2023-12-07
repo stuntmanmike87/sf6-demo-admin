@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use Override;
 use App\Entity\User;
 use App\Form\Helper\LocationHelper;
 use Symfony\Component\Form\AbstractType;
@@ -29,6 +30,7 @@ final class SettingsAddressType extends AbstractType
     {
     }
 
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var TokenInterface $token */
@@ -168,6 +170,7 @@ final class SettingsAddressType extends AbstractType
         ;
     }
 
+    #[Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

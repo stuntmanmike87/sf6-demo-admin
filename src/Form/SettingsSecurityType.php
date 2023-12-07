@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use Override;
 use App\Entity\AclUserGroup;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
@@ -31,6 +32,7 @@ final class SettingsSecurityType extends AbstractType
     {
     }
 
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -111,6 +113,7 @@ final class SettingsSecurityType extends AbstractType
         ;
     }
 
+    #[Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

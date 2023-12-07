@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use Override;
 use App\Entity\LocationCountry;
 use App\Entity\User;
 use App\Entity\UserType;
@@ -38,6 +39,7 @@ final class SettingsProfileType extends AbstractType
     {
     }
 
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {//Cognitive complexity for "App\Form\SettingsProfileType::buildForm()" is 12, keep it under 8
         /** @var Request $req */
@@ -182,6 +184,7 @@ final class SettingsProfileType extends AbstractType
         ;
     }
 
+    #[Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

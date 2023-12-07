@@ -2,6 +2,7 @@
 
 namespace App\Factory;
 
+use Override;
 use App\Entity\ResetUserPassword;
 use App\Repository\ResetUserPasswordRepository;
 use Zenstruck\Foundry\ModelFactory;
@@ -60,6 +61,7 @@ final class ResetUserPasswordFactory extends ModelFactory
      *
      * @todo add your default values here
      */
+    #[Override]
     protected function getDefaults(): array
     {
         return [
@@ -72,6 +74,7 @@ final class ResetUserPasswordFactory extends ModelFactory
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
      */
+    #[Override]
     protected function initialize(): self
     {
         return $this
@@ -79,6 +82,7 @@ final class ResetUserPasswordFactory extends ModelFactory
         ;
     }
 
+    #[Override]
     protected static function getClass(): string
     {
         return ResetUserPassword::class;

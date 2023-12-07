@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use Override;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -15,6 +16,7 @@ use Symfony\Component\Validator\Constraints\Length;
 
 final class UserAddType extends UserType
 {
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -40,6 +42,7 @@ final class UserAddType extends UserType
         $this->addBuildForm($builder, $param);
     }
 
+    #[Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
