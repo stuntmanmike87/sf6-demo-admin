@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use Override;
 use App\Entity\AclUserGroup;
 use App\Entity\User;
 use App\Enum\Acl\AclUserGroupIdEnum;
@@ -26,6 +27,7 @@ final class UserAdminCommand extends Command
         parent::__construct();
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
