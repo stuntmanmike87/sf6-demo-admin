@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Override;
 use App\Repository\UserRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -584,6 +585,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @see UserInterface
      */
+    #[Override]
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
@@ -592,6 +594,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
+    #[Override]
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -612,6 +615,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
+    #[Override]
     public function getPassword(): ?string
     {
         return $this->password;
@@ -627,6 +631,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
+    #[Override]
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
