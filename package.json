@@ -4,11 +4,11 @@
         "@babel/preset-env": "^7.23.9",
         "@symfony/webpack-encore": "^4.6.1",
         "core-js": "^3.35.1",
-        "css-loader": "^6.9.1",
+        "css-loader": "^6.10.0",
         "regenerator-runtime": "^0.14.1",
         "sass": "^1.70.0",
         "sass-loader": "^13.3.3",
-        "webpack": "^5.90.0",
+        "webpack": "^5.90.1",
         "webpack-cli": "^5.1.4",
         "webpack-notifier": "^1.15.0"
     },
