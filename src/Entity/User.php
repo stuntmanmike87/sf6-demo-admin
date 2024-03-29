@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Override;
 use App\Repository\UserRepository;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -16,67 +14,67 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Index(columns: ["username"], name: "idx_username")]
-#[ORM\Index(columns: ["first_name"], name: "idx_first_name")]
-#[ORM\Index(columns: ["last_name"], name: "idx_last_name")]
-#[ORM\Index(columns: ["email"], name: "idx_email")]
-#[ORM\Index(columns: ["active"], name: "idx_active")]
-#[ORM\Index(columns: ["lat"], name: "idx_lat")]
-#[ORM\Index(columns: ["lng"], name: "idx_lng")]
-#[ORM\Index(columns: ["google_id"], name: "idx_google_id")]
-#[ORM\Index(columns: ["facebook_id"], name: "idx_facebook_id")]
+#[ORM\Index(columns: ['username'], name: 'idx_username')]
+#[ORM\Index(columns: ['first_name'], name: 'idx_first_name')]
+#[ORM\Index(columns: ['last_name'], name: 'idx_last_name')]
+#[ORM\Index(columns: ['email'], name: 'idx_email')]
+#[ORM\Index(columns: ['active'], name: 'idx_active')]
+#[ORM\Index(columns: ['lat'], name: 'idx_lat')]
+#[ORM\Index(columns: ['lng'], name: 'idx_lng')]
+#[ORM\Index(columns: ['google_id'], name: 'idx_google_id')]
+#[ORM\Index(columns: ['facebook_id'], name: 'idx_facebook_id')]
 /** @final */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\Column(unique: true)]
     #[ORM\CustomIdGenerator(class: UuidOrderedTimeGenerator::class)]
-    protected UuidOrderedTimeGenerator|string|null $id = null;//protected string $id;
+    protected UuidOrderedTimeGenerator|string|null $id = null; // protected string $id;
 
     #[ORM\Column(length: 100, unique: true)]
-    private ?string $username = null;//private string $username;
+    private ?string $username = null; // private string $username;
 
-    /** @var array<string> $roles *///** @var string[] $roles */
+    /** @var array<string> $roles */ // ** @var string[] $roles */
     #[ORM\Column]
     private array $roles = [];
 
     #[ORM\Column(length: 255)]
-    private ?string $password = null;//private string $password;//private ?string $password;//private string $password = null;
+    private ?string $password = null; // private string $password;//private ?string $password;//private string $password = null;
 
     #[ORM\Column]
-    private ?bool $verified = false;//private bool $verified = false;
+    private ?bool $verified = false; // private bool $verified = false;
 
     #[ORM\Column(length: 255)]
-    private ?string $firstName = null;//private string $firstName;
+    private ?string $firstName = null; // private string $firstName;
 
     #[ORM\Column(length: 255)]
-    private ?string $lastName = null;//private string $lastName;
+    private ?string $lastName = null; // private string $lastName;
 
     #[ORM\Column(length: 255)]
-    private ?string $email = null;//private string $email;
+    private ?string $email = null; // private string $email;
 
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?DateTimeInterface $birthday = null;
+    private ?\DateTimeInterface $birthday = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $urlPicture = null;
 
     #[ORM\Column]
-    private ?bool $showPicture = false;//private bool $showPicture = false;
+    private ?bool $showPicture = false; // private bool $showPicture = false;
 
     #[ORM\Column]
-    private ?bool $active = true;//private bool $active = true;
+    private ?bool $active = true; // private bool $active = true;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?AclUserGroup $userGroup = null;//private AclUserGroup $userGroup;
+    private ?AclUserGroup $userGroup = null; // private AclUserGroup $userGroup;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?DateTimeInterface $lastAccessAt = null;
+    private ?\DateTimeInterface $lastAccessAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $address = null;
@@ -124,19 +122,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $googleAccessToken = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?DateTimeInterface $createdAt = null;
+    private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?DateTimeInterface $updatedAt = null;
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?DateTimeInterface $deletedAt = null;
+    private ?\DateTimeInterface $deletedAt = null;
 
-    /** @var  Collection<int, AccountVerification> $accountVerifications*/
+    /** @var Collection<int, AccountVerification> $accountVerifications */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: AccountVerification::class)]
     private Collection $accountVerifications;
 
-    /** @var  Collection<int, ResetUserPassword> $resetUserPasswords*/
+    /** @var Collection<int, ResetUserPassword> $resetUserPasswords */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: ResetUserPassword::class)]
     private Collection $resetUserPasswords;
 
@@ -146,8 +144,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * This variable is only used with a combination to ACL service.
      */
-    /** @var array<string> $acl */
-    private ?array $acl = null;//private array $acl;
+    /** @var array<string> */
+    private ?array $acl = null; // private array $acl;
 
     #[ORM\ManyToOne]
     private ?LocationCountry $phoneNumberCountry = null;
@@ -235,12 +233,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getBirthday(): ?DateTimeInterface
+    public function getBirthday(): ?\DateTimeInterface
     {
         return $this->birthday;
     }
 
-    public function setBirthday(?DateTimeInterface $birthday): self
+    public function setBirthday(?\DateTimeInterface $birthday): self
     {
         $this->birthday = $birthday;
 
@@ -291,16 +289,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUserGroup(?AclUserGroup $userGroup): self
     {
         $this->userGroup = $userGroup;
-        
+
         return $this;
     }
 
-    public function getLastAccessAt(): ?DateTimeInterface
+    public function getLastAccessAt(): ?\DateTimeInterface
     {
         return $this->lastAccessAt;
     }
 
-    public function setLastAccessAt(?DateTimeInterface $lastAccessAt): self
+    public function setLastAccessAt(?\DateTimeInterface $lastAccessAt): self
     {
         $this->lastAccessAt = $lastAccessAt;
 
@@ -487,36 +485,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?DateTimeInterface $createdAt): self
+    public function setCreatedAt(?\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    public function getDeletedAt(): ?DateTimeInterface
+    public function getDeletedAt(): ?\DateTimeInterface
     {
         return $this->deletedAt;
     }
 
-    public function setDeletedAt(?DateTimeInterface $deletedAt): self
+    public function setDeletedAt(?\DateTimeInterface $deletedAt): self
     {
         $this->deletedAt = $deletedAt;
 
@@ -573,19 +571,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // set the owning side to null (unless already changed)
         if ($this->resetUserPasswords->removeElement($resetUserPassword) && $resetUserPassword->getUser() === $this) {
-            $resetUserPassword->setUser(null);//
+            $resetUserPassword->setUser(null);
         }
 
         return $this;
     }
-
 
     /**
      * A visual identifier that represents this user.
      *
      * @see UserInterface
      */
-    #[Override]
+    #[\Override]
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
@@ -594,7 +591,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
-    #[Override]
+    #[\Override]
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -615,7 +612,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    #[Override]
+    #[\Override]
     public function getPassword(): ?string
     {
         return $this->password;
@@ -631,7 +628,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
-    #[Override]
+    #[\Override]
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here

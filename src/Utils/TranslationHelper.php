@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Utils;
 
-use function Symfony\Component\String\u;
 use Nette\Utils\Strings;
+
+use function Symfony\Component\String\u;
 
 final class TranslationHelper
 {
@@ -13,12 +14,13 @@ final class TranslationHelper
      * Convert to array with translate key as key array.
      *
      * @param array<mixed> $translations
+     *
      * @return array<mixed>
      */
     public static function convertTranslateKeyAsKey(array $translations): array
     {
         $items = [];
-        /** @var string[][] $translations *//** @var string[] $translation */
+        /** @var string[][] $translations */ /** @var string[] $translation */
         foreach ($translations as $translation) {
             if (null === $translation['translateKey'] || null === $translation['text']) {
                 break;
@@ -35,8 +37,9 @@ final class TranslationHelper
      */
     public static function camelCaseToDashed(mixed $string): string
     {
-        /** @var (callable(): mixed)|string $string *//** @var string $s */
+        /** @var (callable(): mixed)|string $string */ /** @var string $s */
         $s = Strings::replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $string);
+
         return strtolower($s);
     }
 
@@ -51,17 +54,15 @@ final class TranslationHelper
         $terms = array_unique($searchQuery->split(' '));
 
         // Ignore the search terms that are too short
-        return array_filter($terms, static fn($term) => 2 <= $term->length());
+        return array_filter($terms, static fn ($term) => 2 <= $term->length());
     }
 
     /**
      * Returns boolean if the URL is from YouTube.
-     *
-     *
      */
-    public static function isYouTube(string $url = null): bool
+    public static function isYouTube(?string $url = null): bool
     {
-        if ($url === null || $url === ''){
+        if (null === $url || '' === $url) {
             return false;
         }
 
@@ -69,6 +70,7 @@ final class TranslationHelper
         $yt_matches = [];
         /** @var bool|int $yt_matches */
         $has_match_youtube = Strings::match($yt_rx, $url, $yt_matches);
+
         return (bool) $has_match_youtube;
     }
 }

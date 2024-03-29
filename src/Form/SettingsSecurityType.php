@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use Override;
 use App\Entity\AclUserGroup;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
@@ -28,11 +27,10 @@ final class SettingsSecurityType extends AbstractType
         private readonly EntityManager $entityManager,
         protected RequestStack $request,
         private readonly UserPasswordHasherInterface $passwordHasher
-    )
-    {
+    ) {
     }
 
-    #[Override]
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -47,14 +45,14 @@ final class SettingsSecurityType extends AbstractType
                 'constraints' => [
                     new Length([
                         'min' => 5,
-                        'minMessage' => 'app.user.form.error.min_length.password'
-                    ])
+                        'minMessage' => 'app.user.form.error.min_length.password',
+                    ]),
                 ],
                 'first_options' => ['label' => 'app.user.form.label.password'],
                 'second_options' => ['label' => 'app.user.form.label.repeat_password'],
             ])
             ->add('acl_user_group_id', ChoiceType::class, [
-                'label'     => 'app.user.form.label.group',
+                'label' => 'app.user.form.label.group',
                 'choices' => $this->getUserGroupsChoices(),
                 'placeholder' => 'app.form.label.choose',
                 'mapped' => false,
@@ -68,7 +66,7 @@ final class SettingsSecurityType extends AbstractType
                 /** @var string $plainPassword */
                 $plainPassword = $form->get('plainPassword')->getData();
 
-                if ($plainPassword !== null) {
+                if (null !== $plainPassword) {
                     $user->setPassword($this->passwordHasher->hashPassword(
                         $user,
                         $plainPassword
@@ -78,7 +76,7 @@ final class SettingsSecurityType extends AbstractType
                 // Update user group.
                 $acl_user_group_id = $form->get('acl_user_group_id')->getData();
 
-                if ($acl_user_group_id !== null) {
+                if (null !== $acl_user_group_id) {
                     /** @var AclUserGroup $userGroup */
                     $userGroup = $this->entityManager->getRepository(AclUserGroup::class)
                         ->find($acl_user_group_id);
@@ -86,7 +84,7 @@ final class SettingsSecurityType extends AbstractType
                     $user->setUserGroup($userGroup);
                 }
             })
-            /**
+            /*
              * Prepare to set data correctly from unmapped databases columns before load form.
              * This method should be loaded on edit form or if exist an error on form.
              *
@@ -103,7 +101,7 @@ final class SettingsSecurityType extends AbstractType
                 }
 
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
-                if ($user->getId() !== null) {
+                if (null !== $user->getId()) {
                     // Set user group on form.
                     /** @var AclUserGroup aclUserGroup */
                     $aclUserGroup = $form->get('acl_user_group_id')->setData($user->getUserGroup());
@@ -113,7 +111,7 @@ final class SettingsSecurityType extends AbstractType
         ;
     }
 
-    #[Override]
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -130,12 +128,12 @@ final class SettingsSecurityType extends AbstractType
     {
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
-        $locale = $req->getLocale();//** @var string[][] $types */
+        $locale = $req->getLocale(); // ** @var string[][] $types */
         $types = $this->entityManager->getRepository(AclUserGroup::class)
             ->findAllByLocale($locale);
 
         $choices = [];
-        /** @var string[][] $types *///** @var string[] $type */
+        /** @var string[][] $types */ // ** @var string[] $type */
         foreach ($types as $type) {
             $choices[$type['text']] = $type['id'];
         }

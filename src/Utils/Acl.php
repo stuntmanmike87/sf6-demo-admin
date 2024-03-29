@@ -8,10 +8,8 @@ use App\Entity\AclPermission;
 use App\Entity\AclUserGroup;
 use App\Entity\User;
 use App\Repository\AclPermissionRepository;
-use App\Utils\StringHelper;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Nette\Utils\Strings;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +27,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 final class Acl
 {
-    /** @var array<string> $roles */
+    /** @var array<string> */
     private array $roles = [];
 
     public function __construct(
@@ -43,18 +41,18 @@ final class Acl
     }
 
     /**
-     * Load all permission from user group
+     * Load all permission from user group.
      */
     public function loadRoles(): void
     {
         try {
             /** @var User $user */
             $user = $this->security->getUser();
-        } catch (Exception) {
+        } catch (\Exception) {
             throw new AccessDeniedException($this->translator->trans('app.error.unauthorised_access'));
         }
 
-        if (!$user instanceof User)  {
+        if (!$user instanceof User) {
             return;
         }
 
@@ -64,7 +62,7 @@ final class Acl
 
         /** @var AclPermissionRepository $aclPermissionRepository */
         $aclPermissionRepository = $this->entityManager->getRepository(AclPermission::class);
-        /** @var  Collection<int, AclPermission> $permissions *///** @var AclPermission $permissions */
+        /** @var Collection<int, AclPermission> $permissions */ // ** @var AclPermission $permissions */
         $permissions = $aclPermissionRepository->findRoles((int) $userGroupId);
 
         /* $permissions = $this->entityManager
@@ -76,24 +74,26 @@ final class Acl
         }
 
         /** @var array<string> $permission */
-        foreach($permissions as $permission) {
+        foreach ($permissions as $permission) {
             $prefix = strtolower($permission['prefix']);
             $controller = strtolower($permission['controller']);
             $action = strtolower($permission['action']);
-            if (($this->roles[$prefix] === '') && ($this->roles[$controller] === '') && ($this->roles[$action] === '')){
+            if (('' === $this->roles[$prefix]) && ('' === $this->roles[$controller]) && ('' === $this->roles[$action])) {
                 return;
             }
 
-            ///* $b =  */$this->roles[$prefix][$controller][$action] = true;//@var (string|true[][])[] $roles//Cannot assign offset string to string.
-            //$this->roles[strtolower((string) $permission['prefix'])][strtolower((string) $permission['controller'])][strtolower((string) $permission['action'])] = true;
+            // /* $b = */$this->roles[$prefix][$controller][$action] = true;
+            //@var (string|true[][])[] $roles//Cannot assign offset string to string.
+            // $this->roles[strtolower((string) $permission['prefix'])][strtolower((string)
+            //  $permission['controller'])][strtolower((string) $permission['action'])] = true;
         }
 
         /** @var TokenInterface $token */
         $token = $this->tokenStorage->getToken();
-        /** @var User $user*/
+        /** @var User $user */
         $user = $token->getUser();
         $user->setAcl($this->roles);
-        //$this->tokenStorage->getToken()->getUser()->setAcl($this->roles);//Undefined method 'setAcl'
+        // $this->tokenStorage->getToken()->getUser()->setAcl($this->roles);//Undefined method 'setAcl'
     }
 
     /**
@@ -103,6 +103,7 @@ final class Acl
     {
         $controller = $this->getControllerName();
         $action = $this->getActionName();
+
         return isset($this->roles[$prefix][$controller][$action]);
     }
 
@@ -117,15 +118,14 @@ final class Acl
     }
 
     /**
-     * Get current controller name
-     *
-     * @return string
+     * Get current controller name.
      */
     public function getControllerName(): ?string
     {
         $request = $this->requestStack->getCurrentRequest();
 
-        /** @var \Symfony\Component\HttpFoundation\Request $request *//** @var string $controller */
+        /** @var Request $request */
+        /** @var string $controller */
         $controller = $request->get('_controller');
         $controller = explode('::', $controller);
         $controller = explode('\\', $controller[0]);
@@ -135,24 +135,22 @@ final class Acl
     }
 
     /**
-     * Get current action name
-     *
-     * @return string
+     * Get current action name.
      */
     public function getActionName(): ?string
     {
         /** @var Request $request */
         $request = $this->requestStack->getCurrentRequest();
 
-        $pattern = "#Controller::([a-zA-Z]*)#";
-        $matches = [];
-        $req = $request->get('_controller');
-        /** @var string $req */
+        $pattern = '#Controller::([a-zA-Z]*)#';
         /** @var bool|int $matches */
+        $matches = [];
+        /** @var string $req */
+        $req = $request->get('_controller');
         Strings::match($pattern, $req, $matches);
 
         /** @var array<string> $matches */
-        if(null === $matches[1]) {
+        if (null === $matches[1]) {
             return null;
         }
 

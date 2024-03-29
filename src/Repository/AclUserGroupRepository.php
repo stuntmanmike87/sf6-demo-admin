@@ -48,8 +48,8 @@ final class AclUserGroupRepository extends ServiceEntityRepository
     //  *
     //  * @return AclUserGroup[]
     //  */
-    //** @return array<mixed> */
-    public function findAllByLocale(string $locale): mixed//array
+    // ** @return array<mixed> */
+    public function findAllByLocale(string $locale): mixed// array
     {
         $qb = $this->createQueryBuilder('userGroup')
             ->innerJoin(
@@ -65,7 +65,7 @@ final class AclUserGroupRepository extends ServiceEntityRepository
                 translation.translateKey'
             );
 
-        if ($locale !== '' && $locale !== '0') {
+        if ('' !== $locale && '0' !== $locale) {
             $qb->andWhere('language.locale = :locale')
                 ->setParameter('locale', $locale);
         }

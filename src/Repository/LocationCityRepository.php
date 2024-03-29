@@ -46,7 +46,7 @@ final class LocationCityRepository extends ServiceEntityRepository
     //  *
     //  * @return array<mixed>
     //  */
-    public function listAllByState(int $stateId): mixed//array
+    public function listAllByState(int $stateId): mixed// array
     {
         $qb = $this->createQueryBuilder('city')
             ->select(
@@ -55,7 +55,7 @@ final class LocationCityRepository extends ServiceEntityRepository
                  city.slug'
             );
 
-        if ($stateId !== 0) {
+        if (0 !== $stateId) {
             $qb->andWhere('city.state = :state')
                 ->setParameter('state', $stateId);
         }

@@ -2,7 +2,6 @@
 
 namespace App\Factory;
 
-use Override;
 use App\Entity\AclAction;
 use App\Repository\AclActionRepository;
 use Zenstruck\Foundry\ModelFactory;
@@ -61,7 +60,7 @@ final class AclActionFactory extends ModelFactory
      *
      * @todo add your default values here
      */
-    #[Override]
+    #[\Override]
     protected function getDefaults(): array
     {
         return [
@@ -73,7 +72,7 @@ final class AclActionFactory extends ModelFactory
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
      */
-    #[Override]
+    #[\Override]
     protected function initialize(): self
     {
         return $this
@@ -81,7 +80,7 @@ final class AclActionFactory extends ModelFactory
         ;
     }
 
-    #[Override]
+    #[\Override]
     protected static function getClass(): string
     {
         return AclAction::class;

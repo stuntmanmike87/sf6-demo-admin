@@ -48,23 +48,23 @@ final class LocationNeighborhoodRepository extends ServiceEntityRepository
      * This method will be find correctly neighborhood, if not find, then will be added.
      *
      * @param array<mixed> $criteria
-     * @return LocationNeighborhood|null
+     *
      * @throws NonUniqueResultException
      */
     public function findAdd(array $criteria): ?LocationNeighborhood
     {
-        if (!array_key_exists( 'name', $criteria) && !array_key_exists( 'location_city_id', $criteria)) {
+        if (!array_key_exists('name', $criteria) && !array_key_exists('location_city_id', $criteria)) {
             return null;
         }
 
         $qb = $this->createQueryBuilder('neighborhood');
 
-        if (array_key_exists( 'name', $criteria)) {
+        if (array_key_exists('name', $criteria)) {
             $qb->andWhere('neighborhood.name = :name')
                 ->setParameter('name', $criteria['name']);
         }
 
-        if (array_key_exists( 'location_city_id', $criteria)) {
+        if (array_key_exists('location_city_id', $criteria)) {
             $qb->andWhere('neighborhood.city = :location_city_id')
                 ->setParameter('location_city_id', $criteria['location_city_id']);
         }
@@ -73,7 +73,7 @@ final class LocationNeighborhoodRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
 
-        if ($locationNeighborhood !== null) {
+        if (null !== $locationNeighborhood) {
             /** @var LocationCity $locationCity */
             $locationCity = $this->getEntityManager()->getRepository(LocationCity::class)
                 ->find($criteria['location_city_id']);

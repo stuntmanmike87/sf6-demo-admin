@@ -20,15 +20,15 @@ class AclPermission
 
     #[ORM\ManyToOne(targetEntity: AclAction::class, inversedBy: 'permissions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?AclAction $action = null;//private AclAction $action;
+    private ?AclAction $action = null; // private AclAction $action;
 
-    /** @var  Collection<int, AclUserGroup> $userGroups*/
+    /** @var Collection<int, AclUserGroup> $userGroups */
     #[ORM\OneToMany(mappedBy: 'permission', targetEntity: AclUserGroup::class)]
     private Collection $userGroups;
 
     #[ORM\ManyToOne(inversedBy: 'permissions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?AclUserGroup $userGroup = null;//private AclUserGroup $userGroup;
+    private ?AclUserGroup $userGroup = null; // private AclUserGroup $userGroup;
 
     public function __construct()
     {
@@ -48,7 +48,7 @@ class AclPermission
     public function setAction(?AclAction $action): self
     {
         $this->action = $action;
-        
+
         return $this;
     }
 
@@ -88,7 +88,7 @@ class AclPermission
     public function setUserGroup(?AclUserGroup $userGroup): self
     {
         $this->userGroup = $userGroup;
-        
+
         return $this;
     }
 }

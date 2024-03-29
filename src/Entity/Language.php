@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\LanguageRepository;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LanguageRepository::class)]
-#[ORM\Index(columns: ["translate_key"], name: "idx_translate_key")]
-#[ORM\Index(columns: ["locale"], name: "idx_locale")]
-#[ORM\Index(columns: ["app"], name: "idx_app")]
-#[ORM\Index(columns: ["user"], name: "idx_user")]
+#[ORM\Index(columns: ['translate_key'], name: 'idx_translate_key')]
+#[ORM\Index(columns: ['locale'], name: 'idx_locale')]
+#[ORM\Index(columns: ['app'], name: 'idx_app')]
+#[ORM\Index(columns: ['user'], name: 'idx_user')]
 /** @final */
 class Language
 {
@@ -25,30 +24,30 @@ class Language
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;//private string $name;
+    private ?string $name = null; // private string $name;
 
     #[ORM\Column(length: 10)]
-    private ?string $locale = null;//private string $locale;
+    private ?string $locale = null; // private string $locale;
 
     #[ORM\Column(length: 10)]
-    private ?string $identifier = null;//private string $identifier;
+    private ?string $identifier = null; // private string $identifier;
 
     #[ORM\Column(length: 255)]
-    private ?string $translateKey = null;//private string $translateKey;
+    private ?string $translateKey = null; // private string $translateKey;
 
     #[ORM\Column]
-    private ?bool $app = false;//private bool $app = false;
+    private ?bool $app = false; // private bool $app = false;
 
     #[ORM\Column]
-    private ?bool $user = false;//private bool $user = false;
+    private ?bool $user = false; // private bool $user = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?DateTimeInterface $createdAt = null;
+    private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column]
-    private ?bool $active = true;//private bool $active = true;
+    private ?bool $active = true; // private bool $active = true;
 
-    /** @var  Collection<int, Translation> $translations*/
+    /** @var Collection<int, Translation> $translations */
     #[ORM\OneToMany(mappedBy: 'language', targetEntity: Translation::class)]
     private Collection $translations;
 
@@ -134,12 +133,12 @@ class Language
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?DateTimeInterface $createdAt): self
+    public function setCreatedAt(?\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 

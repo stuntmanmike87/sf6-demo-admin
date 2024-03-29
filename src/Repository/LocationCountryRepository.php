@@ -45,8 +45,8 @@ final class LocationCountryRepository extends ServiceEntityRepository
     //  * Search countries. Recommended just for searching or auto-complete input.
     //  * @return LocationCountry[] Returns an array of LocationCountry objects
     //  */
-    //** @return array<mixed> */
-    public function search(string $text): mixed//array
+    // ** @return array<mixed> */
+    public function search(string $text): mixed// array
     {
         return $this->createQueryBuilder('country')
             ->select(
@@ -58,11 +58,11 @@ final class LocationCountryRepository extends ServiceEntityRepository
             ->andWhere('country.name LIKE :text')
             ->orWhere('country.native LIKE :text')
             ->orWhere('country.alpha2 LIKE :text')
-            ->setParameter('text', '%' . $text . '%')
+            ->setParameter('text', '%'.$text.'%')
             ->orderBy('country.name', 'ASC')
             ->getQuery()
             ->getResult()
-            ;
+        ;
     }
 
     // /**
@@ -70,8 +70,8 @@ final class LocationCountryRepository extends ServiceEntityRepository
     //  *
     //  * @return LocationCountry[] Returns an array of LocationCountry objects with calling codes.
     //  */
-    //** @return array<mixed> */
-    public function findAllCallingCodes(): mixed//array
+    // ** @return array<mixed> */
+    public function findAllCallingCodes(): mixed// array
     {
         return $this->createQueryBuilder('country')
             ->select(
@@ -84,6 +84,6 @@ final class LocationCountryRepository extends ServiceEntityRepository
             ->orderBy('country.name', 'ASC')
             ->getQuery()
             ->getResult()
-            ;
+        ;
     }
 }

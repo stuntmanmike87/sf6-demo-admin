@@ -19,38 +19,35 @@ final readonly class WebsiteExtensionRuntime implements RuntimeExtensionInterfac
         private TranslatorInterface $translator,
         private Acl $acl,
         private EntityManagerInterface $entityManager
-    )
-    {
+    ) {
     }
 
     /** @param array<mixed>|null $thumb */
     public function getImage(?string $src, ?array $thumb = []): string
     {
-        if ($src === null) {
+        if (null === $src) {
             if (isset($thumb['w']) && isset($thumb['h'])) {
-                return $this->thumbnailUrl . '?src=https://dummyimage.com/' . $thumb['w'] .'x'. $thumb['h'] . '/ffffff/bbb.gif&text=Sem imagem';
+                return $this->thumbnailUrl.'?src=https://dummyimage.com/'.$thumb['w'].'x'.$thumb['h'].'/ffffff/bbb.gif&text=Sem imagem';
             }
 
-            return $this->thumbnailUrl . '?src=https://dummyimage.com/800x800/ffffff/bbb.gif&text=Sem imagem';
+            return $this->thumbnailUrl.'?src=https://dummyimage.com/800x800/ffffff/bbb.gif&text=Sem imagem';
         }
 
         $params = [];
 
-        if ($thumb !== null) {
+        if (null !== $thumb) {
             foreach ($thumb as $parameter => $value) {
-                $params[] = $parameter . '=' . $value;
+                $params[] = $parameter.'='.$value;
             }
         }
 
-        $params[] = "src=".$src;
+        $params[] = 'src='.$src;
 
-        return $this->thumbnailUrl. '?'. implode('&', $params);
+        return $this->thumbnailUrl.'?'.implode('&', $params);
     }
 
     /**
      * Returns HTML with correct toggle icon.
-     *
-     *
      */
     public function getHtmlToggle(?bool $active = false): string
     {
@@ -60,7 +57,7 @@ final readonly class WebsiteExtensionRuntime implements RuntimeExtensionInterfac
             $toggle = 'fa-toggle-on text-success';
         }
 
-        return '<i class="fa ' . $toggle . '" aria-hidden="true"></i>';
+        return '<i class="fa '.$toggle.'" aria-hidden="true"></i>';
     }
 
     /**
@@ -71,7 +68,7 @@ final readonly class WebsiteExtensionRuntime implements RuntimeExtensionInterfac
     /** @return array<mixed> */
     public function getLocales(): array
     {
-        $localeCodes = explode('|', /* (string)  */$this->locales);
+        $localeCodes = explode('|', /* (string) */ $this->locales);
         sort($localeCodes);
 
         $locales = [];
@@ -81,7 +78,7 @@ final readonly class WebsiteExtensionRuntime implements RuntimeExtensionInterfac
 
             $locales[] = [
                 'code' => $localeCode,
-                'name' => $this->translator->trans($translateKey)
+                'name' => $this->translator->trans($translateKey),
             ];
         }
 
@@ -96,7 +93,7 @@ final readonly class WebsiteExtensionRuntime implements RuntimeExtensionInterfac
         $_controller = $this->acl->getControllerName();
         $_action = $this->acl->getActionName();
 
-        if ($action !== null) {
+        if (null !== $action) {
             if ($controller == $_controller && $action == $_action) {
                 return $className;
             }
@@ -113,15 +110,14 @@ final readonly class WebsiteExtensionRuntime implements RuntimeExtensionInterfac
 
     /**
      * Returns a string with the correct text by translate key.
-     * Originally this method was created to receive an array 
+     * Originally this method was created to receive an array
      * generated from TranslationHelper::convertTranslateKeyAsKey().
      *
      * @param array<mixed> $translations
-     * @param string|null $translateKey
      */
-    public function getTextByTranslateKey(array $translations, ?string $translateKey): mixed//?mixed//?string
+    public function getTextByTranslateKey(array $translations, ?string $translateKey): mixed// ?mixed//?string
     {
-        if ($translateKey === null) {
+        if (null === $translateKey) {
             return null;
         }
 
@@ -133,10 +129,11 @@ final readonly class WebsiteExtensionRuntime implements RuntimeExtensionInterfac
     //  *
     //  * @return array<mixed>
     //  */
-    public function getCountryCallingCodes(): mixed//array
+    public function getCountryCallingCodes(): mixed// array
     {
         /** @var LocationCountryRepository $locationCountryRepository */
         $locationCountryRepository = $this->entityManager->getRepository(LocationCountry::class);
+
         return $locationCountryRepository->findAllCallingCodes();
     }
 }

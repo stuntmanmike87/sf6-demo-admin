@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Twig\Extension;
 
-use Override;
 use App\Twig\Runtime\LanguageExtensionRuntime;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
 final class LanguageExtension extends AbstractExtension
 {
-    #[Override]
+    #[\Override]
     public function getFilters(): array
     {
         return [
@@ -19,7 +18,7 @@ final class LanguageExtension extends AbstractExtension
         ];
     }
 
-    #[Override]
+    #[\Override]
     public function getFunctions(): array
     {
         return [];

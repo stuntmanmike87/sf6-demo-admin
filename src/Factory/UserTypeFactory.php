@@ -2,7 +2,6 @@
 
 namespace App\Factory;
 
-use Override;
 use App\Entity\UserType;
 use App\Repository\UserTypeRepository;
 use Zenstruck\Foundry\ModelFactory;
@@ -61,7 +60,7 @@ final class UserTypeFactory extends ModelFactory
      *
      * @todo add your default values here
      */
-    #[Override]
+    #[\Override]
     protected function getDefaults(): array
     {
         return [
@@ -72,7 +71,7 @@ final class UserTypeFactory extends ModelFactory
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
      */
-    #[Override]
+    #[\Override]
     protected function initialize(): self
     {
         return $this
@@ -80,7 +79,7 @@ final class UserTypeFactory extends ModelFactory
         ;
     }
 
-    #[Override]
+    #[\Override]
     protected static function getClass(): string
     {
         return UserType::class;

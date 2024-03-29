@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace App\Utils;
 
-use function Symfony\Component\String\u;
 use Nette\Utils\Strings;
+
+use function Symfony\Component\String\u;
 
 final class StringHelper
 {
     /**
      * Convert to camelcase.
      */
-    public static function dashesToCamelCase(mixed $string, string $between = "-", bool $capitalizeFirstCharacter = false): string
+    public static function dashesToCamelCase(mixed $string, string $between = '-', bool $capitalizeFirstCharacter = false): string
     {
-        /** @var array<string>|string $string *//** @var string $s */
+        /** @var array<string>|string $string */ /** @var string $s */
         $s = str_replace($between, ' ', $string);
         $str = str_replace(' ', '', ucwords($s));
 
@@ -30,8 +31,9 @@ final class StringHelper
      */
     public static function camelCaseToDashed(mixed $string): string
     {
-        /** @var (callable(): mixed)|string $string *//** @var string $s */
+        /** @var (callable(): mixed)|string $string */ /** @var string $s */
         $s = Strings::replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $string);
+
         return strtolower($s);
     }
 
@@ -46,17 +48,15 @@ final class StringHelper
         $terms = array_unique($searchQuery->split(' '));
 
         // Ignore the search terms that are too short
-        return array_filter($terms, static fn($term) => 2 <= $term->length());
+        return array_filter($terms, static fn ($term) => 2 <= $term->length());
     }
 
     /**
      * Returns boolean if the URL is from YouTube.
-     *
-     *
      */
-    public static function isYouTube(string $url = null): bool
+    public static function isYouTube(?string $url = null): bool
     {
-        if ($url === null || $url === ''){
+        if (null === $url || '' === $url) {
             return false;
         }
 
@@ -64,6 +64,7 @@ final class StringHelper
         $yt_matches = [];
         /** @var bool|int $yt_matches */
         $has_match_youtube = Strings::match($yt_rx, $url, $yt_matches);
+
         return (bool) $has_match_youtube;
     }
 }

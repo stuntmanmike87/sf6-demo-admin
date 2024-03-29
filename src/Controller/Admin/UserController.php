@@ -9,11 +9,10 @@ use App\Entity\User;
 use App\Entity\UserType;
 use App\Form\UserAddType;
 use App\Form\UserEditType;
-use App\Repository\UserRepository;
 use App\Repository\AclUserGroupRepository;
+use App\Repository\UserRepository;
 use App\Repository\UserTypeRepository;
 use App\Utils\TranslationHelper;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +38,7 @@ final class UserController extends AdminController
         /** @var array<string> $aclUserGroupTranslations */
         $aclUserGroupTranslations = $aclUserGroupRepository->findAllByLocale($request->getLocale());
         $transGroups = TranslationHelper::convertTranslateKeyAsKey($aclUserGroupTranslations);
-        
+
         /** @var UserTypeRepository $userTypeRepository */
         $userTypeRepository = $entityManager->getRepository(UserType::class);
         /** @var array<string> $userTranslations */
@@ -63,7 +62,7 @@ final class UserController extends AdminController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setUpdatedAt(new DateTime());
+            $user->setUpdatedAt(new \DateTime());
 
             $entityManager->flush();
 
@@ -89,7 +88,7 @@ final class UserController extends AdminController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setCreatedAt(new DateTime());
+            $user->setCreatedAt(new \DateTime());
 
             $entityManager->persist($user);
             $entityManager->flush();

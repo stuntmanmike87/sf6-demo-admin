@@ -10,8 +10,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LocationCityRepository::class)]
-#[ORM\Index(columns: ["name"], name: "idx_name")]
-#[ORM\Index(columns: ["slug"], name: "idx_slug")]
+#[ORM\Index(columns: ['name'], name: 'idx_name')]
+#[ORM\Index(columns: ['slug'], name: 'idx_slug')]
 /** @final */
 class LocationCity
 {
@@ -21,20 +21,20 @@ class LocationCity
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;//private string $name;
+    private ?string $name = null; // private string $name;
 
     #[ORM\Column(length: 255)]
-    private ?string $slug = null;//private string $slug;
+    private ?string $slug = null; // private string $slug;
 
     #[ORM\ManyToOne(inversedBy: 'cities')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?LocationState $state = null;//private LocationState $state;
+    private ?LocationState $state = null; // private LocationState $state;
 
-    /** @var  Collection<int, LocationNeighborhood> $neighborhoods*/
+    /** @var Collection<int, LocationNeighborhood> $neighborhoods */
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: LocationNeighborhood::class)]
     private Collection $neighborhoods;
 
-    /** @var  Collection<int, User> $users*/
+    /** @var Collection<int, User> $users */
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: User::class)]
     private Collection $users;
 
@@ -81,7 +81,7 @@ class LocationCity
     public function setState(?LocationState $state): self
     {
         $this->state = $state;
-        
+
         return $this;
     }
 

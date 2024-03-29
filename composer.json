@@ -15,7 +15,7 @@
         "doctrine/orm": "^3.0",
         "gedmo/doctrine-extensions": "^3.10",
         "geoip2/geoip2": "^3.0",
-        "gumlet/php-image-resize": "^2.0",
+        "gumlet/php-image-resize": "^1.7",
         "knplabs/knp-paginator-bundle": "^6.0",
         "liip/imagine-bundle": "^2.10",
         "phpdocumentor/reflection-docblock": "^5.3",

@@ -10,8 +10,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LocationNeighborhoodRepository::class)]
-#[ORM\Index(columns: ["name"], name: "idx_name")]
-#[ORM\Index(columns: ["slug"], name: "idx_slug")]
+#[ORM\Index(columns: ['name'], name: 'idx_name')]
+#[ORM\Index(columns: ['slug'], name: 'idx_slug')]
 /** @final */
 class LocationNeighborhood
 {
@@ -21,16 +21,16 @@ class LocationNeighborhood
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;//private string $name;
+    private ?string $name = null; // private string $name;
 
     #[ORM\Column(length: 255)]
-    private ?string $slug = null;//private string $slug;
+    private ?string $slug = null; // private string $slug;
 
     #[ORM\ManyToOne(inversedBy: 'neighborhoods')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?LocationCity $city = null;//private LocationCity $city;
+    private ?LocationCity $city = null; // private LocationCity $city;
 
-    /** @var  Collection<int, User> $users*/
+    /** @var Collection<int, User> $users */
     #[ORM\OneToMany(mappedBy: 'neighborhood', targetEntity: User::class)]
     private Collection $users;
 
@@ -76,7 +76,7 @@ class LocationNeighborhood
     public function setCity(?LocationCity $city): self
     {
         $this->city = $city;
-        
+
         return $this;
     }
 

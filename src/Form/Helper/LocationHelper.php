@@ -20,28 +20,27 @@ final readonly class LocationHelper
     public function __construct(
         private EntityManager $entityManager,
         private RequestStack $request
-    )
-    {
+    ) {
     }
 
     /**
      * Returns states from a country in a dropdown (ChoiceType).
      *
-     * @param object|null $entityByGet In case without a entity reference in the route of method controller, 
-     * should be added manually the entity in the form type class.
+     * @param object|null $entityByGet in case without a entity reference in the route of method controller,
+     *                                 should be added manually the entity in the form type class
      *
      * @return array<mixed>
      */
     public function getStates(string $key, ?object $entityByGet = null): array
-    {//Cognitive complexity for "App\Form\Helper\LocationHelper::getStates()" is 14, keep it under 8
+    {// Cognitive complexity for "App\Form\Helper\LocationHelper::getStates()" is 14, keep it under 8
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         if ($this->requestMethodIsPOST()) {
             $entity = $req->get($key);
-        } elseif ($entityByGet !== null) {
+        } elseif (null !== $entityByGet) {
             $entity = $entityByGet;
         } else {
-            $entity = $req->get(StringHelper::dashesToCamelCase($key, "_"));
+            $entity = $req->get(StringHelper::dashesToCamelCase($key, '_'));
         }
 
         if (null === $entity) {
@@ -50,16 +49,16 @@ final readonly class LocationHelper
 
         $location_country_id = null;
 
-        if ('object' == gettype($entity)) {
+        if ('object' === gettype($entity)) {
             /** @var LocationCountry $locationCountry */
-            $locationCountry = $entity->getCountry();//Call to an undefined method object::getCountry().
+            $locationCountry = $entity->getCountry(); // Call to an undefined method object::getCountry().
 
             if (!$locationCountry instanceof LocationCountry) {
                 return [];
             }
 
             $location_country_id = $locationCountry->getId();
-        } elseif ('array' == gettype($entity)){
+        } elseif ('array' === gettype($entity)) {
             if (null === $entity['location_country_id']) {
                 return [];
             }
@@ -67,7 +66,7 @@ final readonly class LocationHelper
             $location_country_id = $entity['location_country_id'];
         }
 
-        if ($location_country_id === null) {
+        if (null === $location_country_id) {
             return [];
         }
 
@@ -78,15 +77,15 @@ final readonly class LocationHelper
         $states = $this->entityManager
             ->getRepository(LocationState::class)
             ->findBy([
-                'country' => $locationCountry
+                'country' => $locationCountry,
             ], [
-                'name' => 'ASC'
+                'name' => 'ASC',
             ]);
 
         $choices = [];
 
         foreach ($states as $state) {
-            /** @var LocationState $state */
+            /* @var LocationState $state */
             $choices[$state->getName()] = $state->getId();
         }
 
@@ -99,15 +98,15 @@ final readonly class LocationHelper
      * @return array<mixed>
      */
     public function getCities(string $key, ?object $entityByGet = null): array
-    {//Cognitive complexity for "App\Form\Helper\LocationHelper::getCities()" is 14, keep it under 8
+    {// Cognitive complexity for "App\Form\Helper\LocationHelper::getCities()" is 14, keep it under 8
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         if ($this->requestMethodIsPOST()) {
             $entity = $req->get($key);
-        } elseif ($entityByGet !== null) {
+        } elseif (null !== $entityByGet) {
             $entity = $entityByGet;
         } else {
-            $entity = $req->get(StringHelper::dashesToCamelCase($key, "_"));
+            $entity = $req->get(StringHelper::dashesToCamelCase($key, '_'));
         }
 
         if (null === $entity) {
@@ -116,16 +115,16 @@ final readonly class LocationHelper
 
         $location_state_id = null;
 
-        if ('object' == gettype($entity)) {
+        if ('object' === gettype($entity)) {
             /** @var LocationState $locationState */
-            $locationState = $entity->getState();//Call to an undefined method object::getState().
+            $locationState = $entity->getState(); // Call to an undefined method object::getState().
 
             if (!$locationState instanceof LocationState) {
                 return [];
             }
 
             $location_state_id = $locationState->getId();
-        } elseif ('array' == gettype($entity)){
+        } elseif ('array' === gettype($entity)) {
             if (null === $entity['state']) {
                 return [];
             }
@@ -133,8 +132,8 @@ final readonly class LocationHelper
             $location_state_id = $entity['state'];
         }
 
-        if ($location_state_id === null) {
-           return [];
+        if (null === $location_state_id) {
+            return [];
         }
 
         $locationState = $this->entityManager
@@ -144,35 +143,32 @@ final readonly class LocationHelper
         $cities = $this->entityManager
             ->getRepository(LocationCity::class)
             ->findBy([
-                'state' => $locationState
+                'state' => $locationState,
             ], [
-                'name' => 'ASC'
+                'name' => 'ASC',
             ]);
 
         $choices = [];
 
         foreach ($cities as $city) {
-            /** @var LocationCity $city */
+            /* @var LocationCity $city */
             $choices[$city->getName()] = $city->getId();
         }
 
         return $choices;
     }
 
-
     /**
      * Set all values with correctly format of locations before submit.
-     *
-     * @param $entity
      */
     public function setLocationBeforeSubmit(FormInterface $form, mixed $entity): void
     {
         /** @var User $entity */
-        
+
         // Update location country.
         $location_country_id = $form->get('location_country_id')->getData();
 
-        if ($location_country_id !== null) {
+        if (null !== $location_country_id) {
             /** @var LocationCountry $locationCountry */
             $locationCountry = $this->entityManager->getRepository(LocationCountry::class)
                 ->find($location_country_id);
@@ -182,8 +178,8 @@ final readonly class LocationHelper
 
         // Update location state.
         $location_state_id = $form->get('state')->getData();
-        //** @var int|null $location_state_id */
-        if ($location_state_id !== null) {
+        // ** @var int|null $location_state_id */
+        if (null !== $location_state_id) {
             /** @var LocationState $locationState */
             $locationState = $this->entityManager->getRepository(LocationState::class)
                 ->find($location_state_id);
@@ -193,7 +189,7 @@ final readonly class LocationHelper
         // Update location city.
         $location_city_id = $form->get('city')->getData();
 
-        if ($location_city_id !== null) {
+        if (null !== $location_city_id) {
             /** @var LocationCity $locationCity */
             $locationCity = $this->entityManager->getRepository(LocationCity::class)
                 ->find($location_city_id);
@@ -203,12 +199,12 @@ final readonly class LocationHelper
             // Set correct neightborhood.
             $neighborhood = $form->get('neighborhood')->getData();
 
-            if ($neighborhood !== null) {
+            if (null !== $neighborhood) {
                 /** @var LocationNeighborhood $locationNeighborhood */
                 $locationNeighborhood = $this->entityManager->getRepository(LocationNeighborhood::class)
                     ->findAdd([
                         'location_city_id' => $location_city_id,
-                        'name' => $neighborhood
+                        'name' => $neighborhood,
                     ]);
 
                 $entity->setNeighborhood($locationNeighborhood);
@@ -220,13 +216,11 @@ final readonly class LocationHelper
 
     /**
      * Set all values with correctly format of locations before load form.
-     *
-     * @param $entity
      */
     public function setLocationBeforeLoadForm(FormInterface $form, mixed $entity): void
     {
         /** @var User $entity */
-        
+
         // Set location state on form.
         /** @var LocationState $locationState */
         $locationState = $entity->getState();
@@ -249,9 +243,11 @@ final readonly class LocationHelper
         }
     }
 
-    private function requestMethodIsPOST(): bool {
+    private function requestMethodIsPOST(): bool
+    {
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
+
         return Request::METHOD_POST == $req->getMethod();
     }
 }

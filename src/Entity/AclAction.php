@@ -19,13 +19,13 @@ class AclAction
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private string $name;//private ?string $name = null;
+    private string $name; // private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'actions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?AclController $controller = null;//private AclController $controller;
+    private ?AclController $controller = null; // private AclController $controller;
 
-    /** @var  Collection<int, AclPermission> $permissions */
+    /** @var Collection<int, AclPermission> $permissions */
     #[ORM\OneToMany(mappedBy: 'action', targetEntity: AclPermission::class)]
     private Collection $permissions;
 
@@ -59,7 +59,7 @@ class AclAction
     public function setController(?AclController $controller): self
     {
         $this->controller = $controller;
-        
+
         return $this;
     }
 

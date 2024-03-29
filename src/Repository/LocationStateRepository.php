@@ -46,7 +46,7 @@ final class LocationStateRepository extends ServiceEntityRepository
     //  *
     //  * @return array<mixed>
     //  */
-    public function listAllByCountry(int $countryId): mixed//array
+    public function listAllByCountry(int $countryId): mixed// array
     {
         $qb = $this->createQueryBuilder('state')
             ->select(
@@ -56,7 +56,7 @@ final class LocationStateRepository extends ServiceEntityRepository
                  state.code'
             );
 
-        if ($countryId !== 0) {
+        if (0 !== $countryId) {
             $qb->andWhere('state.country = :country')
                 ->setParameter('country', $countryId);
         }

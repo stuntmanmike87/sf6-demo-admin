@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use Override;
 use App\Entity\LocationCountry;
 use App\Entity\User;
 use App\Entity\UserType;
@@ -22,9 +21,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class SettingsProfileType extends AbstractType
@@ -35,13 +34,12 @@ final class SettingsProfileType extends AbstractType
         protected RequestStack $request,
         private readonly UploaderHelper $uploaderHelper,
         private readonly array $uploadRules
-    )
-    {
+    ) {
     }
 
-    #[Override]
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
-    {//Cognitive complexity for "App\Form\SettingsProfileType::buildForm()" is 12, keep it under 8
+    {// Cognitive complexity for "App\Form\SettingsProfileType::buildForm()" is 12, keep it under 8
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         $builder
@@ -54,9 +52,9 @@ final class SettingsProfileType extends AbstractType
             ->add('bio', TextareaType::class, [
                 'label' => 'app.user.form.label.bio',
                 'attr' => [
-                    'rows' => 5
+                    'rows' => 5,
                 ],
-                'required' => false
+                'required' => false,
             ])
             ->add('birthday', DateType::class, [
                 'label' => 'app.user.form.label.birthday',
@@ -64,10 +62,10 @@ final class SettingsProfileType extends AbstractType
                 'widget' => 'single_text',
                 'html5' => false,
                 'format' => (new DateTimeService())->getDateFormatFromLocale($req->getLocale()),
-                //Dynamic call to static method App\Service\DateTimeService::getDateFormatFromLocale().
+                // Dynamic call to static method App\Service\DateTimeService::getDateFormatFromLocale().
                 'attr' => [
-                    'autocomplete' => 'off'
-                ]
+                    'autocomplete' => 'off',
+                ],
             ])
             ->add('tmp_url_avatar',
                 FileType::class, [
@@ -75,8 +73,8 @@ final class SettingsProfileType extends AbstractType
                     'mapped' => false,
                     'required' => false,
                     'attr' => [
-                        'accept' => '.jpg,.jpeg,.png,.gif'
-                    ]
+                        'accept' => '.jpg,.jpeg,.png,.gif',
+                    ],
                 ]
             )
             ->add('delete_url_avatar', CheckboxType::class, [
@@ -101,7 +99,7 @@ final class SettingsProfileType extends AbstractType
                 'mapped' => false,
                 'required' => false,
             ])
-            /**
+            /*
              * The FormEvents::SUBMIT event is dispatched right before the Form::submit()
              * method transforms back the normalized data to the model and view data.
              * See more: https://symfony.com/doc/current/form/events.html
@@ -122,7 +120,7 @@ final class SettingsProfileType extends AbstractType
                     $user->setPhoneNumberCountry($country);
                 }
 
-                if ($user->getPhoneNumber() === null) {
+                if (null === $user->getPhoneNumber()) {
                     $user->setPhoneNumberCountry(null);
                 }
 
@@ -131,25 +129,25 @@ final class SettingsProfileType extends AbstractType
                 $tmp_url_avatar = $form->get('tmp_url_avatar')->getData();
 
                 if ($tmp_url_avatar instanceof UploadedFile) {
-                    /** @var string[] $upload *///** @var string[]|null $upload */
+                    /** @var string[] $upload */ // ** @var string[]|null $upload */
                     $upload = $this->uploaderHelper->uploadImageToCDN($tmp_url_avatar, [
                         'addParentPath' => 'user',
                         'uniqueName' => true,
-                        'heightReducing' => $this->uploadRules['limitHeightAvatarUser']
+                        'heightReducing' => $this->uploadRules['limitHeightAvatarUser'],
                     ]);
 
                     $user->setUrlPicture($upload['url']);
                 }
 
                 // Delete URL avatar.
-                if ($form->get('delete_url_avatar')->getData() !== null) {
+                if (null !== $form->get('delete_url_avatar')->getData()) {
                     $user->setUrlPicture(null);
                 }
 
                 // Update user type.
                 $user_type_id = $form->get('user_type_id')->getData();
 
-                if ($user_type_id !== null) {
+                if (null !== $user_type_id) {
                     /** @var UserType $userType */
                     $userType = $this->entityManager->getRepository(UserType::class)
                         ->find($user_type_id);
@@ -159,7 +157,7 @@ final class SettingsProfileType extends AbstractType
                     $user->setType(null);
                 }
             })
-            /**
+            /*
              * Prepare to set data correctly from unmapped databases columns before load form.
              * This method should be loaded on edit form or if exist an error on form.
              *
@@ -177,14 +175,14 @@ final class SettingsProfileType extends AbstractType
 
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
                 // Set user type on form.
-                if ($user->getId() !== null && $user->getType() instanceof UserType) {
+                if (null !== $user->getId() && $user->getType() instanceof UserType) {
                     $form->get('user_type_id')->setData($user->getType()->getId());
                 }
             })
         ;
     }
 
-    #[Override]
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -201,12 +199,12 @@ final class SettingsProfileType extends AbstractType
     {
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
-        $locale = $req->getLocale();//** @var string[][] $types */
+        $locale = $req->getLocale(); // ** @var string[][] $types */
         $types = $this->entityManager->getRepository(UserType::class)
             ->findAllByLocale($locale);
 
         $choices = [];
-        /** @var string[][] $types *///** @var string[] $type */
+        /** @var string[][] $types */ // ** @var string[] $type */
         foreach ($types as $type) {
             $choices[$type['text']] = $type['id'];
         }

@@ -13,7 +13,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 final readonly class GeoIP2Service
 {
     public function __construct(private RequestStack $requestStack, private string $projectDir)
-    {}
+    {
+    }
 
     /**
      * Returns a string with the country code (AT => Austria, BR => Brazil...) according user visitor.
@@ -38,7 +39,6 @@ final readonly class GeoIP2Service
             $record = $reader->city((string) $ip);
 
             return $record->country->isoCode;
-
         } catch (AddressNotFoundException) {
             // Couldn't retrieve geo information from the given IP
             return null;

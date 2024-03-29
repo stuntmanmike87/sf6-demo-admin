@@ -8,7 +8,6 @@ use App\Entity\User;
 use App\Form\SettingsAddressType;
 use App\Form\SettingsProfileType;
 use App\Form\SettingsSecurityType;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,13 +15,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/admin',  methods: ['GET', 'POST'])]
+#[Route('/admin', methods: ['GET', 'POST'])]
 final class SettingsController extends AdminController
 {
     /**
      * Edit security data of the logged user.
-     *
-     * @return Response
      */
     #[Route('/settings/security', name: 'admin_settings_security')]
     public function security(Request $request, TranslatorInterface $translator, EntityManagerInterface $entityManager): Response
@@ -36,7 +33,7 @@ final class SettingsController extends AdminController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setUpdatedAt(new DateTime());
+            $user->setUpdatedAt(new \DateTime());
 
             $entityManager->flush();
 
@@ -51,8 +48,6 @@ final class SettingsController extends AdminController
 
     /**
      * Edit profile of the logged user.
-     *
-     * @return Response
      */
     #[Route('/settings/profile', name: 'admin_settings_profile')]
     public function profile(Request $request, TranslatorInterface $translator, EntityManagerInterface $entityManager): Response
@@ -66,7 +61,7 @@ final class SettingsController extends AdminController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setUpdatedAt(new DateTime());
+            $user->setUpdatedAt(new \DateTime());
 
             $entityManager->flush();
 
@@ -81,8 +76,6 @@ final class SettingsController extends AdminController
 
     /**
      * Edit address data of the logged user.
-     *
-     * @return Response
      */
     #[Route('/settings/address', name: 'admin_settings_address')]
     public function address(Request $request, TranslatorInterface $translator, EntityManagerInterface $entityManager): Response
@@ -96,7 +89,7 @@ final class SettingsController extends AdminController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setUpdatedAt(new DateTime());
+            $user->setUpdatedAt(new \DateTime());
 
             $entityManager->flush();
 

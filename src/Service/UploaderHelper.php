@@ -6,7 +6,6 @@ namespace App\Service;
 
 use Aws\Result;
 use Aws\S3\S3Client;
-use Exception;
 use Gedmo\Sluggable\Util\Urlizer;
 use Gumlet\ImageResize;
 use Gumlet\ImageResizeException;
@@ -14,7 +13,6 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class UploaderHelper
@@ -30,31 +28,31 @@ final readonly class UploaderHelper
         private string $baseUrl,
         private array $cdn,
         private TranslatorInterface $translator
-    )
-    {
+    ) {
     }
 
     /**
      * Make upload any file and set in uploads folder.
      *
      * @param array<mixed>|null $options
+     *
      * @return array<mixed>
      */
     public function uploadMedia(UploadedFile $uploadedFile, ?array $options = []): array
     {
         /** @var array<mixed> $options */
-        $addParentPath = array_key_exists('addParentPath', $options) ? $options['addParentPath']: '/';
-        $desiredFileName = array_key_exists('desiredFileName', $options) ? $options['desiredFileName']: '';
+        $addParentPath = array_key_exists('addParentPath', $options) ? $options['addParentPath'] : '/';
+        $desiredFileName = array_key_exists('desiredFileName', $options) ? $options['desiredFileName'] : '';
         $uniqueName = array_key_exists('uniqueName', $options);
 
         $newFilename = $this->generateFileName($uploadedFile->getClientOriginalName(), $desiredFileName, $uniqueName);
 
-        $tempDestination = $this->projectDir . '/public/' . $addParentPath;
+        $tempDestination = $this->projectDir.'/public/'.$addParentPath;
         $file = $this->saveFile($uploadedFile, $tempDestination, $newFilename);
 
         return [
             'path' => $file['path'],
-            'url' => $this->baseUrl . '/' . $addParentPath . $newFilename,
+            'url' => $this->baseUrl.'/'.$addParentPath.$newFilename,
         ];
     }
 
@@ -66,13 +64,13 @@ final readonly class UploaderHelper
     public function deleteFile(string $path, bool $isPublic = true)
     {
         if ($isPublic) {
-            $path = $this->projectDir . '/public/' .$path;
+            $path = $this->projectDir.'/public/'.$path;
         }
 
         try {
             $this->filesystem->remove($path);
         } catch (IOExceptionInterface $ioException) {
-            echo "An error occurred while creating your directory at ".$ioException->getPath();
+            echo 'An error occurred while creating your directory at '.$ioException->getPath();
         }
     }
 
@@ -87,7 +85,7 @@ final readonly class UploaderHelper
         );
 
         return [
-            'path' => $directory . '/' .  $filename
+            'path' => $directory.'/'.$filename,
         ];
     }
 
@@ -95,22 +93,24 @@ final readonly class UploaderHelper
      * Upload a file to CDN.
      *
      * @param array<mixed>|null $options
+     *
      * @return array<mixed>
+     *
      * @throws ImageResizeException
      */
     public function uploadImageToCDN(UploadedFile $uploadedFile, ?array $options = []): array
     {
         /** @var array<mixed> $options */
-        $heightReducing = array_key_exists('heightReducing', $options) ? $options['heightReducing']: 800;
-        $addParentPath = array_key_exists('addParentPath', $options) ? $options['addParentPath']: '';
-        $desiredFileName = array_key_exists('desiredFileName', $options) ? $options['desiredFileName']: '';
+        $heightReducing = array_key_exists('heightReducing', $options) ? $options['heightReducing'] : 800;
+        $addParentPath = array_key_exists('addParentPath', $options) ? $options['addParentPath'] : '';
+        $desiredFileName = array_key_exists('desiredFileName', $options) ? $options['desiredFileName'] : '';
         $uniqueName = array_key_exists('uniqueName', $options);
 
         $newFilename = $this->generateFileName($uploadedFile->getClientOriginalName(), $desiredFileName, $uniqueName);
 
         // Save file temporarily.
-        $mediaPath = $this->uploadsMediaPath . '/tmp';
-        $tempDestination = $this->projectDir . '/public/' . $mediaPath;
+        $mediaPath = $this->uploadsMediaPath.'/tmp';
+        $tempDestination = $this->projectDir.'/public/'.$mediaPath;
         $file = $this->saveFile($uploadedFile, $tempDestination, $newFilename);
 
         $tempFile = $file['path'];
@@ -121,21 +121,21 @@ final readonly class UploaderHelper
 
         if ($reducing) {
             $image->resizeToHeight($heightReducing);
-            $image->save($tempFile, IMAGETYPE_JPEG);
+            $image->save($tempFile, (string) IMAGETYPE_JPEG);
         }
 
         $url = '';
-        $path = $addParentPath . '/' . date('Y') . '/' . date('m');
-        $file = $path . '/' . $newFilename;
+        $path = $addParentPath.'/'.date('Y').'/'.date('m');
+        $file = $path.'/'.$newFilename;
 
         try {
             $client = $this->getClientCDN();
 
             $result = $client->putObject([
                 'Bucket' => $this->cdn['bucket'],
-                'Key'    => $file,
+                'Key' => $file,
                 'SourceFile' => $tempFile,
-                'ACL' => 'public-read' // or 'private'
+                'ACL' => 'public-read', // or 'private'
             ]);
 
             $message = $this->translator->trans('app.success.upload_was_successfully');
@@ -144,14 +144,14 @@ final readonly class UploaderHelper
 
             // Remove the temporarily file.
             unlink($tempFile);
-        } catch (Exception) {
+        } catch (\Exception) {
             $message = $this->translator->trans('app.error.upload_error');
         }
 
         return [
             'url' => $url,
             'name' => $newFilename,
-            'message' => $message
+            'message' => $message,
         ];
     }
 
@@ -159,40 +159,36 @@ final readonly class UploaderHelper
     {
         return new S3Client([
             'version' => 'latest',
-            'region'  => 'us-east-1',
+            'region' => 'us-east-1',
             'endpoint' => $this->cdn['endpoint'],
             'credentials' => [
-                'key'    => $this->cdn['key'],
+                'key' => $this->cdn['key'],
                 'secret' => $this->cdn['secret'],
             ],
         ]);
     }
 
-    /**
-     * @param string|null $desiredFileName
-     * @return string
-     */
     private function generateFileName(string $file, ?string $desiredFileName = null, bool $nameAddUniqid = false): string
     {
-        if ($desiredFileName === null || $desiredFileName === '') {
+        if (null === $desiredFileName || '' === $desiredFileName) {
             $originalFilename = pathinfo($file, PATHINFO_FILENAME);
             $desiredFileName = $originalFilename;
         }
 
         if ($nameAddUniqid) {
-            $desiredFileName = $desiredFileName. '-' .uniqid();
+            $desiredFileName = $desiredFileName.'-'.uniqid();
         }
 
-        return Urlizer::urlize($desiredFileName).'.'. pathinfo($file, PATHINFO_EXTENSION);
+        return Urlizer::urlize($desiredFileName).'.'.pathinfo($file, PATHINFO_EXTENSION);
     }
 
     /**
      * @param Result<mixed> $result
      */
-    private function getUrlFromCDN(Result $result, string $file): mixed//?mixed//string
+    private function getUrlFromCDN(Result $result, string $file): mixed// ?mixed//string
     {
         if (array_key_exists('domain', $this->cdn) && '' != $this->cdn['domain']) {
-            return $this->cdn['domain'] . '/' . $file;
+            return $this->cdn['domain'].'/'.$file;
         }
 
         return $result->get('ObjectURL');
@@ -200,15 +196,15 @@ final readonly class UploaderHelper
 
     /**
      * @param array<mixed>|null $options
-     * @return string|null
+     *
      * @throws ImageResizeException
      */
     public function moveToCDN(string $originalFile, ?array $options = []): ?string
     {
         /** @var array<mixed> $options */
-        $heightReducing = array_key_exists('heightReducing', $options) ? $options['heightReducing']: 800;
-        $addParentPath = array_key_exists('addParentPath', $options) ? $options['addParentPath']: '';
-        $desiredFileName = array_key_exists('desiredFileName', $options) ? $options['desiredFileName']: '';
+        $heightReducing = array_key_exists('heightReducing', $options) ? $options['heightReducing'] : 800;
+        $addParentPath = array_key_exists('addParentPath', $options) ? $options['addParentPath'] : '';
+        $desiredFileName = array_key_exists('desiredFileName', $options) ? $options['desiredFileName'] : '';
         $uniqueName = array_key_exists('uniqueName', $options);
 
         $newFilename = $this->generateFileName($originalFile, $desiredFileName, $uniqueName);
@@ -219,21 +215,21 @@ final readonly class UploaderHelper
 
         if ($reducing) {
             $image->resizeToHeight($heightReducing);
-            $image->save($originalFile, IMAGETYPE_JPEG);
+            $image->save($originalFile, (string) IMAGETYPE_JPEG);
         }
 
         $url = '';
-        $path = $addParentPath . '/' . date('Y') . '/' . date('m');
-        $file = $path . '/' . $newFilename;
+        $path = $addParentPath.'/'.date('Y').'/'.date('m');
+        $file = $path.'/'.$newFilename;
 
         try {
             $client = $this->getClientCDN();
 
             $result = $client->putObject([
                 'Bucket' => $this->cdn['bucket'],
-                'Key'    => $file,
+                'Key' => $file,
                 'SourceFile' => $originalFile,
-                'ACL' => 'public-read' // or 'private'
+                'ACL' => 'public-read', // or 'private'
             ]);
 
             // Remove the temporarily file.
@@ -241,7 +237,7 @@ final readonly class UploaderHelper
 
             /** @var ?string $url */
             $url = $this->getUrlFromCDN($result, $file);
-        } catch (Exception) {
+        } catch (\Exception) {
             throw new FileException($this->translator->trans('app.error.upload_error'));
         }
 
@@ -250,8 +246,6 @@ final readonly class UploaderHelper
 
     /**
      * Remove file from CDN.
-     *
-     * @return void
      */
     public function removeFromCDN(string $file): void
     {
@@ -259,8 +253,9 @@ final readonly class UploaderHelper
             $client = $this->getClientCDN();
             $client->deleteObject([
                 'Bucket' => $this->cdn['bucket'],
-                'Key'    => str_replace($this->cdn['domain'] . '/', '', $file),
+                'Key' => str_replace($this->cdn['domain'].'/', '', $file),
             ]);
-        } catch (Exception) { }
+        } catch (\Exception) {
+        }
     }
 }

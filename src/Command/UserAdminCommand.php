@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use Override;
 use App\Entity\AclUserGroup;
 use App\Entity\User;
 use App\Enum\Acl\AclUserGroupIdEnum;
@@ -22,12 +21,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 )]
 final class UserAdminCommand extends Command
 {
-
-    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly UserPasswordHasherInterface $passwordHasher) {
+    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly UserPasswordHasherInterface $passwordHasher)
+    {
         parent::__construct();
     }
 
-    #[Override]
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

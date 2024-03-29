@@ -10,8 +10,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LocationCountryRepository::class)]
-#[ORM\Index(columns: ["name"], name: "idx_name")]
-#[ORM\Index(columns: ["slug"], name: "idx_slug")]
+#[ORM\Index(columns: ['name'], name: 'idx_name')]
+#[ORM\Index(columns: ['slug'], name: 'idx_slug')]
 /** @final */
 class LocationCountry
 {
@@ -21,28 +21,28 @@ class LocationCountry
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;//private string $name;
+    private ?string $name = null; // private string $name;
 
     #[ORM\Column(length: 255)]
-    private ?string $slug = null;//private string $slug;
+    private ?string $slug = null; // private string $slug;
 
     #[ORM\Column(length: 3, nullable: true)]
     private ?string $alpha3 = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $native = null;//private string $native;
+    private ?string $native = null; // private string $native;
 
     #[ORM\Column(length: 2)]
-    private ?string $alpha2 = null;//private string $alpha2;
+    private ?string $alpha2 = null; // private string $alpha2;
 
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $callingCode = null;
 
-    /** @var  Collection<int, LocationState> $states*/
+    /** @var Collection<int, LocationState> $states */
     #[ORM\OneToMany(mappedBy: 'country', targetEntity: LocationState::class)]
     private Collection $states;
 
-    /** @var  Collection<int, User> $users*/
+    /** @var Collection<int, User> $users */
     #[ORM\OneToMany(mappedBy: 'country', targetEntity: User::class)]
     private Collection $users;
 

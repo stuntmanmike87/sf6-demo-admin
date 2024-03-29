@@ -19,24 +19,24 @@ class AclUserGroup
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?bool $active = null;//private bool $active;
+    private ?bool $active = null; // private bool $active;
 
     #[ORM\ManyToOne(inversedBy: 'userGroups')]
-    private ?AclPermission $permission = null;//private AclPermission $permission;
+    private ?AclPermission $permission = null; // private AclPermission $permission;
 
     #[ORM\Column]
-    private bool $adm;//private ?bool $adm = null;
+    private bool $adm; // private ?bool $adm = null;
 
-    /** @var  Collection<int, AclPermission> $permissions*/
+    /** @var Collection<int, AclPermission> $permissions */
     #[ORM\OneToMany(mappedBy: 'userGroup', targetEntity: AclPermission::class)]
     private Collection $permissions;
 
-    /** @var  Collection<int, User> $users*/
+    /** @var Collection<int, User> $users */
     #[ORM\OneToMany(mappedBy: 'userGroup', targetEntity: User::class)]
     private Collection $users;
 
     #[ORM\Column(length: 255)]
-    private ?string $translateKey = null;//private string $translateKey;
+    private ?string $translateKey = null; // private string $translateKey;
 
     public function __construct()
     {
@@ -108,7 +108,7 @@ class AclUserGroup
         // set the owning side to null (unless already changed)
         if ($this->permissions->removeElement($permission) && $permission->getUserGroup() === $this) {
             $permission->setUserGroup(null);
-        }//Parameter #1 $userGroup of method App\Entity\AclPermission::setUserGroup() expects App\Entity\AclUserGroup, null given.
+        }// Parameter #1 $userGroup of method App\Entity\AclPermission::setUserGroup() expects App\Entity\AclUserGroup, null given.
 
         return $this;
     }

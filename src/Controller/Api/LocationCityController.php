@@ -9,8 +9,8 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -27,7 +27,8 @@ final class LocationCityController extends AbstractController
         private readonly EntityManagerInterface $entityManager,
         private readonly TokenStorageInterface $tokenStorage,
         private readonly TranslatorInterface $translator
-    ) {}
+    ) {
+    }
 
     /**
      * List cities.
@@ -67,7 +68,7 @@ final class LocationCityController extends AbstractController
             ->getRepository(LocationCity::class)
             ->listAllByState((int) $stateId);
 
-        if ([] !== $locationCities){
+        if ([] !== $locationCities) {
             $success = true;
             $message = $this->translator->trans('app.message.successfully_found');
 

@@ -23,12 +23,12 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-/* final  */class UserType extends AbstractType
+/* final */ class UserType extends AbstractType
 {
     /** @param array<mixed> $uploadRules */
     public function __construct(
@@ -38,12 +38,11 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         private readonly UploaderHelper $uploaderHelper,
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly array $uploadRules
-    )
-    {
+    ) {
     }
 
     protected function addBuildForm(FormBuilderInterface $builder, string $formType): FormBuilderInterface
-    {//Cognitive complexity for "App\Form\UserType::addBuildForm()" is 14, keep it under 8
+    {// Cognitive complexity for "App\Form\UserType::addBuildForm()" is 14, keep it under 8
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         $builder
@@ -52,7 +51,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 'required' => false,
                 'attr' => [
                     'class' => 'js-address-info-address',
-                    'autocomplete' => 'none'
+                    'autocomplete' => 'none',
                 ],
             ])
             ->add('street_number', TextType::class, [
@@ -60,7 +59,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 'required' => false,
                 'attr' => [
                     'class' => 'js-address-info-street-number',
-                    'autocomplete' => 'none'
+                    'autocomplete' => 'none',
                 ],
             ])
             ->add('complement', TextType::class, [
@@ -68,7 +67,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 'required' => false,
                 'attr' => [
                     'class' => 'js-address-info-complement',
-                    'autocomplete' => 'none'
+                    'autocomplete' => 'none',
                 ],
             ])
             ->add('postal_code', TextType::class, [
@@ -76,25 +75,25 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control js-address-info-postal-code',
-                    'autocomplete' => 'none'
+                    'autocomplete' => 'none',
                 ],
             ])
             ->add('lat', HiddenType::class, [
                 'required' => false,
                 'attr' => [
-                    'class' => 'js-address-info-lat'
+                    'class' => 'js-address-info-lat',
                 ],
             ])
             ->add('lng', HiddenType::class, [
                 'required' => false,
                 'attr' => [
-                    'class' => 'js-address-info-lng'
+                    'class' => 'js-address-info-lng',
                 ],
             ])
             ->add('formatted_address', HiddenType::class, [
                 'required' => false,
                 'attr' => [
-                    'class' => 'js-address-info-formatted-address'
+                    'class' => 'js-address-info-formatted-address',
                 ],
             ])
             ->add('location_country_id', TextType::class, [
@@ -110,7 +109,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 'placeholder' => 'app.form.label.choose',
                 'mapped' => false,
                 'attr' => [
-                    'class' => 'js-address-info-state'
+                    'class' => 'js-address-info-state',
                 ],
                 'choices' => $this->location->getStates($formType),
                 'required' => false,
@@ -120,7 +119,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 'placeholder' => 'app.form.label.choose',
                 'mapped' => false,
                 'attr' => [
-                    'class' => 'js-address-info-city'
+                    'class' => 'js-address-info-city',
                 ],
                 'choices' => $this->location->getCities($formType),
                 'required' => false,
@@ -131,9 +130,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 'required' => false,
                 'attr' => [
                     'class' => 'js-address-info-neighborhood',
-                    'autocomplete' => 'none'
+                    'autocomplete' => 'none',
                     // 'readonly' => 'readonly'
-                ]
+                ],
             ])
             ->add('active', CheckboxType::class, [
                 'label' => 'app.active',
@@ -153,7 +152,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 'label' => 'app.user.form.label.username',
             ])
             ->add('acl_user_group_id', ChoiceType::class, [
-                'label'     => 'app.user.form.label.group',
+                'label' => 'app.user.form.label.group',
                 'choices' => $this->getUserGroupsChoices(),
                 'placeholder' => 'app.form.label.choose',
                 'mapped' => false,
@@ -161,9 +160,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
             ->add('bio', TextareaType::class, [
                 'label' => 'app.user.form.label.bio',
                 'attr' => [
-                    'rows' => 5
+                    'rows' => 5,
                 ],
-                'required' => false
+                'required' => false,
             ])
             ->add('tmp_url_avatar',
                 FileType::class, [
@@ -171,8 +170,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                     'mapped' => false,
                     'required' => false,
                     'attr' => [
-                        'accept' => '.jpg,.jpeg,.png,.gif'
-                    ]
+                        'accept' => '.jpg,.jpeg,.png,.gif',
+                    ],
                 ]
             )
             ->add('delete_url_avatar', CheckboxType::class, [
@@ -187,8 +186,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 'html5' => false,
                 'format' => DateTimeService::getDateFormatFromLocale($req->getLocale()),
                 'attr' => [
-                    'autocomplete' => 'off'
-                ]
+                    'autocomplete' => 'off',
+                ],
             ])
             ->add('user_type_id', ChoiceType::class, [
                 'label' => 'app.user.form.label.user_type',
@@ -207,7 +206,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 'mapped' => false,
                 'required' => false,
             ])
-            /**
+            /*
              * The FormEvents::SUBMIT event is dispatched right before the Form::submit()
              * method transforms back the normalized data to the model and view data.
              * See more: https://symfony.com/doc/current/form/events.html
@@ -221,7 +220,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 /** @var string $plainPassword */
                 $plainPassword = $form->get('plainPassword')->getData();
 
-                if ($plainPassword !== null) {//if ($plainPassword !== '') {
+                if (null !== $plainPassword) {// if ($plainPassword !== '') {
                     $user->setPassword($this->passwordHasher->hashPassword(
                         $user,
                         $plainPassword
@@ -231,7 +230,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 // Update user group.
                 $acl_user_group_id = $form->get('acl_user_group_id')->getData();
 
-                if ($acl_user_group_id !== null) {
+                if (null !== $acl_user_group_id) {
                     /** @var AclUserGroup $userGroup */
                     $userGroup = $this->entityManager->getRepository(AclUserGroup::class)
                         ->find($acl_user_group_id);
@@ -242,7 +241,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 // Update user type.
                 $user_type_id = $form->get('user_type_id')->getData();
 
-                if ($user_type_id !== null) {
+                if (null !== $user_type_id) {
                     /** @var \App\Entity\UserType $userType */
                     $userType = $this->entityManager->getRepository(\App\Entity\UserType::class)
                         ->find($user_type_id);
@@ -263,7 +262,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                     $user->setPhoneNumberCountry($country);
                 }
 
-                if ($user->getPhoneNumber() === null) {
+                if (null === $user->getPhoneNumber()) {
                     $user->setPhoneNumberCountry(null);
                 }
 
@@ -272,18 +271,18 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 $tmp_url_avatar = $form->get('tmp_url_avatar')->getData();
 
                 if ($tmp_url_avatar instanceof UploadedFile) {
-                    /** @var string[] $upload *///** @var string[]|null $upload */
+                    /** @var string[] $upload */ // ** @var string[]|null $upload */
                     $upload = $this->uploaderHelper->uploadImageToCDN($tmp_url_avatar, [
                         'addParentPath' => 'user',
                         'uniqueName' => true,
-                        'heightReducing' => $this->uploadRules['limitHeightAvatarUser']
+                        'heightReducing' => $this->uploadRules['limitHeightAvatarUser'],
                     ]);
 
                     $user->setUrlPicture($upload['url']);
                 }
 
                 // Delete URL avatar.
-                if ($form->get('delete_url_avatar')->getData() !== null) {
+                if (null !== $form->get('delete_url_avatar')->getData()) {
                     $user->setUrlPicture(null);
                 }
 
@@ -291,7 +290,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 $this->location->setLocationBeforeSubmit($form, $user);
             })
 
-            /**
+            /*
              * Prepare to set data correctly from unmapped databases columns before load form.
              * This method should be loaded on edit form or if exist an error on form.
              *
@@ -309,7 +308,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 }
 
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
-                if ($user->getId() !== null) {
+                if (null !== $user->getId()) {
                     // Set user group on form.
                     /** @var AclUserGroup aclUserGroup */
                     $aclUserGroup = $form->get('acl_user_group_id')->setData($user->getUserGroup());
@@ -338,12 +337,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
     {
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
-        $locale = $req->getLocale();//** @var string[][] $types */
+        $locale = $req->getLocale(); // ** @var string[][] $types */
         $types = $this->entityManager->getRepository(AclUserGroup::class)
             ->findAllByLocale($locale);
 
         $choices = [];
-        /** @var string[][] $types *///** @var string[] $type */
+        /** @var string[][] $types */ // ** @var string[] $type */
         foreach ($types as $type) {
             $choices[$type['text']] = $type['id'];
         }
@@ -360,12 +359,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
     {
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
-        $locale = $req->getLocale();//** @var string[][] $types */
+        $locale = $req->getLocale(); // ** @var string[][] $types */
         $types = $this->entityManager->getRepository(\App\Entity\UserType::class)
             ->findAllByLocale($locale);
 
         $choices = [];
-        /** @var string[][] $types *///** @var string[] $type */
+        /** @var string[][] $types */ // ** @var string[] $type */
         foreach ($types as $type) {
             $choices[$type['text']] = $type['id'];
         }

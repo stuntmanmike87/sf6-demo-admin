@@ -19,12 +19,12 @@ class AclController
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;//private string $name;
+    private ?string $name = null; // private string $name;
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $prefix = null;
 
-    /** @var  Collection<int, AclAction> $actions*/
+    /** @var Collection<int, AclAction> $actions */
     #[ORM\OneToMany(mappedBy: 'controller', targetEntity: AclAction::class)]
     private Collection $actions;
 

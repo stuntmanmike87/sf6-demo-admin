@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use Override;
 use App\Entity\User;
 use App\Form\Helper\LocationHelper;
 use Symfony\Component\Form\AbstractType;
@@ -26,20 +25,19 @@ final class SettingsAddressType extends AbstractType
         protected RequestStack $request,
         private readonly LocationHelper $location,
         private readonly TokenStorageInterface $tokenStorage
-    )
-    {
+    ) {
     }
 
-    #[Override]
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var TokenInterface $token */
         $token = $this->tokenStorage->getToken();
-        //** @var User $user */
+        // ** @var User $user */
         $user = $token->getUser();
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
-        $formType = Request::METHOD_POST == $req->getMethod() ? 'settings_address': 'user';
+        $formType = Request::METHOD_POST == $req->getMethod() ? 'settings_address' : 'user';
 
         $builder
             ->add('address', TextType::class, [
@@ -47,7 +45,7 @@ final class SettingsAddressType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'js-address-info-address',
-                    'autocomplete' => 'none'
+                    'autocomplete' => 'none',
                 ],
             ])
             ->add('street_number', TextType::class, [
@@ -55,7 +53,7 @@ final class SettingsAddressType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'js-address-info-street-number',
-                    'autocomplete' => 'none'
+                    'autocomplete' => 'none',
                 ],
             ])
             ->add('complement', TextType::class, [
@@ -63,7 +61,7 @@ final class SettingsAddressType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'js-address-info-complement',
-                    'autocomplete' => 'none'
+                    'autocomplete' => 'none',
                 ],
             ])
             ->add('postal_code', TextType::class, [
@@ -71,25 +69,25 @@ final class SettingsAddressType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control js-address-info-postal-code',
-                    'autocomplete' => 'none'
+                    'autocomplete' => 'none',
                 ],
             ])
             ->add('lat', HiddenType::class, [
                 'required' => false,
                 'attr' => [
-                    'class' => 'js-address-info-lat'
+                    'class' => 'js-address-info-lat',
                 ],
             ])
             ->add('lng', HiddenType::class, [
                 'required' => false,
                 'attr' => [
-                    'class' => 'js-address-info-lng'
+                    'class' => 'js-address-info-lng',
                 ],
             ])
             ->add('formatted_address', HiddenType::class, [
                 'required' => false,
                 'attr' => [
-                    'class' => 'js-address-info-formatted-address'
+                    'class' => 'js-address-info-formatted-address',
                 ],
             ])
             ->add('location_country_id', TextType::class, [
@@ -105,7 +103,7 @@ final class SettingsAddressType extends AbstractType
                 'placeholder' => 'app.form.label.choose',
                 'mapped' => false,
                 'attr' => [
-                    'class' => 'js-address-info-state'
+                    'class' => 'js-address-info-state',
                 ],
                 'choices' => $this->location->getStates($formType, $user),
                 'required' => false,
@@ -115,7 +113,7 @@ final class SettingsAddressType extends AbstractType
                 'placeholder' => 'app.form.label.choose',
                 'mapped' => false,
                 'attr' => [
-                    'class' => 'js-address-info-city'
+                    'class' => 'js-address-info-city',
                 ],
                 'choices' => $this->location->getCities($formType, $user),
                 'required' => false,
@@ -126,11 +124,11 @@ final class SettingsAddressType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'js-address-info-neighborhood',
-                    'autocomplete' => 'none'
+                    'autocomplete' => 'none',
                     // 'readonly' => 'readonly'
-                ]
+                ],
             ])
-            /**
+            /*
              * The FormEvents::SUBMIT event is dispatched right before the Form::submit()
              * method transforms back the normalized data to the model and view data.
              * See more: https://symfony.com/doc/current/form/events.html
@@ -144,7 +142,7 @@ final class SettingsAddressType extends AbstractType
                 $this->location->setLocationBeforeSubmit($form, $user);
             })
 
-            /**
+            /*
              * Prepare to set data correctly from unmapped databases columns before load form.
              * This method should be loaded on edit form or if exist an error on form.
              *
@@ -162,7 +160,7 @@ final class SettingsAddressType extends AbstractType
                 }
 
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
-                if ($user->getId() !== null) {
+                if (null !== $user->getId()) {
                     // Set all location fields correctly before load form.
                     $this->location->setLocationBeforeLoadForm($form, $user);
                 }
@@ -170,7 +168,7 @@ final class SettingsAddressType extends AbstractType
         ;
     }
 
-    #[Override]
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

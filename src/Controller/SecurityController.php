@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 final class SecurityController extends AbstractController
@@ -32,6 +31,6 @@ final class SecurityController extends AbstractController
     #[Route('/logout', name: 'security_logout')]
     public function logout(): never
     {
-        throw new Exception('This should never be reached!');
+        throw new \Exception('This should never be reached!');
     }
 }

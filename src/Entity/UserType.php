@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserTypeRepository::class)]
-#[ORM\Index(columns: ["translate_key"], name: "idx_translate_key")]
+#[ORM\Index(columns: ['translate_key'], name: 'idx_translate_key')]
 /** @final */
 class UserType
 {
@@ -20,12 +20,11 @@ class UserType
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $translateKey = null;//private string $translateKey;
+    private ?string $translateKey = null; // private string $translateKey;
 
-    /** @var  Collection<int, User> $users*/
+    /** @var Collection<int, User> $users */
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: User::class)]
     private Collection $users;
-
 
     public function __construct()
     {

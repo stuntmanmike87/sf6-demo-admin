@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use Override;
 use App\Entity\User;
 use App\Utils\StringHelper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Knp\Component\Pager\PaginatorInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -51,7 +50,7 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
-    #[Override]
+    #[\Override]
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         if (!$user instanceof User) {
@@ -67,11 +66,12 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     //  * @param array|null $criteria
     //  * @return SlidingPagination
     //  */
-    /** 
+    /**
      * @param array<mixed>|null $criteria
-     * @return PaginationInterface<mixed> 
+     *
+     * @return PaginationInterface<mixed>
      */
-    public function findLatest(?array $criteria): PaginationInterface//SlidingPagination
+    public function findLatest(?array $criteria): PaginationInterface// SlidingPagination
     {
         $qb = $this->createQueryBuilder('user')
             ->innerJoin('user.userGroup', 'ug')
@@ -91,10 +91,10 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
         ;
 
         /** @var array<mixed> $criteria */
-        if (array_key_exists( 'query', $criteria)) {
+        if (array_key_exists('query', $criteria)) {
             $searchTerms = StringHelper::extractSearchTerms($criteria['query']);
 
-            if ($searchTerms !== []) {
+            if ([] !== $searchTerms) {
                 $orStatements = $qb->expr()->orX();
 
                 foreach ($searchTerms as $term) {

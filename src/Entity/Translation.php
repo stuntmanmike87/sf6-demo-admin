@@ -8,8 +8,8 @@ use App\Repository\TranslationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TranslationRepository::class)]
-#[ORM\Index(columns: ["translate_key"], name: "idx_translate_key")]
-#[ORM\Index(columns: ["slug"], name: "idx_slug")]
+#[ORM\Index(columns: ['translate_key'], name: 'idx_translate_key')]
+#[ORM\Index(columns: ['slug'], name: 'idx_slug')]
 /** @final */
 class Translation
 {
@@ -19,17 +19,17 @@ class Translation
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $text = null;//private string $text;
+    private ?string $text = null; // private string $text;
 
     #[ORM\Column(length: 255)]
-    private ?string $slug = null;//private string $slug;
+    private ?string $slug = null; // private string $slug;
 
     #[ORM\Column(length: 255)]
-    private ?string $translateKey = null;//private string $translateKey;
+    private ?string $translateKey = null; // private string $translateKey;
 
     #[ORM\ManyToOne(inversedBy: 'translations')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Language $language = null;//private Language $language;
+    private ?Language $language = null; // private Language $language;
 
     public function getId(): ?int
     {
@@ -80,7 +80,7 @@ class Translation
     public function setLanguage(?Language $language): self
     {
         $this->language = $language;
-        
+
         return $this;
     }
 }
