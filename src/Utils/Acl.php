@@ -83,7 +83,7 @@ final class Acl
             }
 
             // /* $b = */$this->roles[$prefix][$controller][$action] = true;
-            //@var (string|true[][])[] $roles//Cannot assign offset string to string.
+            // @var (string|true[][])[] $roles//Cannot assign offset string to string.
             // $this->roles[strtolower((string) $permission['prefix'])][strtolower((string)
             //  $permission['controller'])][strtolower((string) $permission['action'])] = true;
         }

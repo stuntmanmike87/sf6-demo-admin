@@ -42,6 +42,10 @@ final class SettingsProfileType extends AbstractType
     {// Cognitive complexity for "App\Form\SettingsProfileType::buildForm()" is 12, keep it under 8
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
+        $dateTimeService = new DateTimeService(); // (new DateTimeService())
+        $dateFormatFromLocale = $dateTimeService->getDateFormatFromLocale($req->getLocale());
+        // Dynamic call to static method App\Service\DateTimeService::getDateFormatFromLocale().
+
         $builder
             ->add('first_name', TextType::class, [
                 'label' => 'app.user.form.label.first_name',
@@ -61,8 +65,7 @@ final class SettingsProfileType extends AbstractType
                 'required' => false,
                 'widget' => 'single_text',
                 'html5' => false,
-                'format' => (new DateTimeService())->getDateFormatFromLocale($req->getLocale()),
-                // Dynamic call to static method App\Service\DateTimeService::getDateFormatFromLocale().
+                'format' => $dateFormatFromLocale,
                 'attr' => [
                     'autocomplete' => 'off',
                 ],

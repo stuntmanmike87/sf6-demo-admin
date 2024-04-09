@@ -26,33 +26,35 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /** @final */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    // ** @var string|null $id */
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\Column(unique: true)]
     #[ORM\CustomIdGenerator(class: UuidOrderedTimeGenerator::class)]
-    protected UuidOrderedTimeGenerator|string|null $id = null; // protected string $id;
+    // protected UuidOrderedTimeGenerator|string|null $id = null;
+    protected ?UuidOrderedTimeGenerator $id = null;
 
     #[ORM\Column(length: 100, unique: true)]
-    private ?string $username = null; // private string $username;
+    private ?string $username = null;
 
-    /** @var array<string> $roles */ // ** @var string[] $roles */
+    /** @var array<string> $roles */ // string[]
     #[ORM\Column]
     private array $roles = [];
 
     #[ORM\Column(length: 255)]
-    private ?string $password = null; // private string $password;//private ?string $password;//private string $password = null;
+    private ?string $password = null;
 
     #[ORM\Column]
-    private ?bool $verified = false; // private bool $verified = false;
+    private ?bool $verified = false;
 
     #[ORM\Column(length: 255)]
-    private ?string $firstName = null; // private string $firstName;
+    private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $lastName = null; // private string $lastName;
+    private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $email = null; // private string $email;
+    private ?string $email = null;
 
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $phoneNumber = null;
@@ -64,14 +66,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $urlPicture = null;
 
     #[ORM\Column]
-    private ?bool $showPicture = false; // private bool $showPicture = false;
+    private ?bool $showPicture = false;
 
     #[ORM\Column]
-    private ?bool $active = true; // private bool $active = true;
+    private ?bool $active = true;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?AclUserGroup $userGroup = null; // private AclUserGroup $userGroup;
+    private ?AclUserGroup $userGroup = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $lastAccessAt = null;
@@ -145,7 +147,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * This variable is only used with a combination to ACL service.
      */
     /** @var array<string> */
-    private ?array $acl = null; // private array $acl;
+    private ?array $acl = null;
 
     #[ORM\ManyToOne]
     private ?LocationCountry $phoneNumberCountry = null;
@@ -156,7 +158,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->resetUserPasswords = new ArrayCollection();
     }
 
-    public function getId(): ?string
+    public function getId(): ?UuidOrderedTimeGenerator // ?string
     {
         return $this->id;
     }

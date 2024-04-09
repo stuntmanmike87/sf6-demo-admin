@@ -51,6 +51,7 @@ final readonly class LocationHelper
 
         if ('object' === gettype($entity)) {
             /** @var LocationCountry $locationCountry */
+            /** @var LocationState $entity */
             $locationCountry = $entity->getCountry(); // Call to an undefined method object::getCountry().
 
             if (!$locationCountry instanceof LocationCountry) {
@@ -117,6 +118,7 @@ final readonly class LocationHelper
 
         if ('object' === gettype($entity)) {
             /** @var LocationState $locationState */
+            /** @var LocationCity $entity */
             $locationState = $entity->getState(); // Call to an undefined method object::getState().
 
             if (!$locationState instanceof LocationState) {
