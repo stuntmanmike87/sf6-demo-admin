@@ -10,6 +10,7 @@ use App\Entity\UserType;
 use App\Service\DateTimeService;
 use App\Service\UploaderHelper;
 use Doctrine\ORM\EntityManager;
+use Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -42,10 +43,7 @@ final class SettingsProfileType extends AbstractType
     {// Cognitive complexity for "App\Form\SettingsProfileType::buildForm()" is 12, keep it under 8
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
-        $dateTimeService = new DateTimeService(); // (new DateTimeService())
-        $dateFormatFromLocale = $dateTimeService->getDateFormatFromLocale($req->getLocale());
-        // Dynamic call to static method App\Service\DateTimeService::getDateFormatFromLocale().
-
+        $dateFormatFromLocale = DateTimeService::getDateFormatFromLocale($req->getLocale());
         $builder
             ->add('first_name', TextType::class, [
                 'label' => 'app.user.form.label.first_name',
@@ -178,7 +176,8 @@ final class SettingsProfileType extends AbstractType
 
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
                 // Set user type on form.
-                if (null !== $user->getId() && $user->getType() instanceof UserType) {
+                // if (null !== $user->getId() && $user->getType() instanceof UserType) {
+                if ($user->getId() instanceof UuidOrderedTimeGenerator && $user->getType() instanceof UserType) {
                     $form->get('user_type_id')->setData($user->getType()->getId());
                 }
             })

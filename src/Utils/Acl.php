@@ -44,7 +44,7 @@ final class Acl
      * Load all permission from user group.
      */
     public function loadRoles(): void
-    {
+    {// Cognitive complexity for "App\Utils\Acl::loadRoles()" is 10, keep it under 8
         try {
             /** @var User $user */
             $user = $this->security->getUser();

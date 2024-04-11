@@ -6,6 +6,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Form\Helper\LocationHelper;
+use Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -160,7 +161,7 @@ final class SettingsAddressType extends AbstractType
                 }
 
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
-                if (null !== $user->getId()) {
+                if ($user->getId() instanceof UuidOrderedTimeGenerator) { // if (null !== $user->getId()) {
                     // Set all location fields correctly before load form.
                     $this->location->setLocationBeforeLoadForm($form, $user);
                 }
