@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Index(columns: ['username'], name: 'idx_username')]
@@ -26,6 +27,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /** @final */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    // final public const ROLE_USER = 'ROLE_USER';
+
+    // final public const ROLE_ADMIN = 'ROLE_ADMIN';
+
     // ** @var string|null $id */
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -35,6 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     protected ?UuidOrderedTimeGenerator $id = null;
 
     #[ORM\Column(length: 100, unique: true)]
+    #[Assert\NotBlank]
     private ?string $username = null;
 
     /** @var array<string> $roles */ // string[]
@@ -51,9 +57,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Email()]
     private ?string $email = null;
 
     #[ORM\Column(length: 100, nullable: true)]
@@ -79,6 +87,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeInterface $lastAccessAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank]
     private ?string $address = null;
 
     #[ORM\Column(length: 10, nullable: true)]
@@ -88,18 +97,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $complement = null;
 
     #[ORM\Column(length: 20, nullable: true)]
+    #[Assert\NotBlank]
     private ?string $postalCode = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?LocationNeighborhood $neighborhood = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
+    #[Assert\NotBlank]
     private ?LocationCity $city = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
+    #[Assert\NotBlank]
     private ?LocationState $state = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
+    #[Assert\NotBlank]
     private ?LocationCountry $country = null;
 
     #[ORM\Column(length: 30, nullable: true)]

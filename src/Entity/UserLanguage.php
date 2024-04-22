@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Repository\UserLanguageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserLanguageRepository::class)]
 #[ORM\Index(columns: ['category'], name: 'idx_category')]
@@ -25,6 +26,7 @@ class UserLanguage
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
     private ?Language $language = null; // private Language $language;
 
     #[ORM\Column(length: 20)]

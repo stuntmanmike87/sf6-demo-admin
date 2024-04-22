@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LanguageRepository::class)]
 #[ORM\Index(columns: ['translate_key'], name: 'idx_translate_key')]
@@ -24,9 +25,11 @@ class Language
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $name = null; // private string $name;
 
     #[ORM\Column(length: 10)]
+    #[Assert\NotBlank]
     private ?string $locale = null; // private string $locale;
 
     #[ORM\Column(length: 10)]
