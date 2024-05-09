@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -22,8 +23,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(columns: ['active'], name: 'idx_active')]
 #[ORM\Index(columns: ['lat'], name: 'idx_lat')]
 #[ORM\Index(columns: ['lng'], name: 'idx_lng')]
-#[ORM\Index(columns: ['google_id'], name: 'idx_google_id')]
-#[ORM\Index(columns: ['facebook_id'], name: 'idx_facebook_id')]
+#[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 /** @final */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -126,12 +127,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $bio = null;
-
-    #[ORM\Column(length: 150, nullable: true)]
-    private ?string $facebookId = null;
-
-    #[ORM\Column(length: 150, nullable: true)]
-    private ?string $googleId = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $googleAccessToken = null;
@@ -460,30 +455,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setBio(?string $bio): self
     {
         $this->bio = $bio;
-
-        return $this;
-    }
-
-    public function getFacebookId(): ?string
-    {
-        return $this->facebookId;
-    }
-
-    public function setFacebookId(?string $facebookId): self
-    {
-        $this->facebookId = $facebookId;
-
-        return $this;
-    }
-
-    public function getGoogleId(): ?string
-    {
-        return $this->googleId;
-    }
-
-    public function setGoogleId(?string $googleId): self
-    {
-        $this->googleId = $googleId;
 
         return $this;
     }
