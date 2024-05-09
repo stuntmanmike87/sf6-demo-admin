@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->extension('twig', [
-        'default_path' => '%kernel.project_dir%/templates',
+        'file_name_pattern' => '*.twig',
         'form_themes' => [
             'forms/bootstrap_4_layout.html.twig',
         ],
