@@ -8,7 +8,6 @@ use App\Form\SettingsSecurityType;
 use App\Form\UserAddType;
 use App\Form\UserEditType;
 use App\Form\UserType;
-use Sulu\Twig\Extensions\ComponentExtension;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
@@ -47,9 +46,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/../src/Entity/',
         __DIR__ . '/../src/Kernel.php',
     ]);
-
-    $services->set(ComponentExtension::class)
-        ->tag('twig.extension');
 
     $services->set(UserAddType::class)
         ->args([
