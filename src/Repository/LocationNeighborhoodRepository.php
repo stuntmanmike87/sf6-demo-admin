@@ -18,6 +18,8 @@ use Gedmo\Sluggable\Util\Urlizer;
  * @method LocationNeighborhood|null findOneBy(array $criteria, array $orderBy = null)
  * @method LocationNeighborhood[]    findAll()
  * @method LocationNeighborhood[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @template-extends ServiceEntityRepository<LocationNeighborhood>
  */
 final class LocationNeighborhoodRepository extends ServiceEntityRepository
 {

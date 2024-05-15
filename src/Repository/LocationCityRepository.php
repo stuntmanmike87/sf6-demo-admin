@@ -15,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method LocationCity|null findOneBy(array $criteria, array $orderBy = null)
  * @method LocationCity[]    findAll()
  * @method LocationCity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @template-extends ServiceEntityRepository<LocationCity>
  */
 final class LocationCityRepository extends ServiceEntityRepository
 {

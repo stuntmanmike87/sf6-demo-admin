@@ -15,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ResetUserPassword|null findOneBy(array $criteria, array $orderBy = null)
  * @method ResetUserPassword[]    findAll()
  * @method ResetUserPassword[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @template-extends ServiceEntityRepository<ResetUserPassword>
  */
 final class ResetUserPasswordRepository extends ServiceEntityRepository
 {

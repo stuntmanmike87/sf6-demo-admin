@@ -17,6 +17,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method UserType|null findOneBy(array $criteria, array $orderBy = null)
  * @method UserType[]    findAll()
  * @method UserType[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @template-extends ServiceEntityRepository<UserType>
  */
 final class UserTypeRepository extends ServiceEntityRepository
 {

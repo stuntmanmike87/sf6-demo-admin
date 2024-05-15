@@ -17,6 +17,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AclUserGroup|null findOneBy(array $criteria, array $orderBy = null)
  * @method AclUserGroup[]    findAll()
  * @method AclUserGroup[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @template-extends ServiceEntityRepository<AclUserGroup>
  */
 final class AclUserGroupRepository extends ServiceEntityRepository
 {

@@ -18,6 +18,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AclPermission|null findOneBy(array $criteria, array $orderBy = null)
  * @method AclPermission[]    findAll()
  * @method AclPermission[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @template-extends ServiceEntityRepository<AclPermission>
  */
 final class AclPermissionRepository extends ServiceEntityRepository
 {

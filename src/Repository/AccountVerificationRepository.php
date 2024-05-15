@@ -15,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AccountVerification|null findOneBy(array $criteria, array $orderBy = null)
  * @method AccountVerification[]    findAll()
  * @method AccountVerification[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @template-extends ServiceEntityRepository<AccountVerification>
  */
 final class AccountVerificationRepository extends ServiceEntityRepository
 {

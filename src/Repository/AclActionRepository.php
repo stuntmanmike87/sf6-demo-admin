@@ -15,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AclAction|null findOneBy(array $criteria, array $orderBy = null)
  * @method AclAction[]    findAll()
  * @method AclAction[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @template-extends ServiceEntityRepository<AclAction>
  */
 final class AclActionRepository extends ServiceEntityRepository
 {
