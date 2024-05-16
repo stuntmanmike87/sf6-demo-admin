@@ -32,13 +32,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     // final public const ROLE_ADMIN = 'ROLE_ADMIN';
 
-    // ** @var string|null $id */
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\Column(unique: true)]
     #[ORM\CustomIdGenerator(class: UuidOrderedTimeGenerator::class)]
-    // protected UuidOrderedTimeGenerator|string|null $id = null;
-    protected ?UuidOrderedTimeGenerator $id = null;
+    protected UuidOrderedTimeGenerator|string|null $id = null;
 
     #[ORM\Column(length: 100, unique: true)]
     #[Assert\NotBlank]
@@ -166,7 +164,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->resetUserPasswords = new ArrayCollection();
     }
 
-    public function getId(): ?UuidOrderedTimeGenerator // ?string
+    /** @return UuidOrderedTimeGenerator|string|null */
+    public function getId()
     {
         return $this->id;
     }
