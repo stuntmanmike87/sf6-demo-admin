@@ -71,7 +71,7 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     /**
      * @param array<mixed>|null $criteria
      *
-     * @return PaginationInterface<mixed>
+     * @return PaginationInterface<int, mixed>
      */
     public function findLatest(?array $criteria): PaginationInterface// SlidingPagination
     {
