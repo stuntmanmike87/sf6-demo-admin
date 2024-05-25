@@ -7,6 +7,9 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->extension('liip_imagine', [
         'driver' => 'gd',
+        'twig' => [
+            'mode' => 'lazy',
+        ],
         'filter_sets' => [
             '800x800' => [
                 'quality' => 80,
