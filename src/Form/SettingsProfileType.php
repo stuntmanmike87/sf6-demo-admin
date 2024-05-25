@@ -10,7 +10,6 @@ use App\Entity\UserType;
 use App\Service\DateTimeService;
 use App\Service\UploaderHelper;
 use Doctrine\ORM\EntityManager;
-use Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -26,6 +25,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Uid\Uuid;
 
 final class SettingsProfileType extends AbstractType
 {
@@ -177,7 +177,7 @@ final class SettingsProfileType extends AbstractType
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
                 // Set user type on form.
                 // if (null !== $user->getId() && $user->getType() instanceof UserType) {
-                if ($user->getId() instanceof UuidOrderedTimeGenerator && $user->getType() instanceof UserType) {
+                if ($user->getId() instanceof Uuid && $user->getType() instanceof UserType) {
                     $form->get('user_type_id')->setData($user->getType()->getId());
                 }
             })

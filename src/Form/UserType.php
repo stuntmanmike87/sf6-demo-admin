@@ -11,7 +11,6 @@ use App\Form\Helper\LocationHelper;
 use App\Service\DateTimeService;
 use App\Service\UploaderHelper;
 use Doctrine\ORM\EntityManager;
-use Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -28,6 +27,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Uid\Uuid;
 
 /* final */ class UserType extends AbstractType
 {
@@ -309,7 +309,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 }
 
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
-                if ($user->getId() instanceof UuidOrderedTimeGenerator) { // if (null !== $user->getId()) {
+                if ($user->getId() instanceof Uuid) { // if (null !== $user->getId()) {
                     // Set user group on form.
                     /** @var AclUserGroup aclUserGroup */
                     $aclUserGroup = $form->get('acl_user_group_id')->setData($user->getUserGroup());

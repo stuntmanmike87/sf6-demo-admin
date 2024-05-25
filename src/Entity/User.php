@@ -9,10 +9,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -34,9 +35,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\Column(unique: true)]
-    #[ORM\CustomIdGenerator(class: UuidOrderedTimeGenerator::class)]
-    protected UuidOrderedTimeGenerator|string|null $id = null;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    private ?Uuid $id = null;
 
     #[ORM\Column(length: 100, unique: true)]
     #[Assert\NotBlank]
@@ -164,8 +165,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->resetUserPasswords = new ArrayCollection();
     }
 
-    /** @return UuidOrderedTimeGenerator|string|null */
-    public function getId()
+    public function getId(): ?Uuid
     {
         return $this->id;
     }

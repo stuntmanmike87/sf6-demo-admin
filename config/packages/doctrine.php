@@ -2,8 +2,7 @@
 
 declare(strict_types=1);
 
-use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
-use Ramsey\Uuid\Doctrine\UuidType;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -12,7 +11,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'url' => '%env(resolve:DATABASE_URL)%',
             'types' => [
                 'uuid' => UuidType::class,
-                'uuid_binary_ordered_time' => UuidBinaryOrderedTimeType::class,
             ],
         ],
         'orm' => [

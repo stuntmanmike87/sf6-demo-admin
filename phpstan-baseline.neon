@@ -1,13 +1,5 @@
 parameters:
-    ignoreErrors:
-        # -
-        #     identifier: missingType.generics
-        # -
-        #     message: '#Method App\\Repository\\UserRepository::findLatest\(\) return type with generic interface Knp\\Component\\Pager\\Pagination\\PaginationInterface does not specify its types: TKey, TValue#'
-        #     path: src/Repository/UserRepository.php
-        -
-            message: '#Property App\\Entity\\User::\$id type mapping mismatch: property can contain Ramsey\\Uuid\\Doctrine\\UuidOrderedTimeGenerator\|string\|null but database expects string.#'
-            path: src/Entity/User.php
+    # ignoreErrors:
     
     treatPhpDocTypesAsCertain: false
 
