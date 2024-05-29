@@ -6,10 +6,10 @@ namespace App\Repository;
 
 use App\Entity\LocationCity;
 use App\Entity\LocationNeighborhood;
+use Cocur\Slugify\Slugify;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
-use Gedmo\Sluggable\Util\Urlizer;
 
 /**
  * @extends ServiceEntityRepository<LocationNeighborhood>
@@ -71,6 +71,7 @@ final class LocationNeighborhoodRepository extends ServiceEntityRepository
                 ->setParameter('location_city_id', $criteria['location_city_id']);
         }
 
+        // ** @var LocationNeighborhood $locationNeighborhood */
         $locationNeighborhood = $qb->getQuery()
             ->getOneOrNullResult()
         ;
@@ -84,8 +85,10 @@ final class LocationNeighborhoodRepository extends ServiceEntityRepository
                 return null;
             }
 
+            // ** @var string $name */
             $name = $criteria['name'];
-            $slug = Urlizer::urlize($name);
+            $slugify = new Slugify();
+            $slug = $slugify->slugify($name);
 
             $locationNeighborhood = new LocationNeighborhood();
             $locationNeighborhood->setName($name);

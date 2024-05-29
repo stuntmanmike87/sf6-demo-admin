@@ -6,14 +6,14 @@ namespace App\Service;
 
 use Aws\Result;
 use Aws\S3\S3Client;
-use Gedmo\Sluggable\Util\Urlizer;
 use Gumlet\ImageResize;
+use Cocur\Slugify\Slugify;
 use Gumlet\ImageResizeException;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 final readonly class UploaderHelper
 {
@@ -179,7 +179,9 @@ final readonly class UploaderHelper
             $desiredFileName = $desiredFileName.'-'.uniqid();
         }
 
-        return Urlizer::urlize($desiredFileName).'.'.pathinfo($file, PATHINFO_EXTENSION);
+        $slugify = new Slugify();
+        
+        return $slugify->slugify($desiredFileName).'.'.pathinfo($file, PATHINFO_EXTENSION);
     }
 
     /**
