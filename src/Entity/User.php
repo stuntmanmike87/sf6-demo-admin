@@ -143,10 +143,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: AccountVerification::class)]
     private Collection $accountVerifications;
 
-    /** @var Collection<int, ResetUserPassword> $resetUserPasswords */
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ResetUserPassword::class)]
-    private Collection $resetUserPasswords;
-
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?UserType $type = null;
 
@@ -162,7 +158,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->accountVerifications = new ArrayCollection();
-        $this->resetUserPasswords = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -529,34 +524,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // set the owning side to null (unless already changed)
         if ($this->accountVerifications->removeElement($accountVerification) && $accountVerification->getUser() === $this) {
             $accountVerification->setUser(null);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, ResetUserPassword>
-     */
-    public function getResetUserPasswords(): Collection
-    {
-        return $this->resetUserPasswords;
-    }
-
-    public function addResetUserPassword(ResetUserPassword $resetUserPassword): self
-    {
-        if (!$this->resetUserPasswords->contains($resetUserPassword)) {
-            $this->resetUserPasswords->add($resetUserPassword);
-            $resetUserPassword->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeResetUserPassword(ResetUserPassword $resetUserPassword): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->resetUserPasswords->removeElement($resetUserPassword) && $resetUserPassword->getUser() === $this) {
-            $resetUserPassword->setUser(null);
         }
 
         return $this;
