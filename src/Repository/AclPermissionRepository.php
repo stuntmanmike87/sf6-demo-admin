@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-// use App\Entity\AclAction;
 use App\Entity\AclPermission;
-// use App\Entity\Translation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-// use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

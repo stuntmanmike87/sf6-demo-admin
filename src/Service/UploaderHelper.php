@@ -6,14 +6,14 @@ namespace App\Service;
 
 use Aws\Result;
 use Aws\S3\S3Client;
-use Gumlet\ImageResize;
 use Cocur\Slugify\Slugify;
+use Gumlet\ImageResize;
 use Gumlet\ImageResizeException;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class UploaderHelper
 {
@@ -180,7 +180,7 @@ final readonly class UploaderHelper
         }
 
         $slugify = new Slugify();
-        
+
         return $slugify->slugify($desiredFileName).'.'.pathinfo($file, PATHINFO_EXTENSION);
     }
 
