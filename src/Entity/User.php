@@ -139,6 +139,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deletedAt = null;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $is_verified = false;
+
+    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
+    private ?string $resetToken = null;
+
     /** @var Collection<int, AccountVerification> $accountVerifications */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: AccountVerification::class)]
     private Collection $accountVerifications;
@@ -585,6 +591,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getIsVerified(): ?bool
+    {
+        return $this->is_verified;
+    }
+
+    public function setIsVerified(bool $is_verified): self
+    {
+        $this->is_verified = $is_verified;
+
+        return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
     }
 
     public function getType(): ?UserType
