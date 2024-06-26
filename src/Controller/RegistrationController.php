@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-// use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
@@ -41,21 +40,13 @@ final class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form_data
-                )
-            );
+            $user->setPassword($userPasswordHasher->hashPassword($user, $form_data));
 
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-            $header = [
-                'typ' => 'JWT',
-                'alg' => 'HS256',
-            ];
+            $header = ['typ' => 'JWT', 'alg' => 'HS256',];
 
             /** @var array<string> $payload */
             $payload = [
@@ -77,20 +68,21 @@ final class RegistrationController extends AbstractController
                 $context
             );
 
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
+            return $userAuthenticator->authenticateUser($user, $authenticator, $request);
         }
 
         return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form, // ->createView(),
+            'registrationForm' => $form,
         ]);
     }
 
     #[Route('/verif/{token}', name: 'verify_user')]
-    public function verifyUser(/* TokenInterface */ string $token, JWTService $jwt, UserRepository $usersRepository, EntityManagerInterface $em): Response
+    public function verifyUser(
+        string $token,
+        JWTService $jwt,
+        UserRepository $usersRepository,
+        EntityManagerInterface $em
+    ): Response
     {
         /** @var string $secret */
         $secret = $this->getParameter('app.jwtsecret');
@@ -112,53 +104,5 @@ final class RegistrationController extends AbstractController
         $this->addFlash('danger', 'Invalid or expired token');
 
         return $this->redirectToRoute('app_login');
-    }
-
-    #[Route('/resentverif', name: 'resend_verif')]
-    public function resendVerif(JWTService $jwt, SendMailService $mail, UserRepository $usersRepository): Response
-    {
-        $user = $this->getUser();
-
-        if (!$user instanceof UserInterface) {// if($user === null){
-            $this->addFlash('danger', 'You must be logged in to see this page');
-
-            return $this->redirectToRoute('app_login');
-        }
-
-        /** @var User $user */
-        if ((bool) $user->getIsVerified()) {
-            $this->addFlash('warning', 'This user is already activated');
-
-            return $this->redirectToRoute('profile_index');
-        }
-
-        $header = [
-            'typ' => 'JWT',
-            'alg' => 'HS256',
-        ];
-
-        /** @var array<string> $payload */
-        $payload = [
-            'user_id' => $user->getId(),
-        ];
-
-        /** @var string $secret */
-        $secret = $this->getParameter('app.jwtsecret');
-
-        $token = $jwt->generate($header, $payload, $secret);
-
-        /** @var array<string> $context */
-        $context = ['user' => $user, 'token' => $token];
-
-        $mail->send(
-            'no-reply@mmywebsite.org',
-            (string) $user->getEmail(),
-            'Account activation',
-            'register',
-            $context
-        );
-        $this->addFlash('success', 'Verification email sent');
-
-        return $this->redirectToRoute('profile_index');
     }
 }

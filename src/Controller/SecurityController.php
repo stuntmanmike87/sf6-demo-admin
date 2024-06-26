@@ -45,7 +45,7 @@ final class SecurityController extends AbstractController
         throw new \Exception('This should never be reached!');
     }
 
-    #[Route('/forgot-pw', name: 'forgotten_password')]
+    #[Route('/forgotten-password', name: 'forgotten_password')]
     public function forgottenPassword(
         Request $request,
         UserRepository $usersRepository,
@@ -70,7 +70,10 @@ final class SecurityController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                $url = $this->generateUrl('reset_pass', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+                $url = $this->generateUrl(
+                    'reset_pass',
+                    ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL
+                );
 
                 /** @var array<string> $context */
                 $context = ['url' => $url, 'user' => $user];
@@ -94,11 +97,11 @@ final class SecurityController extends AbstractController
         }
 
         return $this->render('security/reset_password_request.html.twig', [
-            'requestPassForm' => $form, // ->createView()
+            'requestPassForm' => $form,
         ]);
     }
 
-    #[Route('/forgot-pw/{token}', name: 'reset_pass')]
+    #[Route('/forgotten-password/{token}', name: 'reset_pass')]
     public function resetPass(
         TokenInterface $token,
         Request $request,
@@ -119,12 +122,7 @@ final class SecurityController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $user->setResetToken('');
-                $user->setPassword(
-                    $passwordHasher->hashPassword(
-                        $user,
-                        $form_data
-                    )
-                );
+                $user->setPassword($passwordHasher->hashPassword($user, $form_data));
                 $entityManager->persist($user);
                 $entityManager->flush();
 
@@ -134,7 +132,7 @@ final class SecurityController extends AbstractController
             }
 
             return $this->render('security/reset_password.html.twig', [
-                'passForm' => $form, // ->createView()
+                'passForm' => $form,
             ]);
         }
 
