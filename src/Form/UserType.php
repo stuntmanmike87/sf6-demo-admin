@@ -267,25 +267,25 @@ use Symfony\Component\Uid\Uuid;
                     $user->setPhoneNumberCountry(null);
                 }
 
-                // Update URL avatar.
-                /** @var UploadedFile $tmp_url_avatar */
-                $tmp_url_avatar = $form->get('tmp_url_avatar')->getData();
+                // // Update URL avatar.
+                // /** @var UploadedFile $tmp_url_avatar */
+                // $tmp_url_avatar = $form->get('tmp_url_avatar')->getData();
 
-                if ($tmp_url_avatar instanceof UploadedFile) {
-                    /** @var string[] $upload */ // ** @var string[]|null $upload */
-                    $upload = $this->uploaderHelper->uploadImageToCDN($tmp_url_avatar, [
-                        'addParentPath' => 'user',
-                        'uniqueName' => true,
-                        'heightReducing' => $this->uploadRules['limitHeightAvatarUser'],
-                    ]);
+                // if ($tmp_url_avatar instanceof UploadedFile) {
+                //     /** @var string[] $upload */ // ** @var string[]|null $upload */
+                //     $upload = $this->uploaderHelper->uploadImageToCDN($tmp_url_avatar, [
+                //         'addParentPath' => 'user',
+                //         'uniqueName' => true,
+                //         'heightReducing' => $this->uploadRules['limitHeightAvatarUser'],
+                //     ]);
 
-                    $user->setUrlPicture($upload['url']);
-                }
+                //     $user->setUrlPicture($upload['url']);
+                // }
 
-                // Delete URL avatar.
-                if (null !== $form->get('delete_url_avatar')->getData()) {
-                    $user->setUrlPicture(null);
-                }
+                // // Delete URL avatar.
+                // if (null !== $form->get('delete_url_avatar')->getData()) {
+                //     $user->setUrlPicture(null);
+                // }
 
                 // Update all location's fields from property.
                 $this->location->setLocationBeforeSubmit($form, $user);
