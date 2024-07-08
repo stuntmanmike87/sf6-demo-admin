@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\Mailer\Messenger\SendEmailMessage;
 use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\Notifier\Message\SmsMessage;
 
@@ -25,8 +24,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ],
                 'failed' => 'doctrine://default?queue_name=failed',
             ],
+            'default_bus' => 'messenger.bus.default',
+            'buses' => [
+                'messenger.bus.default' => [
+                ],
+            ],
             'routing' => [
-                SendEmailMessage::class => 'async',
                 ChatMessage::class => 'async',
                 SmsMessage::class => 'async',
             ],
