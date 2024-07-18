@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 final class RegistrationController extends AbstractController
@@ -46,7 +45,7 @@ final class RegistrationController extends AbstractController
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-            $header = ['typ' => 'JWT', 'alg' => 'HS256',];
+            $header = ['typ' => 'JWT', 'alg' => 'HS256'];
 
             /** @var array<string> $payload */
             $payload = [
@@ -82,8 +81,7 @@ final class RegistrationController extends AbstractController
         JWTService $jwt,
         UserRepository $usersRepository,
         EntityManagerInterface $em
-    ): Response
-    {
+    ): Response {
         /** @var string $secret */
         $secret = $this->getParameter('app.jwtsecret');
 
