@@ -9,7 +9,7 @@ use App\Entity\LocationCountry;
 use App\Entity\User;
 use App\Form\Helper\LocationHelper;
 use App\Service\DateTimeService;
-use App\Service\UploaderHelper;
+// use App\Service\UploaderHelper;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -23,7 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+// use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -31,14 +31,14 @@ use Symfony\Component\Uid\Uuid;
 
 /* final */ class UserType extends AbstractType
 {
-    /** @param array<mixed> $uploadRules */
+    // ** @param array<mixed> $uploadRules */
     public function __construct(
         private readonly EntityManager $entityManager,
         protected RequestStack $request,
         private readonly LocationHelper $location,
-        private readonly UploaderHelper $uploaderHelper,
+        // private readonly UploaderHelper $uploaderHelper,
         private readonly UserPasswordHasherInterface $passwordHasher,
-        private readonly array $uploadRules
+        // private readonly array $uploadRules
     ) {
     }
 

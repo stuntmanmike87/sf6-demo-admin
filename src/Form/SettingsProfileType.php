@@ -8,7 +8,7 @@ use App\Entity\LocationCountry;
 use App\Entity\User;
 use App\Entity\UserType;
 use App\Service\DateTimeService;
-use App\Service\UploaderHelper;
+// use App\Service\UploaderHelper;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -21,7 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+// use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -29,12 +29,12 @@ use Symfony\Component\Uid\Uuid;
 
 final class SettingsProfileType extends AbstractType
 {
-    /** @param array<mixed> $uploadRules */
+    // ** @param array<mixed> $uploadRules */
     public function __construct(
         private readonly EntityManager $entityManager,
         protected RequestStack $request,
-        private readonly UploaderHelper $uploaderHelper,
-        private readonly array $uploadRules
+        // private readonly UploaderHelper $uploaderHelper,
+        // private readonly array $uploadRules
     ) {
     }
 
@@ -125,25 +125,25 @@ final class SettingsProfileType extends AbstractType
                     $user->setPhoneNumberCountry(null);
                 }
 
-                // Update URL avatar.
-                /** @var UploadedFile $tmp_url_avatar */
-                $tmp_url_avatar = $form->get('tmp_url_avatar')->getData();
+                // // Update URL avatar.
+                // /** @var UploadedFile $tmp_url_avatar */
+                // $tmp_url_avatar = $form->get('tmp_url_avatar')->getData();
 
-                if ($tmp_url_avatar instanceof UploadedFile) {
-                    /** @var string[] $upload */ // ** @var string[]|null $upload */
-                    $upload = $this->uploaderHelper->uploadImageToCDN($tmp_url_avatar, [
-                        'addParentPath' => 'user',
-                        'uniqueName' => true,
-                        'heightReducing' => $this->uploadRules['limitHeightAvatarUser'],
-                    ]);
+                // if ($tmp_url_avatar instanceof UploadedFile) {
+                //     /** @var string[] $upload */ // ** @var string[]|null $upload */
+                //     $upload = $this->uploaderHelper->uploadImageToCDN($tmp_url_avatar, [
+                //         'addParentPath' => 'user',
+                //         'uniqueName' => true,
+                //         'heightReducing' => $this->uploadRules['limitHeightAvatarUser'],
+                //     ]);
 
-                    $user->setUrlPicture($upload['url']);
-                }
+                //     $user->setUrlPicture($upload['url']);
+                // }
 
-                // Delete URL avatar.
-                if (null !== $form->get('delete_url_avatar')->getData()) {
-                    $user->setUrlPicture(null);
-                }
+                // // Delete URL avatar.
+                // if (null !== $form->get('delete_url_avatar')->getData()) {
+                //     $user->setUrlPicture(null);
+                // }
 
                 // Update user type.
                 $user_type_id = $form->get('user_type_id')->getData();

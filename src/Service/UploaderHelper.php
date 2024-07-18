@@ -14,7 +14,7 @@ final readonly class UploaderHelper
     /**
      * UploaderHelper constructor.
      */
-    /** @param array<mixed> $cdn */
+    // ** @param array<mixed> $cdn */
     public function __construct(
         private string $projectDir,
         private Filesystem $filesystem,
