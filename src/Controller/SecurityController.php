@@ -51,7 +51,7 @@ final class SecurityController extends AbstractController
         UserRepository $usersRepository,
         TokenGeneratorInterface $tokenGenerator,
         EntityManagerInterface $entityManager,
-        SendMailService $mail
+        SendMailService $mail,
     ): Response {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
 
@@ -107,7 +107,7 @@ final class SecurityController extends AbstractController
         Request $request,
         UserRepository $usersRepository,
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
     ): Response {
         /** @var User $user */
         $user = $usersRepository->findOneByResetToken($token);

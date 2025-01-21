@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Twig\Runtime;
 
 use App\Entity\LocationCountry;
-use App\Repository\LocationCountryRepository;
 use App\Utils\Acl;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -18,11 +17,11 @@ final readonly class WebsiteExtensionRuntime implements RuntimeExtensionInterfac
         private string $locales,
         private TranslatorInterface $translator,
         private Acl $acl,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
     ) {
     }
 
-    /** @param array<mixed>|null $thumb */
+    /** @param array<string>|null $thumb */
     public function getImage(?string $src, ?array $thumb = []): string
     {
         if (null === $src) {
@@ -37,7 +36,7 @@ final readonly class WebsiteExtensionRuntime implements RuntimeExtensionInterfac
 
         if (null !== $thumb) {
             foreach ($thumb as $parameter => $value) {
-                $params[] = $parameter.'='.$value;
+                $params[] = (string) $parameter.'='.$value;
             }
         }
 
@@ -68,7 +67,7 @@ final readonly class WebsiteExtensionRuntime implements RuntimeExtensionInterfac
     /** @return array<mixed> */
     public function getLocales(): array
     {
-        $localeCodes = explode('|', /* (string) */ $this->locales);
+        $localeCodes = explode('|', $this->locales);
         sort($localeCodes);
 
         $locales = [];
@@ -94,14 +93,14 @@ final readonly class WebsiteExtensionRuntime implements RuntimeExtensionInterfac
         $_action = $this->acl->getActionName();
 
         if (null !== $action) {
-            if ($controller == $_controller && $action == $_action) {
+            if ($controller === $_controller && $action === $_action) {
                 return $className;
             }
 
             return '';
         }
 
-        if ($controller == $_controller) {
+        if ($controller === $_controller) {
             return $className;
         }
 
@@ -131,7 +130,6 @@ final readonly class WebsiteExtensionRuntime implements RuntimeExtensionInterfac
     //  */
     public function getCountryCallingCodes(): mixed// array
     {
-        /** @var LocationCountryRepository $locationCountryRepository */
         $locationCountryRepository = $this->entityManager->getRepository(LocationCountry::class);
 
         return $locationCountryRepository->findAllCallingCodes();

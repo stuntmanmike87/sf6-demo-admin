@@ -35,7 +35,7 @@ final class Acl
         private readonly EntityManagerInterface $entityManager,
         private readonly TokenStorageInterface $tokenStorage,
         private readonly TranslatorInterface $translator,
-        private readonly Security $security
+        private readonly Security $security,
     ) {
         $this->loadRoles();
     }
@@ -60,7 +60,7 @@ final class Acl
         $aclUserGroup = $user->getUserGroup();
         $userGroupId = $aclUserGroup->getId();
 
-        /** @var AclPermissionRepository $aclPermissionRepository */
+        //** @var AclPermissionRepository $aclPermissionRepository */
         $aclPermissionRepository = $this->entityManager->getRepository(AclPermission::class);
         /** @var Collection<int, AclPermission> $permissions */ // ** @var AclPermission $permissions */
         $permissions = $aclPermissionRepository->findRoles((int) $userGroupId);
@@ -73,11 +73,17 @@ final class Acl
             return;
         }
 
-        /** @var array<string> $permission */
         foreach ($permissions as $permission) {
-            $prefix = strtolower($permission['prefix']);
-            $controller = strtolower($permission['controller']);
-            $action = strtolower($permission['action']);
+            // $this->roles[strtolower($permission['prefix'])][strtolower($permission['controller'])][strtolower($permission['action'])] = true;
+            /** @var string $prefix */
+            $prefix = $permission['prefix'];
+            $prefix = strtolower($prefix);
+            /** @var string $controller */
+            $controller = $permission['controller'];
+            $controller = strtolower($controller);
+            /** @var string $action */
+            $action = $permission['action'];
+            $action = strtolower($action);
             if (('' === $this->roles[$prefix]) && ('' === $this->roles[$controller]) && ('' === $this->roles[$action])) {
                 return;
             }
@@ -103,8 +109,13 @@ final class Acl
     {
         $controller = $this->getControllerName();
         $action = $this->getActionName();
+        // Variable $roles in isset() is never defined.
+        // return isset($roles[$prefix][$controller][(string) $action]);
 
-        return isset($this->roles[$prefix][$controller][$action]);
+        $roles = [];
+
+        /** @var array<string> $roles */
+        return isset($roles[$prefix][$controller][(string) $action]);
     }
 
     /**
@@ -120,7 +131,7 @@ final class Acl
     /**
      * Get current controller name.
      */
-    public function getControllerName(): ?string
+    public function getControllerName(): string
     {
         $request = $this->requestStack->getCurrentRequest();
 
@@ -137,20 +148,38 @@ final class Acl
     /**
      * Get current action name.
      */
+    // public function getActionName(): ?string
+    // {
+    //     /** @var Request $request */
+    //     $request = $this->requestStack->getCurrentRequest();
+
+    //     $pattern = '#Controller::([a-zA-Z]*)#';
+    //     /** @var bool|int $matches */
+    //     $matches = [];
+    //     /** @var string $req */
+    //     $req = $request->get('_controller');
+    //     Strings::match($pattern, $req, $matches);
+
+    //     /** @var int[] $matches */
+    //     if (null === $matches[1]) {
+    //         return null;
+    //     }
+
+    //     return StringHelper::camelCaseToDashed($matches[1]);
+    // }
+
     public function getActionName(): ?string
     {
         /** @var Request $request */
         $request = $this->requestStack->getCurrentRequest();
 
-        $pattern = '#Controller::([a-zA-Z]*)#';
-        /** @var bool|int $matches */
+        $pattern = "#Controller::([a-zA-Z]*)#";
         $matches = [];
         /** @var string $req */
         $req = $request->get('_controller');
-        Strings::match($pattern, $req, $matches);
+        preg_match($pattern, $req, $matches);
 
-        /** @var array<string> $matches */
-        if (null === $matches[1]) {
+        if('' === $matches[1]) {
             return null;
         }
 

@@ -20,12 +20,17 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * @template SettingsAddress
+ *
+ * @extends AbstractType<SettingsAddress>
+ */
 final class SettingsAddressType extends AbstractType
 {
     public function __construct(
         protected RequestStack $request,
         private readonly LocationHelper $location,
-        private readonly TokenStorageInterface $tokenStorage
+        private readonly TokenStorageInterface $tokenStorage,
     ) {
     }
 
@@ -38,7 +43,7 @@ final class SettingsAddressType extends AbstractType
         $user = $token->getUser();
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
-        $formType = Request::METHOD_POST == $req->getMethod() ? 'settings_address' : 'user';
+        $formType = Request::METHOD_POST === $req->getMethod() ? 'settings_address' : 'user';
 
         $builder
             ->add('address', TextType::class, [

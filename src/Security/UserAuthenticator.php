@@ -51,7 +51,7 @@ final class UserAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     #[\Override]
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): Response
     {
         $targetPath = $this->getTargetPath($request->getSession(), $firewallName);
 

@@ -9,9 +9,7 @@ use App\Entity\User;
 use App\Entity\UserType;
 use App\Form\UserAddType;
 use App\Form\UserEditType;
-use App\Repository\AclUserGroupRepository;
 use App\Repository\UserRepository;
-use App\Repository\UserTypeRepository;
 use App\Utils\TranslationHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -33,13 +31,12 @@ final class UserController extends AdminController
         ];
 
         $latest = $users->findLatest($params);
-        /** @var AclUserGroupRepository $aclUserGroupRepository */
+
         $aclUserGroupRepository = $entityManager->getRepository(AclUserGroup::class);
         /** @var array<string> $aclUserGroupTranslations */
         $aclUserGroupTranslations = $aclUserGroupRepository->findAllByLocale($request->getLocale());
         $transGroups = TranslationHelper::convertTranslateKeyAsKey($aclUserGroupTranslations);
 
-        /** @var UserTypeRepository $userTypeRepository */
         $userTypeRepository = $entityManager->getRepository(UserType::class);
         /** @var array<string> $userTranslations */
         $userTranslations = $userTypeRepository->findAllByLocale($request->getLocale());

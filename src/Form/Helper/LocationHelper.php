@@ -19,7 +19,7 @@ final readonly class LocationHelper
 {
     public function __construct(
         private EntityManager $entityManager,
-        private RequestStack $request
+        private RequestStack $request,
     ) {
     }
 
@@ -52,7 +52,7 @@ final readonly class LocationHelper
         if ('object' === gettype($entity)) {
             /** @var LocationCountry $locationCountry */
             /** @var LocationState $entity */
-            $locationCountry = $entity->getCountry(); // Call to an undefined method object::getCountry().
+            $locationCountry = $entity->getCountry();
 
             if (!$locationCountry instanceof LocationCountry) {
                 return [];
@@ -119,7 +119,7 @@ final readonly class LocationHelper
         if ('object' === gettype($entity)) {
             /** @var LocationState $locationState */
             /** @var LocationCity $entity */
-            $locationState = $entity->getState(); // Call to an undefined method object::getState().
+            $locationState = $entity->getState();
 
             if (!$locationState instanceof LocationState) {
                 return [];
@@ -162,6 +162,8 @@ final readonly class LocationHelper
 
     /**
      * Set all values with correctly format of locations before submit.
+     *
+     * @param FormInterface<mixed> $form
      */
     public function setLocationBeforeSubmit(FormInterface $form, mixed $entity): void
     {
@@ -218,6 +220,8 @@ final readonly class LocationHelper
 
     /**
      * Set all values with correctly format of locations before load form.
+     *
+     * @param FormInterface<mixed> $form
      */
     public function setLocationBeforeLoadForm(FormInterface $form, mixed $entity): void
     {
@@ -250,6 +254,6 @@ final readonly class LocationHelper
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
 
-        return Request::METHOD_POST == $req->getMethod();
+        return Request::METHOD_POST === $req->getMethod();
     }
 }

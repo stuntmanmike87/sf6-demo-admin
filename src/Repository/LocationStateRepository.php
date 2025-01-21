@@ -10,13 +10,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<LocationState>
- *
- * @method LocationState|null find($id, $lockMode = null, $lockVersion = null)
- * @method LocationState|null findOneBy(array $criteria, array $orderBy = null)
- * @method LocationState[]    findAll()
- * @method LocationState[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- *
- * @template-extends ServiceEntityRepository<LocationState>
  */
 final class LocationStateRepository extends ServiceEntityRepository
 {

@@ -29,8 +29,11 @@ final readonly class AclExtensionRuntime implements RuntimeExtensionInterface
         $acl = $user->getAcl();
         // $acl = $this->tokenStorage->getToken()->getUser()->getAcl();//Undefined method 'getAcl'
 
+        
+        $acl_array_action = $acl[$prefix][$controller][$action];
+        $acl_array = $acl[$prefix][$controller];
         return
-            (isset($action) && isset($acl[$prefix][$controller][$action])) || ((null === $action || '' === $action) && isset($acl[$prefix][$controller]))
+            (isset($action) && isset($acl_array_action)) || ((null === $action || '' === $action) && isset($acl_array))
         ;
     }
 }

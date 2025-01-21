@@ -18,7 +18,7 @@ final readonly class UploaderHelper
     public function __construct(
         private string $projectDir,
         private Filesystem $filesystem,
-        private string $baseUrl
+        private string $baseUrl,
     ) {
     }
 
@@ -36,8 +36,11 @@ final readonly class UploaderHelper
         $desiredFileName = array_key_exists('desiredFileName', $options) ? $options['desiredFileName'] : '';
         $uniqueName = array_key_exists('uniqueName', $options);
 
+        /** @var null|string $desiredFileName */
         $newFilename = $this->generateFileName($uploadedFile->getClientOriginalName(), $desiredFileName, $uniqueName);
 
+        /** @var string $desiredFileName */
+        /** @var string $addParentPath */
         $tempDestination = $this->projectDir.'/public/'.$addParentPath;
         $file = $this->saveFile($uploadedFile, $tempDestination, $newFilename);
 

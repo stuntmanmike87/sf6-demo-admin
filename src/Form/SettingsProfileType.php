@@ -27,6 +27,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * @template SettingsProfile
+ *
+ * @extends AbstractType<SettingsProfile>
+ */
 final class SettingsProfileType extends AbstractType
 {
     // ** @param array<mixed> $uploadRules */

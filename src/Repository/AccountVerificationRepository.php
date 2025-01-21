@@ -10,13 +10,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<AccountVerification>
- *
- * @method AccountVerification|null find($id, $lockMode = null, $lockVersion = null)
- * @method AccountVerification|null findOneBy(array $criteria, array $orderBy = null)
- * @method AccountVerification[]    findAll()
- * @method AccountVerification[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- *
- * @template-extends ServiceEntityRepository<AccountVerification>
  */
 final class AccountVerificationRepository extends ServiceEntityRepository
 {

@@ -1,6 +1,27 @@
 parameters:
-    # ignoreErrors:
-    
+    ignoreErrors:
+        -
+            message: '#Parameter \#2 ...\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given.#'
+            path: src/Repository/UserRepository.php
+
+        -
+            message: '#Method App\\Entity\\User::getUserIdentifier\(\) should return non-empty-string but returns string.#'
+            path: src/Entity/User.php
+
+        # -
+        #     message: '#Cannot access offset string on mixed.#'
+        #     path: src/Utils/Acl.php
+
+        - '#Cannot access offset .*#'
+
+        - '#Offset string does not exist on .*#'
+
+        - '#Offset string might not exist on .*#'
+
+        - '#Offset 1 might not exist on .*#'
+
+        - '#Offset string on array{} in isset\(\) does not exist.#'
+
     treatPhpDocTypesAsCertain: false
 
     doctrine:

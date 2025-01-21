@@ -15,8 +15,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 final class UserFixtures extends Fixture
 {
     public function __construct(
-        private readonly UserPasswordHasherInterface $passwordEncoder/* ,
-        private readonly SluggerInterface $slugger */
+        private readonly UserPasswordHasherInterface $passwordEncoder,
+        // private readonly SluggerInterface $slugger,
     ) {
     }
 
@@ -32,7 +32,7 @@ final class UserFixtures extends Fixture
 
         $faker = Factory::create('fr_FR');
 
-        for ($usr = 1; $usr <= 5; ++$usr) {// for($usr = 1; $usr <= 5; $usr++){
+        for ($usr = 1; $usr <= 5; ++$usr) {
             $user = new User();
             $user->setEmail($faker->email);
             $user->setPassword($this->passwordEncoder->hashPassword($user, 'secret'));
@@ -42,13 +42,3 @@ final class UserFixtures extends Fixture
         $manager->flush();
     }
 }
-
-/*
-//@return array<string>
-public function getDependencies(): array
-{
-    return [
-        LevelFixtures::class,
-    ];
-}
-*/

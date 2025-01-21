@@ -28,7 +28,7 @@ final class RegistrationController extends AbstractController
         UserAuthenticator $authenticator,
         EntityManagerInterface $entityManager,
         SendMailService $mail,
-        JWTService $jwt
+        JWTService $jwt,
     ): ?Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -47,13 +47,14 @@ final class RegistrationController extends AbstractController
 
             $header = ['typ' => 'JWT', 'alg' => 'HS256'];
 
-            /** @var array<string> $payload */
-            $payload = [
-                'user_id' => $user->getId(),
-            ];
+            /** @var \Symfony\Component\Uid\Uuid $uuid_id */
+            $uuid_id = $user->getId();
+            $id = $uuid_id->toString();
+            $payload = ['user_id' => $id,];
 
             /** @var string $secret */
             $secret = $this->getParameter('app.jwtsecret');
+
             $token = $jwt->generate($header, $payload, $secret);
 
             /** @var array<string> $context() */
@@ -80,7 +81,7 @@ final class RegistrationController extends AbstractController
         string $token,
         JWTService $jwt,
         UserRepository $usersRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
     ): Response {
         /** @var string $secret */
         $secret = $this->getParameter('app.jwtsecret');

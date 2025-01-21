@@ -13,13 +13,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<LocationNeighborhood>
- *
- * @method LocationNeighborhood|null find($id, $lockMode = null, $lockVersion = null)
- * @method LocationNeighborhood|null findOneBy(array $criteria, array $orderBy = null)
- * @method LocationNeighborhood[]    findAll()
- * @method LocationNeighborhood[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- *
- * @template-extends ServiceEntityRepository<LocationNeighborhood>
  */
 final class LocationNeighborhoodRepository extends ServiceEntityRepository
 {
@@ -88,6 +81,7 @@ final class LocationNeighborhoodRepository extends ServiceEntityRepository
             // ** @var string $name */
             $name = $criteria['name'];
             $slugify = new Slugify();
+            /** @var string $name */
             $slug = $slugify->slugify($name);
 
             $locationNeighborhood = new LocationNeighborhood();

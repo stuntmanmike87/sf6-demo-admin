@@ -10,13 +10,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<AclAction>
- *
- * @method AclAction|null find($id, $lockMode = null, $lockVersion = null)
- * @method AclAction|null findOneBy(array $criteria, array $orderBy = null)
- * @method AclAction[]    findAll()
- * @method AclAction[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- *
- * @template-extends ServiceEntityRepository<AclAction>
  */
 final class AclActionRepository extends ServiceEntityRepository
 {

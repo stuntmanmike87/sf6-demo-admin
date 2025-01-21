@@ -67,10 +67,7 @@ final class TranslationHelper
         }
 
         $yt_rx = '/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/';
-        $yt_matches = [];
-        /** @var bool|int $yt_matches */
-        $has_match_youtube = Strings::match($yt_rx, $url, $yt_matches);
-
+        $has_match_youtube = preg_match($yt_rx, $url, $yt_matches);
         return (bool) $has_match_youtube;
     }
 }

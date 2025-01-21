@@ -11,7 +11,7 @@ final class DateTimeService
      *
      * @param string $locale Locale
      */
-    public static function getDateFormatFromLocale(string $locale): ?string
+    public static function getDateFormatFromLocale(string $locale): string
     {
         $formatter = new \IntlDateFormatter($locale, \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE);
         // if (!$formatter instanceof \IntlDateFormatter) {

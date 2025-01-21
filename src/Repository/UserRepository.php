@@ -17,12 +17,7 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 /**
  * @extends ServiceEntityRepository<User>
  *
- * @method User|null find($id, $lockMode = null, $lockVersion = null)
- * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method User[]    findAll()
- * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- *
- * @template-extends ServiceEntityRepository<User>
+ * @implements PasswordUpgraderInterface<User>
  */
 final class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
@@ -92,13 +87,15 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
             ->where('user.deletedAt IS NULL')
         ;
 
-        /** @var array<mixed> $criteria */
+        /** @var array<string> $criteria */
         if (array_key_exists('query', $criteria)) {
+            //** @var string $criteria */
             $searchTerms = StringHelper::extractSearchTerms($criteria['query']);
 
             if ([] !== $searchTerms) {
                 $orStatements = $qb->expr()->orX();
 
+                /** @var string $term */
                 foreach ($searchTerms as $term) {
                     $orStatements->add(
                         $qb->expr()->like('user.username', $qb->expr()->literal('%'.$term.'%'))
@@ -120,12 +117,11 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
         $qb->orderBy('user.id', 'DESC');
 
         $page = $criteria['page'] ?? 1;
-        $limit = $criteria['limit'] ?? null;
+        $page = intval($page);
 
-        return $this->paginator->paginate(
-            $qb,
-            $page,
-            $limit
-        );
+        $limit = $criteria['limit'] ?? null;
+        $limit = intval($limit);
+
+        return $this->paginator->paginate($qb, $page, $limit);
     }
 }
