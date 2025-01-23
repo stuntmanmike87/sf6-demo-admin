@@ -132,7 +132,7 @@ final class LocationCountryController extends AbstractController
                 $alpha2 = $country['alpha2'];
                 /** @var string $native */
                 $native = $country['native'];
-                $countries[$key]['html'] = '<span class="fi fi-' . strtolower($alpha2) . '"></span>' . $native;
+                $countries[$key]['html'] = '<span class="fi fi-'.strtolower($alpha2).'"></span>'.$native;
             }
 
             $success = true;

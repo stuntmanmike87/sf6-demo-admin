@@ -22,12 +22,17 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints\Length;
 
+/**
+ * @template SettingsSecurity
+ *
+ * @extends AbstractType<SettingsSecurity>
+ */
 final class SettingsSecurityType extends AbstractType
 {
     public function __construct(
         private readonly EntityManager $entityManager,
         protected RequestStack $request,
-        private readonly UserPasswordHasherInterface $passwordHasher
+        private readonly UserPasswordHasherInterface $passwordHasher,
     ) {
     }
 
@@ -104,8 +109,9 @@ final class SettingsSecurityType extends AbstractType
                 // It's only possibility to set unmapped values by edit form (by existing user entity values is a edit form).
                 if ($user->getId() instanceof Uuid) { // if (null !== $user->getId()) {
                     // Set user group on form.
+                    $form_interface = $form->get('acl_user_group_id')->setData($user->getUserGroup());
                     /** @var AclUserGroup aclUserGroup */
-                    $aclUserGroup = $form->get('acl_user_group_id')->setData($user->getUserGroup());
+                    $aclUserGroup = $form_interface->getData();
                     $aclUserGroup->getId();
                 }
             })

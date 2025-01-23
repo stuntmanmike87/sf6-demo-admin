@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Component\Uid\Uuid;
 
 final class RegistrationController extends AbstractController
 {
@@ -47,10 +48,10 @@ final class RegistrationController extends AbstractController
 
             $header = ['typ' => 'JWT', 'alg' => 'HS256'];
 
-            /** @var \Symfony\Component\Uid\Uuid $uuid_id */
+            /** @var Uuid $uuid_id */
             $uuid_id = $user->getId();
             $id = $uuid_id->toString();
-            $payload = ['user_id' => $id,];
+            $payload = ['user_id' => $id];
 
             /** @var string $secret */
             $secret = $this->getParameter('app.jwtsecret');

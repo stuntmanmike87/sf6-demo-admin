@@ -8,6 +8,10 @@ parameters:
             message: '#Method App\\Entity\\User::getUserIdentifier\(\) should return non-empty-string but returns string.#'
             path: src/Entity/User.php
 
+        -
+            message: '#Method App\\Form\\UserType::addBuildForm\(\) has parameter \$builder with generic interface Symfony\\Component\\Form\\FormBuilderInterface but does not specify its types: TData#'
+            path: src/Form/UserType.php
+
         # -
         #     message: '#Cannot access offset string on mixed.#'
         #     path: src/Utils/Acl.php

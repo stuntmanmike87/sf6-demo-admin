@@ -13,6 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 
+/**
+ * @ template UserAdd
+ *
+ * @ extends UserType<User>
+ */
 final class UserAddType extends UserType
 {
     #[\Override]
@@ -36,7 +41,7 @@ final class UserAddType extends UserType
 
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
-        $param = Request::METHOD_POST == $req->getMethod() ? 'user_add' : 'user';
+        $param = Request::METHOD_POST === $req->getMethod() ? 'user_add' : 'user';
 
         $this->addBuildForm($builder, $param);
     }

@@ -62,6 +62,7 @@ final class StringHelper
 
         $yt_rx = '/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/';
         $has_match_youtube = preg_match($yt_rx, $url, $yt_matches);
+
         return (bool) $has_match_youtube;
     }
 }

@@ -29,6 +29,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * @ template User
+ *
+ * @extends AbstractType<User>
+ */
 /* final */ class UserType extends AbstractType
 {
     // ** @param array<mixed> $uploadRules */
@@ -38,12 +43,15 @@ use Symfony\Component\Uid\Uuid;
         private readonly LocationHelper $location,
         // private readonly UploaderHelper $uploaderHelper,
         private readonly UserPasswordHasherInterface $passwordHasher,
-        // private readonly array $uploadRules
+        // private readonly array $uploadRules,
     ) {
     }
 
+    // ** @param FormBuilderInterface<?User> $builder */
+    /** @return FormBuilderInterface<?User> */
     protected function addBuildForm(FormBuilderInterface $builder, string $formType): FormBuilderInterface
     {// Cognitive complexity for "App\Form\UserType::addBuildForm()" is 14, keep it under 8
+        // ** @var FormBuilderInterface<?User> $builder */
         /** @var Request $req */
         $req = $this->request->getCurrentRequest();
         $builder
@@ -300,7 +308,6 @@ use Symfony\Component\Uid\Uuid;
              * See more: https://symfony.com/doc/current/form/events.html
              */
             ->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
-                /** @var User $user */
                 $user = $event->getData();
                 $form = $event->getForm();
 
@@ -312,8 +319,8 @@ use Symfony\Component\Uid\Uuid;
                 if ($user->getId() instanceof Uuid) { // if (null !== $user->getId()) {
                     // Set user group on form.
                     /** @var AclUserGroup aclUserGroup */
-                    $aclUserGroup = $form->get('acl_user_group_id')->setData($user->getUserGroup());
-                    $aclUserGroup->getId();
+                    $aclUserGroup = $user->getUserGroup();
+                    $form->get('acl_user_group_id')->setData($aclUserGroup->getId());
 
                     // Set user type on form.
                     if ($user->getType() instanceof \App\Entity\UserType) {

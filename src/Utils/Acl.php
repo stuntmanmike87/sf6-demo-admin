@@ -7,7 +7,6 @@ namespace App\Utils;
 use App\Entity\AclPermission;
 use App\Entity\AclUserGroup;
 use App\Entity\User;
-use App\Repository\AclPermissionRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Nette\Utils\Strings;
@@ -60,9 +59,8 @@ final class Acl
         $aclUserGroup = $user->getUserGroup();
         $userGroupId = $aclUserGroup->getId();
 
-        //** @var AclPermissionRepository $aclPermissionRepository */
         $aclPermissionRepository = $this->entityManager->getRepository(AclPermission::class);
-        /** @var Collection<int, AclPermission> $permissions */ // ** @var AclPermission $permissions */
+        /** @var Collection<int, AclPermission> $permissions */
         $permissions = $aclPermissionRepository->findRoles((int) $userGroupId);
 
         /* $permissions = $this->entityManager
@@ -114,7 +112,6 @@ final class Acl
 
         $roles = [];
 
-        /** @var array<string> $roles */
         return isset($roles[$prefix][$controller][(string) $action]);
     }
 
@@ -173,13 +170,13 @@ final class Acl
         /** @var Request $request */
         $request = $this->requestStack->getCurrentRequest();
 
-        $pattern = "#Controller::([a-zA-Z]*)#";
+        $pattern = '#Controller::([a-zA-Z]*)#';
         $matches = [];
         /** @var string $req */
         $req = $request->get('_controller');
         preg_match($pattern, $req, $matches);
 
-        if('' === $matches[1]) {
+        if ('' === $matches[1]) {
             return null;
         }
 

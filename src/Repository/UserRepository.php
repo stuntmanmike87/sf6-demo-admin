@@ -89,7 +89,6 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
 
         /** @var array<string> $criteria */
         if (array_key_exists('query', $criteria)) {
-            //** @var string $criteria */
             $searchTerms = StringHelper::extractSearchTerms($criteria['query']);
 
             if ([] !== $searchTerms) {
