@@ -23,12 +23,12 @@
     {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {{ encore_entry_script_tags('main') }}
-
+{# 
         <script>
             window.onload = () => {
                 web.startComponents({{ get_components() }});
             };
-        </script>
+        </script> #}
     {% endblock %}
 
     {% block scripts %}

@@ -50,8 +50,11 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     #[\Override]
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
+        $values = $user::class;
+        $values = strval($values);
+
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $values));
         }
 
         $user->setPassword($newHashedPassword);
