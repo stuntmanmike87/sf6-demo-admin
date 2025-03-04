@@ -44,6 +44,7 @@ final class SettingsController extends AdminController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * Edit profile of the logged user.
      */
@@ -71,6 +72,7 @@ final class SettingsController extends AdminController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * Edit address data of the logged user.
      */
